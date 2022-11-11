@@ -1,17 +1,27 @@
 package apap.tugas.akhir.rumahsehat.model;
 
+import apap.tugas.akhir.rumahsehat.model.RoleModel;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,11 +41,11 @@ public class UserModel implements Serializable {
     @Column(name = "nama", nullable = false)
     private String nama;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JsonIgnore
-    // private RoleModel role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private RoleModel role;
 
     @NotNull
     @Size(max = 50)
