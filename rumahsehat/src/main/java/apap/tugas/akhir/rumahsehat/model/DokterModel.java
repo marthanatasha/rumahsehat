@@ -23,10 +23,10 @@ public class DokterModel extends UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "uuid")
-    private UserModel user;
+    // @OneToOne
+    // @MapsId
+    // @JoinColumn(name = "uuid")
+    // private UserModel user;
 
     @NotNull
     @Column(name = "tarif", nullable = false)

@@ -35,8 +35,8 @@ public class RoleModel {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private List<UserModel> userRole;
+    // @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
+    // private List<UserModel> userRole;
 }

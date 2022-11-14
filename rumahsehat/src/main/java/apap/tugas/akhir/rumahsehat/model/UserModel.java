@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -30,9 +31,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Entity
 @Table(name = "user")
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 public class UserModel implements Serializable {
 
     @Id
@@ -66,8 +66,8 @@ public class UserModel implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private DokterModel dokter;
+    // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    // @PrimaryKeyJoinColumn
+    // private DokterModel dokter;
 
 }
