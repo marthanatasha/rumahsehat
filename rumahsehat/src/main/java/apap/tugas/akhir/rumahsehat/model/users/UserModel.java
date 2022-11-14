@@ -1,9 +1,10 @@
-package apap.tugas.akhir.rumahsehat.model;
+package apap.tugas.akhir.rumahsehat.model.users;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,7 +30,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Table(name = "user")
 @MappedSuperclass
 public class UserModel implements Serializable {
 
@@ -65,9 +63,5 @@ public class UserModel implements Serializable {
     @Size(max = 50)
     @Column(name = "email", nullable = false)
     private String email;
-
-    // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    // @PrimaryKeyJoinColumn
-    // private DokterModel dokter;
 
 }
