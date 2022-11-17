@@ -3,51 +3,43 @@ package apap.tugas.akhir.rumahsehat.model.users;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
-@MappedSuperclass
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserModel implements Serializable {
-
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String uuid;
+    @Column(name = "id")
+    private String id;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = 50)
     @Column(name = "nama", nullable = false)
     private String nama;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private RoleModel role;
 
     @NotNull
     @Size(max = 50)
@@ -61,7 +53,13 @@ public class UserModel implements Serializable {
 
     @NotNull
     @Size(max = 50)
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "role", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserType role;
 
 }
