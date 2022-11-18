@@ -9,7 +9,6 @@ import apap.tugas.akhir.rumahsehat.service.GeneralService;
 public class RumahsehatApplication {
 
 	public static void main(String[] args) {
-		GeneralService.testing();
 		SpringApplication.run(RumahsehatApplication.class, args);
 	}
 

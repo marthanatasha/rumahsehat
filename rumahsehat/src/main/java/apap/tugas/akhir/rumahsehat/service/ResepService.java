@@ -7,16 +7,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import apap.tugas.akhir.rumahsehat.model.JumlahModel;
-import apap.tugas.akhir.rumahsehat.repository.JumlahDb;
+import apap.tugas.akhir.rumahsehat.model.ResepModel;
+import apap.tugas.akhir.rumahsehat.repository.ResepDb;
 
 @Service
 @Transactional
-public class JumlahService {
+public class ResepService {
     @Autowired
-    private JumlahDb jumlahDb;
+    private ResepDb resepDb;
 
-    public List<JumlahModel> getListJumlah() {
-        return jumlahDb.findAll();
+    public List<ResepModel> getListResep() {
+        return resepDb.findAll();
     }
 }
