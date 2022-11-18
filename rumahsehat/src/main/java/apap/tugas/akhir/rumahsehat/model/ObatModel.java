@@ -42,7 +42,7 @@ public class ObatModel implements Serializable {
     private Integer harga;
 
     // @NotNull
-    @Column(name = "stok", nullable = true, columnDefinition = "integer default 0")
+    @Column(name = "stok", nullable = true, columnDefinition = "integer default 100")
     private Integer stok;
 
     @OneToMany(mappedBy = "obat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
