@@ -1,4 +1,4 @@
-package apap.tugas.akhir.rumahsehat.controller.web;
+package apap.tugas.akhir.rumahsehat.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
