@@ -19,4 +19,22 @@ public class ObatService {
     public List<ObatModel> getListObat() {
         return obatDb.findAll();
     }
+
+    public ObatModel getObatById(String id) {
+        return obatDb.findById(id).get();
+    }
+
+    public void addObat(ObatModel obat) {
+        obatDb.save(obat);
+    }
+
+    public ObatModel updateObat(ObatModel obat) {
+        obatDb.save(obat);
+        return obat;
+    }
+
+    public ObatModel deleteObat(ObatModel obat) {
+        obatDb.delete(obat);
+        return obat;
+    }
 }

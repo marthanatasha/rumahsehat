@@ -19,4 +19,22 @@ public class AdminService {
     public List<AdminModel> getListAdmin() {
         return adminDb.findAll();
     }
+
+    public AdminModel getAdminById(String id) {
+        return adminDb.findById(id).get();
+    }
+
+    public void addAdmin(AdminModel admin) {
+        adminDb.save(admin);
+    }
+
+    public AdminModel updateAdmin(AdminModel admin) {
+        adminDb.save(admin);
+        return admin;
+    }
+
+    public AdminModel deleteAdmin(AdminModel admin) {
+        adminDb.delete(admin);
+        return admin;
+    }
 }

@@ -19,4 +19,22 @@ public class PasienService {
     public List<PasienModel> getListPasien() {
         return pasienDb.findAll();
     }
+
+    public PasienModel getPasienById(Long id) {
+        return pasienDb.findById(id).get();
+    }
+
+    public void addPasien(PasienModel pasien) {
+        pasienDb.save(pasien);
+    }
+
+    public PasienModel updatePasien(PasienModel pasien) {
+        pasienDb.save(pasien);
+        return pasien;
+    }
+
+    public PasienModel deletePasien(PasienModel pasien) {
+        pasienDb.delete(pasien);
+        return pasien;
+    }
 }

@@ -19,4 +19,22 @@ public class UserService {
     public List<UserModel> getListUser() {
         return userDb.findAll();
     }
+
+    public UserModel getUserById(String id) {
+        return userDb.findById(id).get();
+    }
+
+    public void addUser(UserModel user) {
+        userDb.save(user);
+    }
+
+    public UserModel updateUser(UserModel user) {
+        userDb.save(user);
+        return user;
+    }
+
+    public UserModel deleteUser(UserModel user) {
+        userDb.delete(user);
+        return user;
+    }
 }
