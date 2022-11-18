@@ -17,11 +17,11 @@ public class ApotekerController {
     @GetMapping("/apoteker")
     public String getApotekerList(Model model) {
         model.addAttribute("apotekers", apotekerService.getListApoteker());
-        return "page/apoteker/list";
+        return "pages/apoteker/list";
     }
 
     @GetMapping("/apoteker/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/apoteker/detail";
+        return "pages/apoteker/detail";
     }
 }

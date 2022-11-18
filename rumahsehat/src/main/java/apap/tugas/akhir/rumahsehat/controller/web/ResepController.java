@@ -17,11 +17,11 @@ public class ResepController {
     @GetMapping("/resep")
     public String getResepList(Model model) {
         model.addAttribute("reseps", resepService.getListResep());
-        return "page/resep/list";
+        return "pages/resep/list";
     }
 
     @GetMapping("/resep/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/resep/detail";
+        return "pages/resep/detail";
     }
 }

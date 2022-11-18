@@ -17,11 +17,11 @@ public class PasienController {
     @GetMapping("/pasien")
     public String getPasienList(Model model) {
         model.addAttribute("pasiens", pasienService.getListPasien());
-        return "page/pasien/list";
+        return "pages/pasien/list";
     }
 
     @GetMapping("/pasien/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/pasien/detail";
+        return "pages/pasien/detail";
     }
 }

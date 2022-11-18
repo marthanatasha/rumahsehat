@@ -17,11 +17,11 @@ public class ObatController {
     @GetMapping("/obat")
     public String getObatList(Model model) {
         model.addAttribute("obats", obatService.getListObat());
-        return "page/obat/list";
+        return "pages/obat/list";
     }
 
     @GetMapping("/obat/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/obat/detail";
+        return "pages/obat/detail";
     }
 }

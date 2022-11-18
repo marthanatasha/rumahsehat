@@ -17,11 +17,11 @@ public class TagihanController {
     @GetMapping("/tagihan")
     public String getTagihanList(Model model) {
         model.addAttribute("tagihans", tagihanService.getListTagihan());
-        return "page/tagihan/list";
+        return "pages/tagihan/list";
     }
 
     @GetMapping("/tagihan/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/tagihan/detail";
+        return "pages/tagihan/detail";
     }
 }

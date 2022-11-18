@@ -17,11 +17,11 @@ public class AppointmentController {
     @GetMapping("/appointment")
     public String getAppointmentList(Model model) {
         model.addAttribute("appointments", appointmentService.getListAppointment());
-        return "page/appointment/list";
+        return "pages/appointment/list";
     }
 
     @GetMapping("/appointment/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/appointment/detail";
+        return "pages/appointment/detail";
     }
 }

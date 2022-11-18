@@ -17,11 +17,11 @@ public class JumlahController {
     @GetMapping("/jumlah")
     public String getJumlahList(Model model) {
         model.addAttribute("jumlahs", jumlahService.getListJumlah());
-        return "page/jumlah/list";
+        return "pages/jumlah/list";
     }
 
     @GetMapping("/jumlah/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/jumlah/detail";
+        return "pages/jumlah/detail";
     }
 }

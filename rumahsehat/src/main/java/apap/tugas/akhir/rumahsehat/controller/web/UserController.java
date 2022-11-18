@@ -17,11 +17,11 @@ public class UserController {
     @GetMapping("/user")
     public String getUserList(Model model) {
         model.addAttribute("users", userService.getListUser());
-        return "page/user/list";
+        return "pages/user/list";
     }
 
     @GetMapping("/user/{id}")
     public String updateCourseFormPage(@PathVariable Long id, Model model) {
-        return "page/user/detail";
+        return "pages/user/detail";
     }
 }
