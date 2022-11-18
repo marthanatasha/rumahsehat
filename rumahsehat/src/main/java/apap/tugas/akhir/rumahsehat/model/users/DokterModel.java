@@ -1,6 +1,5 @@
 package apap.tugas.akhir.rumahsehat.model.users;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
