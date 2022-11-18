@@ -13,7 +13,6 @@ public class BaseController {
 
     @GetMapping("/")
     private String Home() {
-        System.out.println(obatService.getListObat());
-        return "home";
+        return "pages/home";
     }
 }
