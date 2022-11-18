@@ -19,4 +19,22 @@ public class TagihanService {
     public List<TagihanModel> getListTagihan() {
         return tagihanDb.findAll();
     }
+
+    public TagihanModel getTagihanById(String id) {
+        return tagihanDb.findById(id).get();
+    }
+
+    public void addTagihan(TagihanModel tagihan) {
+        tagihanDb.save(tagihan);
+    }
+
+    public TagihanModel updateTagihan(TagihanModel tagihan) {
+        tagihanDb.save(tagihan);
+        return tagihan;
+    }
+
+    public TagihanModel deleteTagihan(TagihanModel tagihan) {
+        tagihanDb.delete(tagihan);
+        return tagihan;
+    }
 }

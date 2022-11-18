@@ -19,4 +19,22 @@ public class DokterService {
     public List<DokterModel> getListDokter() {
         return dokterDb.findAll();
     }
+
+    public DokterModel getDokterById(Long id) {
+        return dokterDb.findById(id).get();
+    }
+
+    public void addDokter(DokterModel dokter) {
+        dokterDb.save(dokter);
+    }
+
+    public DokterModel updateDokter(DokterModel dokter) {
+        dokterDb.save(dokter);
+        return dokter;
+    }
+
+    public DokterModel deleteDokter(DokterModel dokter) {
+        dokterDb.delete(dokter);
+        return dokter;
+    }
 }

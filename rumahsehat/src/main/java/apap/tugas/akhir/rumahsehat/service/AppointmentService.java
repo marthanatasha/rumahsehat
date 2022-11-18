@@ -19,4 +19,22 @@ public class AppointmentService {
     public List<AppointmentModel> getListAppointment() {
         return appointmentDb.findAll();
     }
+
+    public AppointmentModel getAppointmentById(String id) {
+        return appointmentDb.findById(id).get();
+    }
+
+    public void addAppointment(AppointmentModel appointment) {
+        appointmentDb.save(appointment);
+    }
+
+    public AppointmentModel updateAppointment(AppointmentModel appointment) {
+        appointmentDb.save(appointment);
+        return appointment;
+    }
+
+    public AppointmentModel deleteAppointment(AppointmentModel appointment) {
+        appointmentDb.delete(appointment);
+        return appointment;
+    }
 }

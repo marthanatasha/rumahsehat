@@ -19,4 +19,22 @@ public class JumlahService {
     public List<JumlahModel> getListJumlah() {
         return jumlahDb.findAll();
     }
+
+    public JumlahModel getJumlahById(String id) {
+        return jumlahDb.findById(id).get();
+    }
+
+    public void addJumlah(JumlahModel jumlah) {
+        jumlahDb.save(jumlah);
+    }
+
+    public JumlahModel updateJumlah(JumlahModel jumlah) {
+        jumlahDb.save(jumlah);
+        return jumlah;
+    }
+
+    public JumlahModel deleteJumlah(JumlahModel jumlah) {
+        jumlahDb.delete(jumlah);
+        return jumlah;
+    }
 }

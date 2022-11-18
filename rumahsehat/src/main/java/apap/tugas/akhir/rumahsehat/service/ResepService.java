@@ -19,4 +19,22 @@ public class ResepService {
     public List<ResepModel> getListResep() {
         return resepDb.findAll();
     }
+
+    public ResepModel getResepById(String id) {
+        return resepDb.findById(id).get();
+    }
+
+    public void addResep(ResepModel resep) {
+        resepDb.save(resep);
+    }
+
+    public ResepModel updateResep(ResepModel resep) {
+        resepDb.save(resep);
+        return resep;
+    }
+
+    public ResepModel deleteResep(ResepModel resep) {
+        resepDb.delete(resep);
+        return resep;
+    }
 }

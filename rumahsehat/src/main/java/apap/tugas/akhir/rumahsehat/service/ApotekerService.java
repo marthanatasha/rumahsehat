@@ -19,4 +19,22 @@ public class ApotekerService {
     public List<ApotekerModel> getListApoteker() {
         return apotekerDb.findAll();
     }
+
+    public ApotekerModel getApotekerById(Long id) {
+        return apotekerDb.findById(id).get();
+    }
+
+    public void addApoteker(ApotekerModel apoteker) {
+        apotekerDb.save(apoteker);
+    }
+
+    public ApotekerModel updateApoteker(ApotekerModel apoteker) {
+        apotekerDb.save(apoteker);
+        return apoteker;
+    }
+
+    public ApotekerModel deleteApoteker(ApotekerModel apoteker) {
+        apotekerDb.delete(apoteker);
+        return apoteker;
+    }
 }
