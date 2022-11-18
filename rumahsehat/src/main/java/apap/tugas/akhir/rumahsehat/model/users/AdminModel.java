@@ -1,7 +1,5 @@
 package apap.tugas.akhir.rumahsehat.model.users;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
