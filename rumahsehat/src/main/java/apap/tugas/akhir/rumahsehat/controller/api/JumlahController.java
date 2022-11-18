@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import apap.tugas.akhir.rumahsehat.model.JumlahModel;
 import apap.tugas.akhir.rumahsehat.service.JumlahService;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1")
 public class JumlahController {
 
     @Autowired
