@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.JumlahService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class JumlahController {
+public class JumlahAPIController {
 
     @Autowired
     JumlahService jumlahService;

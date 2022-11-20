@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.TagihanService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class TagihanController {
+public class TagihanAPIController {
 
     @Autowired
     TagihanService tagihanService;

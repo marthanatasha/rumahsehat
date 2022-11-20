@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class AppointmentController {
+public class AppointmentAPIController {
 
     @Autowired
     AppointmentService appointmentService;
