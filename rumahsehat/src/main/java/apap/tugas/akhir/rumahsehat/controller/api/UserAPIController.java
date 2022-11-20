@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class UserController {
+public class UserAPIController {
 
     @Autowired
     UserService userService;

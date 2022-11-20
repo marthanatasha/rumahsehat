@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.DokterService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class DokterController {
+public class DokterAPIController {
 
     @Autowired
     DokterService dokterService;

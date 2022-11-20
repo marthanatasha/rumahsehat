@@ -14,7 +14,7 @@ import apap.tugas.akhir.rumahsehat.service.AdminService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class AdminController {
+public class AdminAPIController {
 
     @Autowired
     AdminService adminService;

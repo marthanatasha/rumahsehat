@@ -15,7 +15,7 @@ import apap.tugas.akhir.rumahsehat.service.ResepService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class ResepController {
+public class ResepAPIController {
 
     @Autowired
     ResepService resepService;
