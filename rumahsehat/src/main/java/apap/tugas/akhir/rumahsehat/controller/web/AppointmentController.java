@@ -30,35 +30,35 @@ public class AppointmentController {
         return "pages/appointment/detail";
     }
 
-    // Form create appointment
-    @GetMapping("/appointment/add")
-    public String getAppointmentAddForm(Model model) {
-        return "pages/appointment/form-add";
-    }
+//    // Form create appointment
+//    @GetMapping("/appointment/add")
+//    public String getAppointmentAddForm(Model model) {
+//        return "pages/appointment/form-add";
+//    }
 
-    // Confirmation create appointment
-    @PostMapping(value = "/appointment/add")
-    public String postAppointmentAddForm(
-            @ModelAttribute AppointmentModel appointment, Model model) {
-        return "pages/appointment/confirmation-add";
-    }
+//    // Confirmation create appointment
+//    @PostMapping(value = "/appointment/add")
+//    public String postAppointmentAddForm(
+//            @ModelAttribute AppointmentModel appointment, Model model) {
+//        return "pages/appointment/confirmation-add";
+//    }
 
-    // Form update appointment
-    @GetMapping("/appointment/update/{id}")
-    public String getAppointmentAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/appointment/form-update";
-    }
-
-    // Confirmation update appointment
-    @PostMapping(value = "/appointment/update")
-    public String postAppointmentUpdateForm(
-            @ModelAttribute AppointmentModel appointment, Model model) {
-        return "pages/appointment/confirmation-update";
-    }
-
-    // Delete appointment
-    @PostMapping("/appointment/delete")
-    public String deletePengajarSubmit(@ModelAttribute AppointmentModel appointment, Model model) {
-        return "pages/appointment/confirmation-delete";
-    }
+//    // Form update appointment
+//    @GetMapping("/appointment/update/{id}")
+//    public String getAppointmentAddUpdate(@PathVariable Long id, Model model) {
+//        return "pages/appointment/form-update";
+//    }
+//
+//    // Confirmation update appointment
+//    @PostMapping(value = "/appointment/update")
+//    public String postAppointmentUpdateForm(
+//            @ModelAttribute AppointmentModel appointment, Model model) {
+//        return "pages/appointment/confirmation-update";
+//    }
+//
+//    // Delete appointment
+//    @PostMapping("/appointment/delete")
+//    public String deletePengajarSubmit(@ModelAttribute AppointmentModel appointment, Model model) {
+//        return "pages/appointment/confirmation-delete";
+//    }
 }

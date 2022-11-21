@@ -25,6 +25,12 @@ public class AppointmentService {
     }
 
     public void addAppointment(AppointmentModel appointment) {
+        // set default values
+        int count = getListAppointment().size();
+        appointment.setKode("APT-" + (count+1));
+        appointment.setIsDone(false);
+
+        // save
         appointmentDb.save(appointment);
     }
 
