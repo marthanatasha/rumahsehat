@@ -32,7 +32,6 @@ public class JumlahModel {
 
     @NotNull
     @Column(nullable = false, name = "kuantitas")
-    @Size(max = 50)
     private Integer kuantitas;
 
     @ManyToOne
