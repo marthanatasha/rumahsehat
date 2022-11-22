@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Branch Create Appointment'),
+          title: const Text('Rumah Sehat'),
         ),
-        body: FormCreateAppointment(),
+        body: FormCreateAppointment(), // TODO: Masih ganti2 sesuai apa yang mau gue liat :)
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
