@@ -24,14 +24,14 @@ public class AppointmentService {
         return appointmentDb.findById(id).get();
     }
 
-    public void addAppointment(AppointmentModel appointment) {
+    public AppointmentModel addAppointment(AppointmentModel appointment) {
         // set default values
         int count = getListAppointment().size();
         appointment.setKode("APT-" + (count+1));
         appointment.setIsDone(false);
 
         // save
-        appointmentDb.save(appointment);
+        return appointmentDb.save(appointment);
     }
 
     public AppointmentModel updateAppointment(AppointmentModel appointment) {
