@@ -21,44 +21,44 @@ public class PasienController {
     @GetMapping("/pasien")
     public String getPasienList(Model model) {
         model.addAttribute("pasiens", pasienService.getListPasien());
-        return "pages/pasien/list";
+        return "dashboard/pasien/list";
     }
 
     // Detail pasien
     @GetMapping("/pasien/{id}")
     public String getPasienById(@PathVariable Long id, Model model) {
-        return "pages/pasien/detail";
+        return "dashboard/pasien/detail";
     }
 
     // Form create pasien
     @GetMapping("/pasien/add")
     public String getPasienAddForm(Model model) {
-        return "pages/pasien/form-add";
+        return "dashboard/pasien/form-add";
     }
 
     // Confirmation create pasien
     @PostMapping(value = "/pasien/add")
     public String postPasienAddForm(
             @ModelAttribute PasienModel pasien, Model model) {
-        return "pages/pasien/confirmation-add";
+        return "dashboard/pasien/confirmation-add";
     }
 
     // Form update pasien
     @GetMapping("/pasien/update/{id}")
     public String getPasienAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/pasien/form-update";
+        return "dashboard/pasien/form-update";
     }
 
     // Confirmation update pasien
     @PostMapping(value = "/pasien/update")
     public String postPasienUpdateForm(
             @ModelAttribute PasienModel pasien, Model model) {
-        return "pages/pasien/confirmation-update";
+        return "dashboard/pasien/confirmation-update";
     }
 
     // Delete pasien
     @PostMapping("/pasien/delete")
     public String deletePengajarSubmit(@ModelAttribute PasienModel pasien, Model model) {
-        return "pages/pasien/confirmation-delete";
+        return "dashboard/pasien/confirmation-delete";
     }
 }

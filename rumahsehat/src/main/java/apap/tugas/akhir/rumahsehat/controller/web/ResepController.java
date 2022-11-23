@@ -38,13 +38,13 @@ public class ResepController {
     @GetMapping("/resep")
     public String getResepList(Model model) {
         model.addAttribute("reseps", resepService.getListResep());
-        return "pages/resep/list";
+        return "dashboard/resep/list";
     }
 
     // Detail resep
     @GetMapping("/resep/{id}")
     public String getResepById(@PathVariable Long id, Model model) {
-        return "pages/resep/detail";
+        return "dashboard/resep/detail";
     }
 
     // Form create resep
@@ -62,7 +62,7 @@ public class ResepController {
         model.addAttribute("listJumlah", listJumlah);
         model.addAttribute("kode", kode);
 
-        return "pages/resep/form-add";
+        return "dashboard/resep/form-add";
     }
 
     // Confirmation create resep
@@ -98,7 +98,7 @@ public class ResepController {
         resepService.addResep(resep);
 
         model.addAttribute("idResep", resep.getId());
-        return "pages/resep/confirmation-add";
+        return "dashboard/resep/confirmation-add";
     }
 
     // Add Row obat
@@ -116,7 +116,7 @@ public class ResepController {
         model.addAttribute("listJumlah", listJumlah);
         model.addAttribute("listObat", listObat);
 
-        return "pages/resep/form-add";
+        return "dashboard/resep/form-add";
     }
 
     // Delete Row obat
@@ -132,25 +132,25 @@ public class ResepController {
         model.addAttribute("listJumlah", listJumlah);
         model.addAttribute("listObat", listObat);
 
-        return "pages/resep/form-add";
+        return "dashboard/resep/form-add";
     }
 
     // Form update resep
     @GetMapping("/resep/update/{id}")
     public String getResepAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/resep/form-update";
+        return "dashboard/resep/form-update";
     }
 
     // Confirmation update resep
     @PostMapping(value = "/resep/update")
     public String postResepUpdateForm(
             @ModelAttribute ResepModel resep, Model model) {
-        return "pages/resep/confirmation-update";
+        return "dashboard/resep/confirmation-update";
     }
 
     // Delete resep
     @PostMapping("/resep/delete")
     public String deletePengajarSubmit(@ModelAttribute ResepModel resep, Model model) {
-        return "pages/resep/confirmation-delete";
+        return "dashboard/resep/confirmation-delete";
     }
 }

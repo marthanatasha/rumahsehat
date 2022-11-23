@@ -36,9 +36,9 @@ public class BaseController {
             admin.setPassword("admin");
             admin.setRole(UserType.ADMIN);
             admin.setUsername("admin");
-
             adminService.addAdmin(admin);
         }
+
         return "pages/home";
     }
 }
