@@ -24,8 +24,14 @@ public class AppointmentService {
         return appointmentDb.findById(id).get();
     }
 
-    public void addAppointment(AppointmentModel appointment) {
-        appointmentDb.save(appointment);
+    public AppointmentModel addAppointment(AppointmentModel appointment) {
+        // set default values
+        int count = getListAppointment().size();
+        appointment.setKode("APT-" + (count+1));
+        appointment.setIsDone(false);
+
+        // save
+        return appointmentDb.save(appointment);
     }
 
     public AppointmentModel updateAppointment(AppointmentModel appointment) {
