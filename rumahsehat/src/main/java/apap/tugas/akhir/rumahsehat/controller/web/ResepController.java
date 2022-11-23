@@ -7,12 +7,10 @@ import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import apap.tugas.akhir.rumahsehat.service.JumlahService;
 import apap.tugas.akhir.rumahsehat.service.ObatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import apap.tugas.akhir.rumahsehat.model.ResepModel;
 import apap.tugas.akhir.rumahsehat.service.ResepService;
@@ -51,7 +49,7 @@ public class ResepController {
 
     // Form create resep
     @GetMapping("/resep/add/{kode}")
-    public String getResepAddForm(Model model, String kode) {
+    public String getResepAddForm(Model model, @PathVariable String kode) {
         ResepModel resep = new ResepModel();
         List<ObatModel> listObat = obatService.getListObat();
         List<JumlahModel> listJumlah = jumlahService.getListJumlah();
@@ -68,8 +66,12 @@ public class ResepController {
     }
 
     // Confirmation create resep
-    @PostMapping(value = "/resep/add")
-    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, String kode) {
+    @PostMapping(value = "/resep/add/{kode}")
+    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, @PathVariable String kode) {
+        AppointmentModel app = appointmentService.getAppointmentById(kode);
+        app.setResep(resep);
+        resep.setAppointment(app);
+
         if (resep.getJumlah() == null){
             resep.setJumlah(new ArrayList<>());
         }
@@ -85,17 +87,52 @@ public class ResepController {
         resep.setIsDone(false);
         resep.setCreatedAt(LocalDateTime.now());
 
-        List<AppointmentModel> listAppointment = appointmentService.getListAppointment();
-        for (AppointmentModel a : listAppointment){
-            if (a.getKode().equals(kode)){
-                resep.setAppointment(a);
-            }
-        }
+//        List<AppointmentModel> listAppointment = appointmentService.getListAppointment();
+//        for (AppointmentModel a : listAppointment){
+//            if (a.getKode().equals(kode)){
+//                resep.setAppointment(a);
+//                a.setResep(resep);
+//            }
+//        }
 
         resepService.addResep(resep);
 
         model.addAttribute("idResep", resep.getId());
         return "pages/resep/confirmation-add";
+    }
+
+    // Add Row obat
+    @PostMapping(value="/resep/add/{kode}", params = {"addRow"})
+    public String addRowObat(@ModelAttribute ResepModel resep, Model model, @PathVariable String kode){
+        List<ObatModel> listObat = obatService.getListObat();
+        if (resep.getJumlah() == null){
+            resep.setJumlah(new ArrayList<>());
+        }
+
+        resep.getJumlah().add(new JumlahModel());
+        List<JumlahModel> listJumlah = jumlahService.getListJumlah();
+
+        model.addAttribute("resep", resep);
+        model.addAttribute("listJumlah", listJumlah);
+        model.addAttribute("listObat", listObat);
+
+        return "pages/resep/form-add";
+    }
+
+    // Delete Row obat
+    @PostMapping(value = "/resep/add/{kode}", params = {"deleteRow"})
+    public String deleteRowObat(@ModelAttribute ResepModel resep, Model model, @RequestParam("deleteRow") Integer row, @PathVariable String kode){
+        List<ObatModel> listObat = obatService.getListObat();
+        final Integer rowInt = Integer.valueOf(row);
+        resep.getJumlah().remove(rowInt.intValue());
+
+        List<JumlahModel> listJumlah = resep.getJumlah();
+
+        model.addAttribute("resep", resep);
+        model.addAttribute("listJumlah", listJumlah);
+        model.addAttribute("listObat", listObat);
+
+        return "pages/resep/form-add";
     }
 
     // Form update resep
