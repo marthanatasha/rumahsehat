@@ -16,6 +16,9 @@ public class AdminService {
     @Autowired
     private AdminDb adminDb;
 
+    @Autowired
+    private GeneralService generalService;
+
     public List<AdminModel> getListAdmin() {
         return adminDb.findAll();
     }
@@ -25,6 +28,8 @@ public class AdminService {
     }
 
     public void addAdmin(AdminModel admin) {
+        String pass = generalService.encrypt(admin.getPassword());
+        admin.setPassword(pass);
         adminDb.save(admin);
     }
 

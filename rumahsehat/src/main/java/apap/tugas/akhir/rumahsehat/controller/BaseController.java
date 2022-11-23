@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.repository.AdminDb;
+import apap.tugas.akhir.rumahsehat.service.AdminService;
 
 @Controller
 public class BaseController {
+
     @Autowired
-    AdminDb adminDb;
+    AdminService adminService;
 
     @GetMapping("/")
     private String Home() {
@@ -25,9 +27,9 @@ public class BaseController {
         return "pages/login";
     }
 
-    @GetMapping("/initial")
+    @GetMapping("/api/initial")
     private String Initial() {
-        if (adminDb.findAll().size() == 0) {
+        if (adminService.getListAdmin().size() == 0) {
             AdminModel admin = new AdminModel();
             admin.setEmail("admin@rumahsehat.com");
             admin.setNama("admin utama");
@@ -35,7 +37,7 @@ public class BaseController {
             admin.setRole(UserType.ADMIN);
             admin.setUsername("admin");
 
-            adminDb.save(admin);
+            adminService.addAdmin(admin);
         }
         return "pages/home";
     }

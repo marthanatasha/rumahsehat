@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
@@ -36,5 +37,11 @@ public class UserService {
     public UserModel deleteUser(UserModel user) {
         userDb.delete(user);
         return user;
+    }
+
+    public String encrypt(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        return hashedPassword;
     }
 }
