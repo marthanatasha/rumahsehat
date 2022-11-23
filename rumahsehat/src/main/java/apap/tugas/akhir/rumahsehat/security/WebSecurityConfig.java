@@ -22,7 +22,6 @@ public class WebSecurityConfig {
                 .antMatchers("/").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
-                // .antMatchers("/login-sso", "/validate-ticket").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
