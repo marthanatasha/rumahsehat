@@ -21,7 +21,7 @@ public class ObatController {
     @GetMapping("/obat")
     public String getObatList(Model model) {
         model.addAttribute("daftarObat", obatService.getListObat());
-        return "pages/obat/list";
+        return "dashboard/obat/list";
     }
 
     // Detail obat
