@@ -33,5 +33,18 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // @Autowired
+    // private UserDetailsService userDetailsService;
+
+    // @Autowired
+    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    // }
+
 
 }

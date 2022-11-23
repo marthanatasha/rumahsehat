@@ -7,5 +7,6 @@ import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 
 @Repository
 public interface UserDb extends JpaRepository<UserModel, String> {
+    UserModel findByUsername(String username);
     
 }
