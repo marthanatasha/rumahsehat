@@ -36,7 +36,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "resep")
-
 public class ResepModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +60,7 @@ public class ResepModel implements Serializable {
     private List<JumlahModel> jumlah;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "confirmer_uuid", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "confirmer_uuid", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ApotekerModel apoteker;
 
