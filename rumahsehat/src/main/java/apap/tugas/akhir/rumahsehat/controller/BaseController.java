@@ -24,7 +24,7 @@ public class BaseController {
 
     @RequestMapping("/login")
     public String login() {
-        return "pages/login";
+        return "login";
     }
 
     @GetMapping("/api/initial")
