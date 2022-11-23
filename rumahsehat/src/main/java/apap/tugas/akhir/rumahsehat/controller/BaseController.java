@@ -24,6 +24,7 @@ public class BaseController {
 
     @RequestMapping("/login")
     public String login() {
+        System.out.println("masuk login"); // TODO: debug
         return "pages/login";
     }
 
