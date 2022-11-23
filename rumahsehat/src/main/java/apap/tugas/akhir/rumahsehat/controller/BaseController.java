@@ -19,7 +19,7 @@ public class BaseController {
 
     @GetMapping("/")
     private String Home() {
-        return "pages/home";
+        return "dashboard/index";
     }
 
     @RequestMapping("/login")
