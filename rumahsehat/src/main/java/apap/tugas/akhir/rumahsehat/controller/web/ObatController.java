@@ -21,26 +21,26 @@ public class ObatController {
     @GetMapping("/obat")
     public String getObatList(Model model) {
         model.addAttribute("daftarObat", obatService.getListObat());
-        return "pages/obat/list";
+        return "dashboard/obat/list";
     }
 
     // Detail obat
     @GetMapping("/obat/{id}")
     public String getObatById(@PathVariable Long id, Model model) {
-        return "pages/obat/detail";
+        return "dashboard/obat/detail";
     }
 
     // Form create obat
     @GetMapping("/obat/add")
     public String getObatAddForm(Model model) {
-        return "pages/obat/form-add";
+        return "dashboard/obat/form-add";
     }
 
     // Confirmation create obat
     @PostMapping(value = "/obat/add")
     public String postObatAddForm(
             @ModelAttribute ObatModel obat, Model model) {
-        return "pages/obat/confirmation-add";
+        return "dashboard/obat/confirmation-add";
     }
 
     // Form update obat
@@ -48,7 +48,7 @@ public class ObatController {
     public String getObatAddUpdate(@PathVariable String idObat, Model model) {
         ObatModel obat = obatService.getObatById(idObat);
         model.addAttribute("obat", obat);
-        return "pages/obat/form-update";
+        return "dashboard/obat/form-update";
     }
 
     // Confirmation update obat
@@ -57,12 +57,12 @@ public class ObatController {
             @ModelAttribute ObatModel obat, Model model) {
         ObatModel updatedObat = obatService.updateObat(obat);
         model.addAttribute("updatedObat", updatedObat);
-        return "pages/obat/confirmation-update";
+        return "dashboard/obat/confirmation-update";
     }
 
     // Delete obat
     @PostMapping("/obat/delete")
     public String deletePengajarSubmit(@ModelAttribute ObatModel obat, Model model) {
-        return "pages/obat/confirmation-delete";
+        return "dashboard/obat/confirmation-delete";
     }
 }

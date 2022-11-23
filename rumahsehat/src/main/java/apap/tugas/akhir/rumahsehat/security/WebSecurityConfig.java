@@ -18,10 +18,13 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
+                .antMatchers("/bootstrap/**").permitAll()
+                .antMatchers("/dist/**").permitAll()
+                .antMatchers("/plugins/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -42,9 +45,9 @@ public class WebSecurityConfig {
     // private UserDetailsService userDetailsService;
 
     // @Autowired
-    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    // public void configAuthentication(AuthenticationManagerBuilder auth) throws
+    // Exception {
+    // auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     // }
-
 
 }
