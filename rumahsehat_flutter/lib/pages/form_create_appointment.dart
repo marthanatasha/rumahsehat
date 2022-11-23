@@ -48,7 +48,8 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
   // Function to post Appointment as Json
   AppointmentDTO postAppointment() {
     AppointmentDTO appointment = AppointmentDTO(chosenDateTime!, chosenDoctorId!, "1");
-    print(json.encode(appointment.toJson())); // TODO: debug
+    var aptJson = json.encode(appointment.toJson());
+    print(aptJson); // TODO: debug
     // TODO: API
     return appointment;
   }
