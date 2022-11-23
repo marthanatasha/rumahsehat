@@ -20,7 +20,7 @@ public class ObatController {
     // List obat
     @GetMapping("/obat")
     public String getObatList(Model model) {
-        model.addAttribute("obats", obatService.getListObat());
+        model.addAttribute("daftarObat", obatService.getListObat());
         return "pages/obat/list";
     }
 
@@ -44,8 +44,10 @@ public class ObatController {
     }
 
     // Form update obat
-    @GetMapping("/obat/update/{id}")
-    public String getObatAddUpdate(@PathVariable Long id, Model model) {
+    @GetMapping("/obat/update/{idObat}")
+    public String getObatAddUpdate(@PathVariable String idObat, Model model) {
+        ObatModel obat = obatService.getObatById(idObat);
+        model.addAttribute("obat", obat);
         return "pages/obat/form-update";
     }
 
@@ -53,6 +55,8 @@ public class ObatController {
     @PostMapping(value = "/obat/update")
     public String postObatUpdateForm(
             @ModelAttribute ObatModel obat, Model model) {
+        ObatModel updatedObat = obatService.updateObat(obat);
+        model.addAttribute("updatedObat", updatedObat);
         return "pages/obat/confirmation-update";
     }
 
