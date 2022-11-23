@@ -19,12 +19,12 @@ public class BaseController {
 
     @GetMapping("/")
     private String Home() {
-        return "pages/home";
+        return "dashboard/index";
     }
 
     @RequestMapping("/login")
     public String login() {
-        return "pages/login";
+        return "login";
     }
 
     @GetMapping("/api/initial")
@@ -36,9 +36,9 @@ public class BaseController {
             admin.setPassword("admin");
             admin.setRole(UserType.ADMIN);
             admin.setUsername("admin");
-
             adminService.addAdmin(admin);
         }
+
         return "pages/home";
     }
 }
