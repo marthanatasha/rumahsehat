@@ -44,4 +44,9 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(password);
         return hashedPassword;
     }
+
+    public UserModel getUserByUsername(String username) {
+        UserModel user = userDb.findByUsername(username);
+        return user;
+    }
 }
