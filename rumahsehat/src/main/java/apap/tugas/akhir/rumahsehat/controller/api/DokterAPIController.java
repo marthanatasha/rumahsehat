@@ -1,6 +1,7 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.service.DokterService;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,9 +27,14 @@ public class DokterAPIController {
 
     // List dokter
     @GetMapping("/dokter")
-    public String getDokterList(Model model) {
-        model.addAttribute("dokters", dokterService.getListDokter());
-        return "pages/dokter/list";
+    public List<DokterModel> getDokterList() {
+        try {
+            return dokterService.getListDokter();
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Belum ada dokter tersedia"
+            );
+        }
     }
 
     // Detail dokter

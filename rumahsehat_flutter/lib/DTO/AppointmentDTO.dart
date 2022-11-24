@@ -6,6 +6,6 @@ class AppointmentDTO {
   AppointmentDTO(this.waktuAwal, this.dokterId, this.pasienId);
 
   Map<String, dynamic> toJson() {
-    return {'waktu_awal':waktuAwal.toIso8601String(), 'dokter_id': dokterId, 'pasien_id': pasienId};
+    return {'waktuAwal':waktuAwal.toIso8601String(), 'dokterId': dokterId, 'pasienId': pasienId};
   }
 }

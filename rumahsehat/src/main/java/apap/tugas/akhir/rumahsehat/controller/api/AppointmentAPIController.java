@@ -1,5 +1,6 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,12 +34,17 @@ public class AppointmentAPIController {
 
     // Form create appointment
     @PostMapping("/appointment/add")
-    public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentModel appointment, BindingResult bindingResult) {
+    public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentDTO appointmentDTO, BindingResult bindingResult) {
         System.out.println("masuk controller"); // TODO: debug
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
-            return appointmentService.addAppointment(appointment);
+            AppointmentModel result = appointmentService.addAppointment(appointmentDTO);
+            if (result == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Waktu appointment tidak tersedia.");
+            } else {
+                return result;
+            }
         }
     }
 
