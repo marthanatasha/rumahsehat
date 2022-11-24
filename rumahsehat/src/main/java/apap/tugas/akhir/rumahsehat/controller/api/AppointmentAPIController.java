@@ -32,10 +32,11 @@ public class AppointmentAPIController {
     }
 
     // Form create appointment
-    @GetMapping("/appointment/add")
+    @PostMapping("/appointment/add")
     public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentModel appointment, BindingResult bindingResult) {
+        System.out.println("masuk controller"); // TODO: debug
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Resquest body has invalid type or missing field");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
             return appointmentService.addAppointment(appointment);
         }

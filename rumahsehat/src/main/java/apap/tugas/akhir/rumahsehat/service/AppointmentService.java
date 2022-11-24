@@ -25,6 +25,7 @@ public class AppointmentService {
     }
 
     public AppointmentModel addAppointment(AppointmentModel appointment) {
+        System.out.println("masuk service"); // TODO: debug
         // set default values
         int count = getListAppointment().size();
         appointment.setKode("APT-" + (count+1));
