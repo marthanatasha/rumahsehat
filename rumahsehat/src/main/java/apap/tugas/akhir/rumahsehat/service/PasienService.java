@@ -20,7 +20,7 @@ public class PasienService {
         return pasienDb.findAll();
     }
 
-    public PasienModel getPasienById(Long id) {
+    public PasienModel getPasienById(String id) {
         return pasienDb.findById(id).get();
     }
 

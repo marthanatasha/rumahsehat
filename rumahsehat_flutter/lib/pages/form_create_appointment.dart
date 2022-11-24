@@ -25,12 +25,14 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to get list of Dokter
   Future getDokter() async {
-    var response = await http.get(Uri.https('jsonplaceholder.typicode.com', 'users')); // TODO: change API url
+    var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/dokter'));
     var jsonData = jsonDecode(response.body);
+    print(response.body); // TODO: debug
 
     listDokter = [];
     for (var d in jsonData) {
-      DokterDTO dokter = DokterDTO(d["id"].toString(), d["name"], d["id"]);
+      DokterDTO dokter = DokterDTO(d["id"], d["nama"], d["tarif"]);
+      print('get dokter ${dokter.dokterId}'); // TODO: debug
       listDokter.add(dokter);
     }
 
@@ -40,16 +42,20 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
     print('Default doctor value: ${chosenDoctorId!}'); // TODO: debug
     print('Doctor count: ${listDokter.length}'); // TODO: debug
     runGetDokter = true;
-    // listDokter = []; // TODO: testing kl gaada dokter di db
     return listDokter;
   }
 
   // Function to post Appointment as Json
-  AppointmentDTO postAppointment() {
-    AppointmentDTO appointment = AppointmentDTO(chosenDateTime!, chosenDoctorId!, "1");
+  Future postAppointment() async {
+    AppointmentDTO appointment = AppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
-    // TODO: API
+    var response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/api/v1/appointment/add'),
+        headers: {"Accept": "application/json", "content-type": "application/json"},
+        body: aptJson
+    );
+    print(response.body); // TODO: debug
     return appointment;
   }
 
@@ -222,21 +228,14 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  AppointmentDTO newAppointment = postAppointment();
+                                  postAppointment();
+                                  // AppointmentDTO newAppointment = postAppointment(); // TODO: debug
                                   showDialog (
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text('Belom Siap Bang'),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget> [
-                                            Text('Waktu: ${DateFormat('dd-MM-yyyy hh:mm').format(newAppointment.waktuAwal)}'),
-                                            Text('Dokter: ${newAppointment.dokterId}'),
-                                            Text('Pasien: ${newAppointment.pasienId}'),
-                                          ],
-                                        ),
+                                        content: Text('Tapi coba cek db nya deh kak >_<'),
                                         actions: <Widget> [
                                           TextButton(
                                             child: const Text('Oke deh bang'),
