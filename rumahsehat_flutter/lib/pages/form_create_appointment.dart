@@ -56,7 +56,44 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
         body: aptJson
     );
     print(response.body); // TODO: debug
-    return appointment;
+    if (response.statusCode == 200) {
+      return showDialog (
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Appointment Created!'),
+            content: const Text('Coba cek DB bang...'),
+            actions: <Widget> [
+              TextButton(
+                child: const Text('Okede bang'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+      );
+    } else {
+      return showDialog (
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Create Appointment Failed!'),
+            content: const Text('Oh no! Coba buat di waktu yang lain...'),
+            actions: <Widget> [
+              TextButton(
+                child: const Text('Okede bang'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+      );
+    }
   }
 
   @override
@@ -229,25 +266,24 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   postAppointment();
-                                  // AppointmentDTO newAppointment = postAppointment(); // TODO: debug
-                                  showDialog (
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Belom Siap Bang'),
-                                        content: Text('Tapi coba cek db nya deh kak >_<'),
-                                        actions: <Widget> [
-                                          TextButton(
-                                            child: const Text('Oke deh bang'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  );
+                                  // showDialog (
+                                  //   context: context,
+                                  //   builder: (BuildContext context) {
+                                  //     return AlertDialog(
+                                  //       title: const Text('Belom Siap Bang'),
+                                  //       content: Text('Tapi coba cek db nya deh kak >_<'),
+                                  //       actions: <Widget> [
+                                  //         TextButton(
+                                  //           child: const Text('Oke deh bang'),
+                                  //           onPressed: () {
+                                  //             Navigator.pop(context);
+                                  //             Navigator.pop(context);
+                                  //           },
+                                  //         ),
+                                  //       ],
+                                  //     );
+                                  //   }
+                                  // );
                                 }
                               },
                               child: const Text('Submit'),

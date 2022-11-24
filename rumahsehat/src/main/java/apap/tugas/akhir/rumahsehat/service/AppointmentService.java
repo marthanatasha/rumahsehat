@@ -1,5 +1,8 @@
 package apap.tugas.akhir.rumahsehat.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +11,8 @@ import javax.transaction.Transactional;
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
+import net.bytebuddy.asm.Advice;
+import org.hibernate.validator.internal.util.privilegedactions.LoadClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +61,18 @@ public class AppointmentService {
         System.out.println(newAppointment.getWaktuAwal()); // TODO: debug
         System.out.println(newAppointment.getDokter().getId()); // TODO: debug
         System.out.println(newAppointment.getPasien().getId()); // TODO: debug
+
+        // overlapping constraint
+        LocalDateTime aptStart = newAppointment.getWaktuAwal();
+        for (AppointmentModel ext : getListAppointment()) {
+            if (ext.getDokter() == newAppointment.getDokter()) {
+                LocalDateTime extStart = ext.getWaktuAwal();
+                Long difference = ChronoUnit.HOURS.between(aptStart, extStart);
+                if (difference > -1.0 && difference < 1.0) {
+                    return null;
+                }
+            }
+        }
 
         // save
         return appointmentDb.save(newAppointment);

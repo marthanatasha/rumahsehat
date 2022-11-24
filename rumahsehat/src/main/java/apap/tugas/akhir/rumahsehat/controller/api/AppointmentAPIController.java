@@ -39,7 +39,12 @@ public class AppointmentAPIController {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
-            return appointmentService.addAppointment(appointmentDTO);
+            AppointmentModel result = appointmentService.addAppointment(appointmentDTO);
+            if (result == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Waktu appointment tidak tersedia.");
+            } else {
+                return result;
+            }
         }
     }
 
