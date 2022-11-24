@@ -26,6 +26,7 @@ public class WebSecurityConfig {
                 .antMatchers("/dist/**").permitAll()
                 .antMatchers("/plugins/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/login-sso", "/validate-ticket").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -45,9 +46,8 @@ public class WebSecurityConfig {
     // private UserDetailsService userDetailsService;
 
     // @Autowired
-    // public void configAuthentication(AuthenticationManagerBuilder auth) throws
-    // Exception {
-    // auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     // }
 
 }
