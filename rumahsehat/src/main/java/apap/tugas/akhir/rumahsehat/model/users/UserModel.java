@@ -61,4 +61,8 @@ public class UserModel implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private UserType role;
 
+    @NotNull
+    @Column(name = "is_Sso", nullable = false, columnDefinition = "integer default 0")
+    private Boolean isSso;
+
 }
