@@ -50,20 +50,20 @@ public class BaseController {
         return "login";
     }
 
-    @GetMapping("/api/initial")
-    private String Initial() {
-        if (adminService.getListAdmin().size() == 0) {
-            AdminModel admin = new AdminModel();
-            admin.setEmail("admin@rumahsehat.com");
-            admin.setNama("admin utama");
-            admin.setPassword("admin");
-            admin.setRole(UserType.ADMIN);
-            admin.setUsername("admin");
-            adminService.addAdmin(admin);
-        }
+    // @GetMapping("/api/initial")
+    // private String Initial() {
+    //     if (adminService.getListAdmin().size() == 0) {
+    //         AdminModel admin = new AdminModel();
+    //         admin.setEmail("admin@rumahsehat.com");
+    //         admin.setNama("admin utama");
+    //         admin.setPassword("admin");
+    //         admin.setRole(UserType.ADMIN);
+    //         admin.setUsername("admin");
+    //         adminService.addAdmin(admin);
+    //     }
 
-        return "pages/home";
-    }
+    //     return "pages/home";
+    // }
 
     @GetMapping(value = "/login-sso")
     public ModelAndView loginSSO() {
