@@ -21,44 +21,44 @@ public class JumlahController {
     @GetMapping("/jumlah")
     public String getJumlahList(Model model) {
         model.addAttribute("jumlahs", jumlahService.getListJumlah());
-        return "pages/jumlah/list";
+        return "dashboard/jumlah/list";
     }
 
     // Detail jumlah
     @GetMapping("/jumlah/{id}")
     public String getJumlahById(@PathVariable Long id, Model model) {
-        return "pages/jumlah/detail";
+        return "dashboard/jumlah/detail";
     }
 
     // Form create jumlah
     @GetMapping("/jumlah/add")
     public String getJumlahAddForm(Model model) {
-        return "pages/jumlah/form-add";
+        return "dashboard/jumlah/form-add";
     }
 
     // Confirmation create jumlah
     @PostMapping(value = "/jumlah/add")
     public String postJumlahAddForm(
             @ModelAttribute JumlahModel jumlah, Model model) {
-        return "pages/jumlah/confirmation-add";
+        return "dashboard/jumlah/confirmation-add";
     }
 
     // Form update jumlah
     @GetMapping("/jumlah/update/{id}")
     public String getJumlahAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/jumlah/form-update";
+        return "dashboard/jumlah/form-update";
     }
 
     // Confirmation update jumlah
     @PostMapping(value = "/jumlah/update")
     public String postJumlahUpdateForm(
             @ModelAttribute JumlahModel jumlah, Model model) {
-        return "pages/jumlah/confirmation-update";
+        return "dashboard/jumlah/confirmation-update";
     }
 
     // Delete jumlah
     @PostMapping("/jumlah/delete")
     public String deletePengajarSubmit(@ModelAttribute JumlahModel jumlah, Model model) {
-        return "pages/jumlah/confirmation-delete";
+        return "dashboard/jumlah/confirmation-delete";
     }
 }

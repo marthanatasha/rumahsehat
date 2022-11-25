@@ -26,47 +26,55 @@ public class DokterController {
     @GetMapping("/dokter")
     public String getDokterList(Model model) {
         model.addAttribute("dokters", dokterService.getListDokter());
+<<<<<<< HEAD
         model.addAttribute("apotekers", apotekerService.getListApoteker());
         return "pages/dokter/list";
+=======
+        return "dashboard/dokter/list";
+>>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Detail dokter
     @GetMapping("/dokter/{id}")
     public String getDokterById(@PathVariable Long id, Model model) {
-        return "pages/dokter/detail";
+        return "dashboard/dokter/detail";
     }
 
     // Form create dokter
     @GetMapping("/dokter/add")
     public String getDokterAddForm(Model model) {
-        return "pages/dokter/form-add";
+        return "dashboard/dokter/form-add";
     }
 
     // Confirmation create dokter
     @PostMapping(value = "/dokter/add")
     public String postDokterAddForm(
             @ModelAttribute DokterModel dokter, Model model) {
+<<<<<<< HEAD
                 dokter.setRole(UserType.DOKTER);
                 dokterService.addDokter(dokter);
         return "pages/dokter/confirmation-add";
+=======
+        return "dashboard/dokter/confirmation-add";
+>>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Form update dokter
     @GetMapping("/dokter/update/{id}")
     public String getDokterAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/dokter/form-update";
+        return "dashboard/dokter/form-update";
     }
 
     // Confirmation update dokter
     @PostMapping(value = "/dokter/update")
     public String postDokterUpdateForm(
             @ModelAttribute DokterModel dokter, Model model) {
-        return "pages/dokter/confirmation-update";
+        return "dashboard/dokter/confirmation-update";
     }
 
     // Delete dokter
     @PostMapping("/dokter/delete")
     public String deletePengajarSubmit(@ModelAttribute DokterModel dokter, Model model) {
-        return "pages/dokter/confirmation-delete";
+        return "dashboard/dokter/confirmation-delete";
     }
 }

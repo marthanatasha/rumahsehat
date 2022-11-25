@@ -20,45 +20,49 @@ public class ObatController {
     // List obat
     @GetMapping("/obat")
     public String getObatList(Model model) {
-        model.addAttribute("obats", obatService.getListObat());
-        return "pages/obat/list";
+        model.addAttribute("daftarObat", obatService.getListObat());
+        return "dashboard/obat/list";
     }
 
     // Detail obat
     @GetMapping("/obat/{id}")
     public String getObatById(@PathVariable Long id, Model model) {
-        return "pages/obat/detail";
+        return "dashboard/obat/detail";
     }
 
     // Form create obat
     @GetMapping("/obat/add")
     public String getObatAddForm(Model model) {
-        return "pages/obat/form-add";
+        return "dashboard/obat/form-add";
     }
 
     // Confirmation create obat
     @PostMapping(value = "/obat/add")
     public String postObatAddForm(
             @ModelAttribute ObatModel obat, Model model) {
-        return "pages/obat/confirmation-add";
+        return "dashboard/obat/confirmation-add";
     }
 
     // Form update obat
-    @GetMapping("/obat/update/{id}")
-    public String getObatAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/obat/form-update";
+    @GetMapping("/obat/update/{idObat}")
+    public String getObatAddUpdate(@PathVariable String idObat, Model model) {
+        ObatModel obat = obatService.getObatById(idObat);
+        model.addAttribute("obat", obat);
+        return "dashboard/obat/form-update";
     }
 
     // Confirmation update obat
     @PostMapping(value = "/obat/update")
     public String postObatUpdateForm(
             @ModelAttribute ObatModel obat, Model model) {
-        return "pages/obat/confirmation-update";
+        ObatModel updatedObat = obatService.updateObat(obat);
+        model.addAttribute("updatedObat", updatedObat);
+        return "dashboard/obat/confirmation-update";
     }
 
     // Delete obat
     @PostMapping("/obat/delete")
     public String deletePengajarSubmit(@ModelAttribute ObatModel obat, Model model) {
-        return "pages/obat/confirmation-delete";
+        return "dashboard/obat/confirmation-delete";
     }
 }

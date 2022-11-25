@@ -27,46 +27,50 @@ public class ApotekerController {
     public String getApotekerList(Model model) {
         model.addAttribute("dokters", dokterService.getListDokter());
         model.addAttribute("apotekers", apotekerService.getListApoteker());
-        return "pages/apoteker/list";
+        return "dashboard/apoteker/list";
     }
 
     // Detail apoteker
     @GetMapping("/apoteker/{id}")
     public String getApotekerById(@PathVariable Long id, Model model) {
-        return "pages/apoteker/detail";
+        return "dashboard/apoteker/detail";
     }
 
     // Form create apoteker
     @GetMapping("/apoteker/add")
     public String getApotekerAddForm(Model model) {
-        return "pages/apoteker/form-add";
+        return "dashboard/apoteker/form-add";
     }
 
     // Confirmation create apoteker
     @PostMapping(value = "/apoteker/add")
     public String postApotekerAddForm(
             @ModelAttribute ApotekerModel apoteker, Model model) {
+<<<<<<< HEAD
         apoteker.setRole(UserType.APOTEKER);
         apotekerService.addApoteker(apoteker);
         return "pages/apoteker/confirmation-add";
+=======
+        return "dashboard/apoteker/confirmation-add";
+>>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Form update apoteker
     @GetMapping("/apoteker/update/{id}")
     public String getApotekerAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/apoteker/form-update";
+        return "dashboard/apoteker/form-update";
     }
 
     // Confirmation update apoteker
     @PostMapping(value = "/apoteker/update")
     public String postApotekerUpdateForm(
             @ModelAttribute ApotekerModel apoteker, Model model) {
-        return "pages/apoteker/confirmation-update";
+        return "dashboard/apoteker/confirmation-update";
     }
 
     // Delete apoteker
     @PostMapping("/apoteker/delete")
     public String deletePengajarSubmit(@ModelAttribute ApotekerModel apoteker, Model model) {
-        return "pages/apoteker/confirmation-delete";
+        return "dashboard/apoteker/confirmation-delete";
     }
 }

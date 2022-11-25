@@ -1,17 +1,16 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,17 +33,27 @@ public class AppointmentAPIController {
     }
 
     // Form create appointment
-    @GetMapping("/appointment/add")
-    public String getAppointmentAddForm(Model model) {
-        return "pages/appointment/form-add";
+    @PostMapping("/appointment/add")
+    public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentDTO appointmentDTO, BindingResult bindingResult) {
+        System.out.println("masuk controller"); // TODO: debug
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+        } else {
+            AppointmentModel result = appointmentService.addAppointment(appointmentDTO);
+            if (result == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Waktu appointment tidak tersedia.");
+            } else {
+                return result;
+            }
+        }
     }
 
-    // Confirmation create appointment
-    @PostMapping(value = "/appointment/add")
-    public String postAppointmentAddForm(
-            @ModelAttribute AppointmentModel appointment, Model model) {
-        return "pages/appointment/confirmation-add";
-    }
+//    // Confirmation create appointment
+//    @PostMapping(value = "/appointment/add")
+//    public String postAppointmentAddForm(
+//            @ModelAttribute AppointmentModel appointment, Model model) {
+//        return "pages/appointment/confirmation-add";
+//    }
 
     // Form update appointment
     @GetMapping("/appointment/update/{id}")

@@ -7,5 +7,5 @@ import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 
 @Repository
 public interface AdminDb extends JpaRepository<AdminModel, String> {
-    
+    AdminModel findByUsername(String username);
 }
