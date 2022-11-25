@@ -8,7 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
+import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserType;
+import apap.tugas.akhir.rumahsehat.service.ApotekerService;
+import apap.tugas.akhir.rumahsehat.service.DokterService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
 
 @Controller
@@ -16,6 +21,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    DokterService dokterService;
+
+    @Autowired
+    ApotekerService apotekerService;
 
     // List user
     @GetMapping("/user")
@@ -40,6 +51,7 @@ public class UserController {
     @PostMapping(value = "/user/add")
     public String postUserAddForm(
             @ModelAttribute UserModel user, Model model) {
+        userService.addUser(user);
         return "pages/user/confirmation-add";
     }
 

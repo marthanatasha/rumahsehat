@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- <title>Add Dokter/Apoteker</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object> -->
+</head>
+<body>
+<div class = "container">
+    <div class="card m-4 p-4">
+        <div clas="card-body">
+            <div class="justify-content-center">
+                <h2>Tambah Dokter/Apoteker Baru</h2>
+                <br>
+                <form th:action="@{/user/add}" th:object="${user}" method="POST">
+                    <label>Nama</label>
+                    <input type="text" name="nama" class="form-control"/>
+
+                    <label>Role</label>
+                    <select name="role" class="form-control">
+                        <option selected value="">--Pilih Role--</option>
+                        <option value="dokter">Dokter</option>
+                        <option value="apoteker">Apoteker</option>
+                    </select>
+
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control"/>
+
+                    <label>Password</label>
+                    <input type="text" name="password" class="form-control"/>
+
+                    <label>E-mail</label>
+                    <input type="text" name="email" class="form-control"/>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-link" href="/">Home</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

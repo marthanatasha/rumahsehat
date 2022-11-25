@@ -26,7 +26,6 @@ import lombok.Setter;
 public class DokterModel extends UserModel {
 
     @NotNull
-    @Size(max = 50)
     @Column(name = "tarif", nullable = false)
     private Integer tarif;
 

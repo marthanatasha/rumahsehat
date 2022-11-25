@@ -57,7 +57,6 @@ public class UserModel implements Serializable {
     private String email;
 
     @NotNull
-    @Size(max = 50)
     @Column(name = "role", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserType role;

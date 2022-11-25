@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Rumah Sehat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous"></head>
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+<body>
+    <nav th:replace="fragments/fragment :: navbar('Admin')"></nav>
+<div class="container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Daftar Dokter</h2>
+                <br>
+                <div class="d-flex flex-row">
+                    <a class="btn btn-primary mr-3" href="/dokter/add">Tambah Dokter atau Apoteker</a>
+                    <a class="btn btn-primary mr-3" href="/">Home</a>
+                </div>
+                <div th:if="*{listDokter.size() != 0}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Role</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Email</th>
+                                </tr>
+                                <tbody>
+                                <tr th:each="dokter, iterationStatus : ${listDokter}"
+                                    th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                                    <td th:text="${iterationStatus.count}"></td>
+                                    <td th:text="${dokter.nama}"></td>
+                                    <td th:text="${dokter.role}"></td>
+                                    <td th:text="${dokter.username}"></td>
+                                    <td th:text="${dokter.password}"></td>
+                                    <td th:text="${dokter.email}"></td>
+                                </tr>
+                                </tbody>
+                            </thead>
+                        </table> 
+                </div>
+                <div th:unless="*{listDokter.size() !=0}">
+                    <h2 th:text="'Tidak ada Dokter'"></h2>
+                </div>
+                <br>
+
+                <h2>Daftar Apoteker</h2>
+                <br>
+                <!-- <div class="d-flex flex-row">
+                    <a class="btn btn-primary mr-3" href="/apoteker/add">Tambah Apoteker</a>
+                </div> -->
+                <div th:if="*{listApoteker.size() != 0}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Role</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Email</th>
+                                </tr>
+                                <tbody>
+                                <tr th:each="apoteker, iterationStatus : ${listApoteker}"
+                                    th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                                    <td th:text="${iterationStatus.count}"></td>
+                                    <td th:text="${apoteker.nama}"></td>
+                                    <td th:text="${apoteker.role}"></td>
+                                    <td th:text="${apoteker.username}"></td>
+                                    <td th:text="${apoteker.password}"></td>
+                                    <td th:text="${apoteker.email}"></td>
+                                </tr>
+                                </tbody>
+                            </thead>
+                        </table> 
+                </div>
+                <div th:unless="*{listApoteker.size() !=0}">
+                    <h2 th:text="'Tidak ada Apoteker'"></h2>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+</body>
+</html>
