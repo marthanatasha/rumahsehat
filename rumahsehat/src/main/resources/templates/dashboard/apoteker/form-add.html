@@ -53,8 +53,38 @@
             <section class="content">
 
                 <div layout:fragment="content">
-                    <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <h1>Form Add</h1>
+                    <div class = "container">
+                        <div class="card m-4 p-4">
+                            <div clas="card-body">
+                                <div class="justify-content-center">
+                                    <h2>Tambah Dokter</h2>
+                                    <br>
+                                    <form th:action="@{/apoteker/add}" th:object="${apoteker}" method="POST">
+                                        <label>Nama</label>
+                                        <input type="text" name="nama" class="form-control"/>
+                    
+                                        <!-- <label>Role</label>
+                                        <select name="role" class="form-control">
+                                            <option selected value="">--Pilih Role--</option>
+                                            <option value="dokter">APOTEKER</option>
+                                        </select> -->
+                    
+                                        <label>Username</label>
+                                        <input type="text" name="username" class="form-control"/>
+                    
+                                        <label>Password</label>
+                                        <input type="text" name="password" class="form-control"/>
+                    
+                                        <label>E-mail</label>
+                                        <input type="text" name="email" class="form-control"/>
+                                        <br>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <a class="btn btn-link" href="/">Home</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

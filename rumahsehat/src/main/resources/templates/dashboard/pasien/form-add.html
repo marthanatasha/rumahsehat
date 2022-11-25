@@ -53,8 +53,49 @@
             <section class="content">
 
                 <div layout:fragment="content">
-                    <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <h1>Form Add</h1>
+                    <div class="container">
+                        <div class="card m-4 p-4">
+                            <div class="card-body">
+                                <div class="justify-content-center">
+                                    <h2>Daftar Pasien</h2>
+                                    <br>
+                                    <div th:if="*{pasiens.size() != 0}">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama</th>
+                                                        <th>Umur</th>
+                                                        <th>Saldo</th>
+                                                        <th>Username</th>
+                                                        <th>Password</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                    <tbody>
+                                                    <tr th:each="pasien, iterationStatus : ${pasiens}"
+                                                        th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                                                        <td th:text="${iterationStatus.count}"></td>
+                                                        <td th:text="${pasien.nama}"></td>
+                                                        <td th:text="${pasien.umur}"></td>
+                                                        <td th:text="${pasien.saldo}"></td>
+                                                        <td th:text="${pasien.username}"></td>
+                                                        <td th:text="${pasien.password}"></td>
+                                                        <td th:text="${pasien.email}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </thead>
+                                            </table> 
+                                    </div>
+                                    <div th:unless="*{pasiens.size() !=0}">
+                                        <h2 th:text="'Tidak ada Pasien'"></h2>
+                                    </div>
+                                    <br>
+                                    <div class="d-flex flex-row">
+                                        <a class="btn btn-primary mr-3" href="/">Home</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

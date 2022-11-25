@@ -53,8 +53,86 @@
             <section class="content">
 
                 <div layout:fragment="content">
-                    <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <h1>List</h1>
+                    <div class="container">
+                        <div class="card m-4 p-4">
+                            <div class="card-body">
+                                <div class="justify-content-center">
+                                    <div class="d-flex flex-row">
+                                        <a class="btn btn-primary mr-3" href="/dokter/add">Tambah Dokter</a>
+                                        <a class="btn btn-primary mr-3" href="/apoteker/add">Tambah Apoteker</a>
+                                        <a class="btn btn-primary mr-3" href="/">Home</a>
+                                    </div>
+                                    
+                                    <h2>Daftar Dokter</h2>
+                                    <br>
+                                    <div th:if="*{dokters.size() != 0}">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama</th>
+                                                        <th>Role</th>
+                                                        <th>Username</th>
+                                                        <th>Password</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                    <tbody>
+                                                    <tr th:each="dokter, iterationStatus : ${dokters}"
+                                                        th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                                                        <td th:text="${iterationStatus.count}"></td>
+                                                        <td th:text="${dokter.nama}"></td>
+                                                        <td th:text="${dokter.role}"></td>
+                                                        <td th:text="${dokter.username}"></td>
+                                                        <td th:text="${dokter.password}"></td>
+                                                        <td th:text="${dokter.email}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </thead>
+                                            </table> 
+                                    </div>
+                                    <div th:unless="*{dokters.size() !=0}">
+                                        <h2 th:text="'Tidak ada Dokter'"></h2>
+                                    </div>
+                                    <br>
+                    
+                                    <h2>Daftar Apoteker</h2>
+                                    <br>
+                                    <!-- <div class="d-flex flex-row">
+                                        <a class="btn btn-primary mr-3" href="/apoteker/add">Tambah Apoteker</a>
+                                    </div> -->
+                                    <div th:if="*{apotekers.size() != 0}">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama</th>
+                                                        <th>Role</th>
+                                                        <th>Username</th>
+                                                        <th>Password</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                    <tbody>
+                                                    <tr th:each="apoteker, iterationStatus : ${apotekers}"
+                                                        th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                                                        <td th:text="${iterationStatus.count}"></td>
+                                                        <td th:text="${apoteker.nama}"></td>
+                                                        <td th:text="${apoteker.role}"></td>
+                                                        <td th:text="${apoteker.username}"></td>
+                                                        <td th:text="${apoteker.password}"></td>
+                                                        <td th:text="${apoteker.email}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </thead>
+                                            </table> 
+                                    </div>
+                                    <div th:unless="*{apotekers.size() !=0}">
+                                        <h2 th:text="'Tidak ada Apoteker'"></h2>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
