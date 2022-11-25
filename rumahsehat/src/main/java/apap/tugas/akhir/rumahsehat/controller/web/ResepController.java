@@ -3,6 +3,9 @@ package apap.tugas.akhir.rumahsehat.controller.web;
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.model.JumlahModel;
 import apap.tugas.akhir.rumahsehat.model.ObatModel;
+import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
+import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
+import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import apap.tugas.akhir.rumahsehat.service.JumlahService;
 import apap.tugas.akhir.rumahsehat.service.ObatService;
@@ -38,13 +41,24 @@ public class ResepController {
     @GetMapping("/resep")
     public String getResepList(Model model) {
         List<ResepModel> listResep = resepService.getListResep();
-        model.addAttribute("resep", listResep);
+        model.addAttribute("listResep", listResep);
         return "dashboard/resep/list";
     }
 
     // Detail resep
     @GetMapping("/resep/{id}")
     public String getResepById(@PathVariable Long id, Model model) {
+        ResepModel resep = resepService.getResepById(id);
+        List<JumlahModel> listJumlah = resep.getJumlah();
+        System.out.println(listJumlah);
+        DokterModel dokter = resep.getAppointment().getDokter();
+        PasienModel pasien = resep.getAppointment().getPasien();
+        ApotekerModel apoteker = resep.getApoteker();
+        model.addAttribute("resep",resep);
+        model.addAttribute("listJumlah", listJumlah);
+        model.addAttribute("dokter", dokter);
+        model.addAttribute("pasien", pasien);
+        model.addAttribute("apoteker", apoteker);
         return "dashboard/resep/detail";
     }
 
