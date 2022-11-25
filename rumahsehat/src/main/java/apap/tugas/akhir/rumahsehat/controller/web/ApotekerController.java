@@ -46,13 +46,9 @@ public class ApotekerController {
     @PostMapping(value = "/apoteker/add")
     public String postApotekerAddForm(
             @ModelAttribute ApotekerModel apoteker, Model model) {
-<<<<<<< HEAD
         apoteker.setRole(UserType.APOTEKER);
         apotekerService.addApoteker(apoteker);
-        return "pages/apoteker/confirmation-add";
-=======
         return "dashboard/apoteker/confirmation-add";
->>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Form update apoteker

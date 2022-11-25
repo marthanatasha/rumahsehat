@@ -51,12 +51,8 @@ public class UserController {
     @PostMapping(value = "/user/add")
     public String postUserAddForm(
             @ModelAttribute UserModel user, Model model) {
-<<<<<<< HEAD
         userService.addUser(user);
-        return "pages/user/confirmation-add";
-=======
         return "dashboard/user/confirmation-add";
->>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Form update user

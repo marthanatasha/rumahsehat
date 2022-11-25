@@ -26,12 +26,8 @@ public class DokterController {
     @GetMapping("/dokter")
     public String getDokterList(Model model) {
         model.addAttribute("dokters", dokterService.getListDokter());
-<<<<<<< HEAD
         model.addAttribute("apotekers", apotekerService.getListApoteker());
-        return "pages/dokter/list";
-=======
         return "dashboard/dokter/list";
->>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Detail dokter
@@ -50,13 +46,9 @@ public class DokterController {
     @PostMapping(value = "/dokter/add")
     public String postDokterAddForm(
             @ModelAttribute DokterModel dokter, Model model) {
-<<<<<<< HEAD
                 dokter.setRole(UserType.DOKTER);
                 dokterService.addDokter(dokter);
-        return "pages/dokter/confirmation-add";
-=======
         return "dashboard/dokter/confirmation-add";
->>>>>>> dc661ac19ff2816880e975fdc9c7be6f950a5af6
     }
 
     // Form update dokter
