@@ -18,11 +18,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
-                // .antMatchers("/login-sso", "/validate-ticket").permitAll()
+                .antMatchers("/bootstrap/**").permitAll()
+                .antMatchers("/dist/**").permitAll()
+                .antMatchers("/plugins/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/login-sso", "/validate-ticket").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -45,6 +49,5 @@ public class WebSecurityConfig {
     // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
     //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     // }
-
 
 }

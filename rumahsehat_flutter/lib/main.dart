@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rumahsehat_flutter/pages/form_create_appointment.dart';
+import 'package:rumahsehat_flutter/pages/home_dummy.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,15 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Rumah Sehat',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Rumah Sehat'),
-        ),
-        body: FormCreateAppointment(), // TODO: Masih ganti2 sesuai apa yang mau gue liat :)
+        body: HomeDummy(), // TODO: Masih dummy
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

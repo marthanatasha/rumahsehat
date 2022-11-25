@@ -20,7 +20,7 @@ public class DokterService {
         return dokterDb.findAll();
     }
 
-    public DokterModel getDokterById(Long id) {
+    public DokterModel getDokterById(String id) {
         return dokterDb.findById(id).get();
     }
 

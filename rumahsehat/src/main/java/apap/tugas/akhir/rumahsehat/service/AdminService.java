@@ -42,4 +42,9 @@ public class AdminService {
         adminDb.delete(admin);
         return admin;
     }
+
+    public AdminModel getAdminByUsername(String username) {
+        AdminModel admin = adminDb.findByUsername(username);
+        return admin;
+    }
 }
