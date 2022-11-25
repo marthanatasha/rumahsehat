@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import apap.tugas.akhir.rumahsehat.model.ResepModel;
 
 @Repository
-public interface ResepDb extends JpaRepository<ResepModel, String> {
+public interface ResepDb extends JpaRepository<ResepModel, Long> {
 
 }
