@@ -37,7 +37,8 @@ public class ResepController {
     // List resep
     @GetMapping("/resep")
     public String getResepList(Model model) {
-        model.addAttribute("reseps", resepService.getListResep());
+        List<ResepModel> listResep = resepService.getListResep();
+        model.addAttribute("resep", listResep);
         return "dashboard/resep/list";
     }
 
