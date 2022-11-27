@@ -47,7 +47,7 @@ public class TagihanModel implements Serializable {
     private LocalDateTime tanggalBayar;
 
     @NotNull
-    @Size(max = 50)
+//    @Size(max = 50)
     @Column(name = "jumlah_tagihan", nullable = false)
     private Integer jumlahTagihan;
 

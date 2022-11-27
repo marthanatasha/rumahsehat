@@ -1,22 +1,15 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
-import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
-import apap.tugas.akhir.rumahsehat.model.JumlahModel;
-import apap.tugas.akhir.rumahsehat.model.ObatModel;
+import apap.tugas.akhir.rumahsehat.model.*;
 import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
-import apap.tugas.akhir.rumahsehat.service.AppointmentService;
-import apap.tugas.akhir.rumahsehat.service.JumlahService;
-import apap.tugas.akhir.rumahsehat.service.ObatService;
+import apap.tugas.akhir.rumahsehat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import apap.tugas.akhir.rumahsehat.model.ResepModel;
-import apap.tugas.akhir.rumahsehat.service.ResepService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +29,9 @@ public class ResepController {
 
     @Autowired
     AppointmentService appointmentService;
+
+    @Autowired
+    TagihanService tagihanService;
 
     // List resep
     @GetMapping("/resep")
@@ -150,6 +146,7 @@ public class ResepController {
         return "dashboard/resep/form-add";
     }
 
+    /**
     // Form update resep
     @GetMapping("/resep/update/{id}")
     public String getResepAddUpdate(@PathVariable Long id, Model model) {
@@ -160,6 +157,49 @@ public class ResepController {
     @PostMapping(value = "/resep/update")
     public String postResepUpdateForm(
             @ModelAttribute ResepModel resep, Model model) {
+        return "dashboard/resep/confirmation-update";
+    }
+
+     */
+
+    // Update resep
+    @GetMapping("/resep/update/{id}")
+    public String resepUpdate(@PathVariable Long id, Model model){
+        ResepModel resep = resepService.getResepById(id);
+        //to do: ambil id apoteker masih gatau caranya T_T
+
+        //cek kuantitas obat
+        boolean canConfirm = true;
+        List<JumlahModel> listJumlah = resep.getJumlah();
+        for (JumlahModel jml : listJumlah){
+            ObatModel obat = jml.getObat();
+            if (obat.getStok() < jml.getKuantitas()){
+                canConfirm = false;
+                break;
+            }
+        }
+
+        // update status resep dan buat tagihan
+        if (canConfirm){
+            int harga = 0;
+            for (JumlahModel jml : listJumlah){
+                harga += jml.getObat().getHarga();
+            }
+            resep.setIsDone(true);
+            resepService.updateResep(resep);
+            TagihanModel bill = new TagihanModel();
+            bill.setAppointment(resep.getAppointment());
+            //to do: identifiers custom generator buat kode tagihan
+            List<TagihanModel> allBill = tagihanService.getListTagihan();
+            bill.setKode("BILL-" + allBill.size()+1);
+            bill.setIsPaid(false);
+            bill.setTanggalTerbuat(LocalDateTime.now());
+            bill.setJumlahTagihan(resep.getAppointment().getDokter().getTarif() + harga);
+            tagihanService.addTagihan(bill);
+        }
+
+        model.addAttribute("resep", resep);
+        model.addAttribute("canConfirm", canConfirm);
         return "dashboard/resep/confirmation-update";
     }
 
