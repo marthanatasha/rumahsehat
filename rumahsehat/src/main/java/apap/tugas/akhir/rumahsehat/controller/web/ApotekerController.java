@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.service.ApotekerService;
+import apap.tugas.akhir.rumahsehat.service.DokterService;
 
 @Controller
 public class ApotekerController {
@@ -17,9 +19,13 @@ public class ApotekerController {
     @Autowired
     ApotekerService apotekerService;
 
+    @Autowired
+    DokterService dokterService;
+
     // List apoteker
     @GetMapping("/apoteker")
     public String getApotekerList(Model model) {
+        model.addAttribute("dokters", dokterService.getListDokter());
         model.addAttribute("apotekers", apotekerService.getListApoteker());
         return "dashboard/apoteker/list";
     }
@@ -40,6 +46,8 @@ public class ApotekerController {
     @PostMapping(value = "/apoteker/add")
     public String postApotekerAddForm(
             @ModelAttribute ApotekerModel apoteker, Model model) {
+        apoteker.setRole(UserType.APOTEKER);
+        apotekerService.addApoteker(apoteker);
         return "dashboard/apoteker/confirmation-add";
     }
 
