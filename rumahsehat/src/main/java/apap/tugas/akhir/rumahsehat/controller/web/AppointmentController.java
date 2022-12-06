@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
@@ -47,8 +45,40 @@ public class AppointmentController {
     }
 
     // Detail appointment
-    @GetMapping("/appointment/{id}")
-    public String getAppointmentById(@PathVariable Long id, Model model) {
+    @GetMapping("/appointment/detail/{kode}")
+    public String getAppointmentById(@PathVariable("kode") String kode, Model model, Principal principal) {
+        AppointmentModel apt = appointmentService.getAppointmentById(kode);
+        UserModel user = userService.getUserByUsername(principal.getName());
+        String role = user.getRole().toString();
+
+        boolean canAccess = false;
+        boolean canCreateResep = false;
+        boolean canUpdateStatus = false;
+        boolean showResepWarning = false;
+
+        if (role.equals("DOKTER") || role.equals("ADMIN")) {
+            canAccess = true;
+        }
+
+        if (role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
+            if (apt.getResep() == null) {
+                canUpdateStatus = true;
+                showResepWarning = true;
+                canCreateResep = true;
+            } else {
+                if (apt.getResep().getIsDone()) {
+                    canUpdateStatus = true;
+                }
+            }
+        }
+
+        model.addAttribute("apt", apt);
+        model.addAttribute("role", role);
+        model.addAttribute("canAccess", canAccess);
+        model.addAttribute("canCreateResep", canCreateResep);
+        model.addAttribute("canUpdateStatus", canUpdateStatus);
+        model.addAttribute("showResepWarning", showResepWarning);
+
         return "dashboard/appointment/detail";
     }
 

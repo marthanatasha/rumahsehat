@@ -57,7 +57,7 @@
                     <h1 class="font-weight-bold">Daftar Appointment</h1>
                     <br>
                     <div th:if="${appointments == null}">
-                        <h3>Forbidden.</h3>
+                        <h3>Forbidden</h3>
                     </div>
                     <div th:unless="${appointments == null}">
                         <div th:if="${appointments.size() != 0}">
