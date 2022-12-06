@@ -56,6 +56,7 @@ public class ResepModel implements Serializable {
     @JoinTable(name = "resep_appointment", joinColumns = {
             @JoinColumn(name = "resep_id", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "appointment_kode", referencedColumnName = "kode") })
+    @JsonIgnore
     private AppointmentModel appointment;
 
     @OneToMany(mappedBy = "resep", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

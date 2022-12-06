@@ -1,10 +1,12 @@
+import 'dart:ffi';
+
 class GetDetailAppointmentDTO {
   String kode;
   bool isDone;
   String tanggal;
   String jam;
   String namaDokter;
-  String kodeTagihan;
+  String idResep;
 
-  GetDetailAppointmentDTO(this.kode, this.isDone, this.tanggal, this.jam, this.namaDokter, this.kodeTagihan);
+  GetDetailAppointmentDTO(this.kode, this.isDone, this.tanggal, this.jam, this.namaDokter, this.idResep);
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/DTO/GetDetailAppointmentDTO.dart';
@@ -18,13 +19,11 @@ class ViewAppointment extends StatelessWidget {
 
     if (response.statusCode == 200) {
       var raw = jsonData["waktuAwal"].split('T');
-      String kodeTagihan = "";
-      if (jsonData["tagihan"] != null) {
-        kodeTagihan = jsonData["tagihan"]["kode"];
-      } else {
-        kodeTagihan = "NO TAGIHAN";
+      String idResep = "NO RESEP";
+      if (jsonData["resep"] != null) {
+        idResep = jsonData["resep"]["id"].toString();
       }
-      aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"], raw[0], raw[1], jsonData["dokter"]["nama"], kodeTagihan);
+      aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"], raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
       return aptDetails;
 
     } else {
@@ -199,7 +198,7 @@ class ViewAppointment extends StatelessWidget {
                           ),
                           const SizedBox(width: 12,),
                           Expanded(
-                            child: ButtonTagihan(kodeTagihan: aptDetails.kodeTagihan),
+                            child: ButtonLihatResep(idResep: aptDetails.idResep),
                           ),
                         ],
                       ),
@@ -215,32 +214,32 @@ class ViewAppointment extends StatelessWidget {
   }
 }
 
-class ButtonTagihan extends StatefulWidget {
-  late final String kodeTagihan;
-  ButtonTagihan({required this.kodeTagihan});
+class ButtonLihatResep extends StatefulWidget {
+  late final String idResep;
+  ButtonLihatResep({required this.idResep});
 
-  _ButtonTagihan createState() => _ButtonTagihan(kodeTagihan: kodeTagihan);
+  _ButtonLihatResep createState() => _ButtonLihatResep(idResep: idResep);
 }
 
-class _ButtonTagihan extends State<ButtonTagihan> {
-  late final String kodeTagihan;
-  _ButtonTagihan({required this.kodeTagihan});
+class _ButtonLihatResep extends State<ButtonLihatResep> {
+  late final String idResep;
+  _ButtonLihatResep({required this.idResep});
 
   Widget build(BuildContext context) {
-    if (kodeTagihan == "NO TAGIHAN") {
+    if (idResep == "NO RESEP") {
       return Container(
         padding: const EdgeInsets.only(top: 12),
         child: const ElevatedButton(
           onPressed: null,
-          child: Text('Tidak Ada Tagihan'),
+          child: Text('Tidak Ada Resep'),
         )
       );
     } else {
       return Container(
         padding: const EdgeInsets.only(top: 12),
         child: ElevatedButton(
-          onPressed: () {}, // TODO: navigate to detail tagihan
-          child: const Text('Lihat Tagihan'),
+          onPressed: () {}, // TODO: navigate to detail resep
+          child: const Text('Lihat Resep'),
         )
       );
     }
