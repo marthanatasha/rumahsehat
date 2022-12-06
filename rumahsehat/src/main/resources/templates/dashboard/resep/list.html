@@ -54,7 +54,44 @@
 
                 <div layout:fragment="content">
                     <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <h1>List</h1>
+                    <div class="container">
+                        <div class="card m-4 p-4">
+                            <div class="card-body">
+                                <div class="justify-content-center">
+                                    <h2>Daftar Resep</h2>
+                                </div>
+                                <div th:if="*{listResep.size() !=0}">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Id</th>
+                                            <th>Tangal Dibuat</th>
+                                            <th>Status</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="resep, iterationStatus : ${listResep}">
+                                            <td th:text="${iterationStatus.count}"></td>
+                                            <td th:text="${resep.id}"></td>
+                                            <td th:text="${resep.createdAt}"></td>
+                                            <td>
+                                                <span th:if="${resep.isDone == false}" th:text="'Belum Selesai'"></span>
+                                                <span th:if="${resep.isDone == true}" th:text="'Selesai'"></span>
+                                            </td>
+                                            <td><a class="btn btn-info" th:href="@{/resep/} + ${resep.id}">Detail</a> </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:unless="*{listResep.size() !=0}">
+                                    <br>
+                                    <h2 th:text="'Belum ada Resep'"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

@@ -20,7 +20,7 @@ public class ResepService {
         return resepDb.findAll();
     }
 
-    public ResepModel getResepById(String id) {
+    public ResepModel getResepById(Long id) {
         return resepDb.findById(id).get();
     }
 

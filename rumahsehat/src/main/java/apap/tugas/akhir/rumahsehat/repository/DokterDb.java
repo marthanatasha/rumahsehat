@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 
 @Repository
-public interface DokterDb extends JpaRepository<DokterModel, Long> {
+public interface DokterDb extends JpaRepository<DokterModel, String> {
     
 }
