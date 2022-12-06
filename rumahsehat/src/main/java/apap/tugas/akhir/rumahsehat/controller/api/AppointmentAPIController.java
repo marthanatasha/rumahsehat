@@ -44,9 +44,15 @@ public class AppointmentAPIController {
     }
 
     // Detail appointment
-    @GetMapping("/appointment/detail/{id}")
-    public String getAppointmentById(@PathVariable Long id, Model model) {
-        return "pages/appointment/detail";
+    @GetMapping("/appointment/detail/{kode}")
+    public AppointmentModel getAppointmentById(@PathVariable("kode") String kode) {
+        AppointmentModel apt = appointmentService.getAppointmentById(kode);
+        try {
+            return apt;
+        } catch (NoSuchElementException e) {
+            System.out.println("masuk not found"); // TODO: debug
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment Kode " + kode + " not found.");
+        }
     }
 
     // Form create appointment
