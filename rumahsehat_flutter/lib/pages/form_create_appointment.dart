@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:rumahsehat_flutter/DTO/AppointmentDTO.dart';
-import 'package:rumahsehat_flutter/DTO/DokterDTO.dart';
+import 'package:rumahsehat_flutter/DTO/CreateAppointmentDTO.dart';
+import 'package:rumahsehat_flutter/DTO/GetDokterDTO.dart';
 
 class FormCreateAppointment extends StatefulWidget {
   const FormCreateAppointment({super.key});
@@ -16,7 +16,7 @@ class FormCreateAppointment extends StatefulWidget {
 class _FormCreateAppointment extends State<FormCreateAppointment> {
   final _formKey = GlobalKey<FormState>();
   final dateTimeController = TextEditingController();
-  List<DokterDTO> listDokter = [];
+  List<GetDokterDTO> listDokter = [];
   bool runGetDokter = false;
 
   // Form values
@@ -31,7 +31,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
     listDokter = [];
     for (var d in jsonData) {
-      DokterDTO dokter = DokterDTO(d["id"], d["nama"], d["tarif"]);
+      GetDokterDTO dokter = GetDokterDTO(d["id"], d["nama"], d["tarif"]);
       print('get dokter ${dokter.dokterId}'); // TODO: debug
       listDokter.add(dokter);
     }
@@ -47,7 +47,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    AppointmentDTO appointment = AppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
+    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
     var response = await http.post(
