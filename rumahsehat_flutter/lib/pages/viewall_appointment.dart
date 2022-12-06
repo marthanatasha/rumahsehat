@@ -13,20 +13,19 @@ class ViewAllAppointment extends StatelessWidget {
   Future getAppointment(String pasienId) async {
     var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'));
     var jsonData = jsonDecode(response.body);
-    print(response.body); // TODO: debug
-    print('done'); // TODO: debug
-    print('list apt: $listApt'); // TODO: debug
-    
+
     listApt = [];
-    for (var a in jsonData) {
-      print('loop'); // TODO: debug
-      var raw = a["waktuAwal"].split('T');
-      GetAppointmentDTO apt = GetAppointmentDTO(a["kode"], a["dokter"]["nama"], raw[0], raw[1], a["isDone"]);
-      print('get dokter ${apt.kode}'); // TODO: debug
-      listApt.add(apt);
+
+    if (response.statusCode == 200) {
+      for (var a in jsonData) {
+        var raw = a["waktuAwal"].split('T');
+        GetAppointmentDTO apt = GetAppointmentDTO(a["kode"], a["dokter"]["nama"], raw[0], raw[1], a["isDone"]);
+        listApt.add(apt);
+      }
+      return listApt;
+    } else {
+      return false;
     }
-    print('list apt: $listApt'); // TODO: debug
-    return listApt;
   }
 
   @override
@@ -39,7 +38,46 @@ class ViewAllAppointment extends StatelessWidget {
       body: FutureBuilder(
         future: getAppointment("pasien1"), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
+          if (snapshot.data == false) {
+            return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 36),
+                  child: SizedBox (
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        const Text(
+                          'Not Found: 404',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20,),
+                        const Text(
+                          'Ada kesalahan dalam fetch API.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Back to Home'),
+                            )
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+            );
+          } else if (snapshot.data == null) {
             return SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 36),

@@ -1,9 +1,12 @@
 package apap.tugas.akhir.rumahsehat.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,18 @@ public class UserService {
 
     public UserModel getUserById(String id) {
         return userDb.findById(id).get();
+    }
+
+    public UserModel getRestUserById(String id) {
+        System.out.println("masuk service"); // TODO: debug
+        Optional<UserModel> user = userDb.findById(id);
+        if (user.isPresent()) {
+            System.out.println(user.get().getId()); // TODO: debug
+            return user.get();
+        } else {
+            System.out.println("not found"); // TODO: debug
+            throw new NoSuchElementException();
+        }
     }
 
     public void addUser(UserModel user) {

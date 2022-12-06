@@ -33,7 +33,12 @@ public class AppointmentService {
     }
 
     public AppointmentModel getAppointmentById(String id) {
-        return appointmentDb.findById(id).get();
+        Optional<AppointmentModel> apt = appointmentDb.findById(id);
+        if (apt.isPresent()) {
+            return apt.get();
+        } else {
+            return null;
+        }
     }
 
     public AppointmentModel addAppointment(AppointmentDTO appointmentDTO) {
