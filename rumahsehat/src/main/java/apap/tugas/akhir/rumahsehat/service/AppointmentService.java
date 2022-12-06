@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,16 @@ public class AppointmentService {
             return apt.get();
         } else {
             return null;
+        }
+    }
+
+    public AppointmentModel getRestAppointmentById(String id) {
+        Optional<AppointmentModel> apt = appointmentDb.findById(id);
+        if (apt.isPresent()) {
+            return apt.get();
+        } else {
+            System.out.println("not found"); // TODO: debug
+            throw new NoSuchElementException();
         }
     }
 

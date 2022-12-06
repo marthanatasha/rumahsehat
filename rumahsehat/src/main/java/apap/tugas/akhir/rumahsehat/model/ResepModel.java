@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,6 +50,7 @@ public class ResepModel implements Serializable {
     @Column(nullable = false, name = "created_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "resep_appointment", joinColumns = {

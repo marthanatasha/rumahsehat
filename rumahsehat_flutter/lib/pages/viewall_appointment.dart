@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rumahsehat_flutter/pages/view_appointment.dart';
 
 import '../DTO/GetAppointmentDTO.dart';
 
 class ViewAllAppointment extends StatelessWidget {
   List<GetAppointmentDTO> listApt = [];
-  // bool runGetAllAppointment = false;
 
   // Function to get list of Appointment
   Future getAppointment(String pasienId) async {
@@ -168,7 +168,14 @@ class ViewAllAppointment extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final GetAppointmentDTO aptNow = snapshot.data[index];
                           return InkWell(
-                            onTap: () {}, // TODO: navigation push ke page detail appointment
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ViewAppointment(kodeApt: aptNow.kode);
+                                  })
+                              );
+                            },
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
@@ -228,7 +235,14 @@ class ViewAllAppointment extends StatelessWidget {
                                       iconSize: 28,
                                       color: Colors.green,
                                       splashColor: Colors.green.withOpacity(0.3),
-                                      onPressed: () {}, // TODO: navigation push ke page detail appointment
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return ViewAppointment(kodeApt: aptNow.kode);
+                                            })
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),

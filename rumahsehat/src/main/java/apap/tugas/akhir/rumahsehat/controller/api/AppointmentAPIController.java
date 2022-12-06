@@ -46,9 +46,8 @@ public class AppointmentAPIController {
     // Detail appointment
     @GetMapping("/appointment/detail/{kode}")
     public AppointmentModel getAppointmentById(@PathVariable("kode") String kode) {
-        AppointmentModel apt = appointmentService.getAppointmentById(kode);
         try {
-            return apt;
+            return appointmentService.getRestAppointmentById(kode);
         } catch (NoSuchElementException e) {
             System.out.println("masuk not found"); // TODO: debug
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment Kode " + kode + " not found.");
