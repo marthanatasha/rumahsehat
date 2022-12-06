@@ -27,6 +27,7 @@ public class WebSecurityConfig {
                 .antMatchers("/plugins/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/login-sso", "/validate-ticket").permitAll()
+                .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

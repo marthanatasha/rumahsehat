@@ -46,7 +46,6 @@ public class UserService {
     }
 
     public UserModel getUserByUsername(String username) {
-        UserModel user = userDb.findByUsername(username);
-        return user;
+        return userDb.findByUsername(username);
     }
 }

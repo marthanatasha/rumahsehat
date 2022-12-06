@@ -62,10 +62,10 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Appointment Created!'),
-            content: const Text('Coba cek DB bang...'),
+            content: const Text('Appointment Anda sudah kami catat.'),
             actions: <Widget> [
               TextButton(
-                child: const Text('Okede bang'),
+                child: const Text('Oke'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -81,7 +81,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Create Appointment Failed!'),
-            content: const Text('Oh no! Coba buat di waktu yang lain...'),
+            content: const Text('Dokter yang Anda pilih tidak tersedia di waktu ini.'),
             actions: <Widget> [
               TextButton(
                 child: const Text('Okede bang'),
@@ -266,24 +266,6 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   postAppointment();
-                                  // showDialog (
-                                  //   context: context,
-                                  //   builder: (BuildContext context) {
-                                  //     return AlertDialog(
-                                  //       title: const Text('Belom Siap Bang'),
-                                  //       content: Text('Tapi coba cek db nya deh kak >_<'),
-                                  //       actions: <Widget> [
-                                  //         TextButton(
-                                  //           child: const Text('Oke deh bang'),
-                                  //           onPressed: () {
-                                  //             Navigator.pop(context);
-                                  //             Navigator.pop(context);
-                                  //           },
-                                  //         ),
-                                  //       ],
-                                  //     );
-                                  //   }
-                                  // );
                                 }
                               },
                               child: const Text('Submit'),
