@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/login-sso", "/validate-ticket").permitAll()
                 .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
-//                .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
+                .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
 //                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: kalo udah ada jwt2an, tambahin ini
                 .anyRequest().authenticated()
                 .and()
