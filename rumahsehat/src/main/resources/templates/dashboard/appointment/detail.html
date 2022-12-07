@@ -106,10 +106,10 @@
                 <a class="btn btn-secondary mr-8" th:href="@{/appointment}">Kembali ke List Appointment</a>
               </div>
               <div th:if="${apt.resep != null}" style="display: inline">
-                <a class="btn btn-primary mr-8" th:href="@{#}">Lihat Resep</a> <!-- TODO: nav to detail resep -->
+                <a class="btn btn-primary mr-8" th:href="@{#}">Lihat Resep</a> <!-- TODO: nav to detail resep, bisa pake ${apt.resep.id} buat find resepnya -->
               </div>
               <div th:if="${canCreateResep}" style="display: inline">
-                <a class="btn btn-primary mr-8" th:href="@{#}">Buat Resep</a> <!-- TODO: nav to create resep -->
+                <a class="btn btn-primary mr-8" th:href="@{#}">Buat Resep</a> <!-- TODO: nav to create resep, bisa pake ${apt.Kode} buat set apt nya -->
               </div>
               <div th:if="${canUpdateStatus}" style="display: inline">
                 <div th:if="${showResepWarning}" style="display: inline">
