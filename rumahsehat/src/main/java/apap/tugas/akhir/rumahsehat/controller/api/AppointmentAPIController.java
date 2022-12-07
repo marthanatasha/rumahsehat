@@ -19,6 +19,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/api/v1")
 public class AppointmentAPIController {

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class GetDetailAppointmentDTO {
   String kode;
   bool isDone;
