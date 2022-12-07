@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/DTO/GetDetailAppointmentDTO.dart';
@@ -14,7 +13,13 @@ class ViewAppointment extends StatelessWidget {
 
   // Function to get appointment details
   Future getDetailAppointment(String kodeApt) async {
-    var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'));
+    var response = await http.get(
+      Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+      }
+    );
     var jsonData = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
@@ -197,6 +202,27 @@ class ViewAppointment extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12,),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return ViewAppointment(kodeApt: aptDetails.kode);
+                                    })
+                                  );
+                                },
+                                child: const Text('Reload'),
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget> [
                           Expanded(
                             child: ButtonLihatResep(idResep: aptDetails.idResep),
                           ),

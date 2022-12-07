@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,15 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to get list of Dokter
   Future getDokter() async {
-    var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/dokter'));
+    log("message2");
+    var response = await http.get(
+      Uri.parse('http://localhost:8080/api/v1/dokter'),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+      }
+    );
+    log("response");
     var jsonData = jsonDecode(response.body);
     print(response.body); // TODO: debug
 
@@ -47,12 +56,16 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
+    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien3"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
     var response = await http.post(
         Uri.parse('http://10.0.2.2:8080/api/v1/appointment/add'),
-        headers: {"Accept": "application/json", "content-type": "application/json"},
+        headers: {
+          "Accept": "application/json", "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+        },
         body: aptJson
     );
     print(response.body); // TODO: debug

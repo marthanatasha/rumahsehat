@@ -11,7 +11,13 @@ class ViewAllAppointment extends StatelessWidget {
 
   // Function to get list of Appointment
   Future getAppointment(String pasienId) async {
-    var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'));
+    var response = await http.get(
+      Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+      }
+    );
     var jsonData = jsonDecode(response.body);
 
     listApt = [];
@@ -36,7 +42,7 @@ class ViewAllAppointment extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getAppointment("pasien1"), // TODO: pasienId masih hard code
+        future: getAppointment("pasien3"), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
@@ -237,10 +243,10 @@ class ViewAllAppointment extends StatelessWidget {
                                       splashColor: Colors.green.withOpacity(0.3),
                                       onPressed: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return ViewAppointment(kodeApt: aptNow.kode);
-                                            })
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return ViewAppointment(kodeApt: aptNow.kode);
+                                          })
                                         );
                                       },
                                     ),
@@ -251,6 +257,39 @@ class ViewAllAppointment extends StatelessWidget {
                           );
                         }
                       ),
+                    ),
+                    Row(
+                      children: <Widget> [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Back'),
+                            )
+                          ),
+                        ),
+                        const SizedBox(width: 12,),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ViewAllAppointment();
+                                  })
+                                );
+                              },
+                              child: const Text('Reload'),
+                            )
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
