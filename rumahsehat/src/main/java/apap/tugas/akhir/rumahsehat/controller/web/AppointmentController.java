@@ -1,5 +1,8 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
+import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,16 +14,35 @@ import org.springframework.web.bind.annotation.PostMapping;
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 
+import java.security.Principal;
+import java.util.List;
+
 @Controller
 public class AppointmentController {
 
     @Autowired
     AppointmentService appointmentService;
 
+    @Autowired
+    UserService userService;
+
     // List appointment
     @GetMapping("/appointment")
-    public String getAppointmentList(Model model) {
-        model.addAttribute("appointments", appointmentService.getListAppointment());
+    public String getAppointmentList(Model model, Principal principal) {
+        UserModel user = userService.getUserByUsername(principal.getName());
+        String role = user.getRole().toString();
+        List<AppointmentModel> aptList = null;
+
+        if (role.equals("ADMIN")) {
+            aptList = appointmentService.getListAppointment();
+        } else if (role.equals("DOKTER")) {
+            DokterModel dokter = (DokterModel) user;
+            aptList = dokter.getListAppointment();
+            // TODO: blm bisa testing
+        }
+
+        model.addAttribute("appointments", aptList);
+        model.addAttribute("role", role);
         return "dashboard/appointment/list";
     }
 
