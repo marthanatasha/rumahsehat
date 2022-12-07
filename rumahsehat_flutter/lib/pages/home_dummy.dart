@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
 
@@ -44,6 +45,7 @@ class HomeDummy extends StatelessWidget {
                 const SizedBox(height: 24,),
                 ElevatedButton(
                   onPressed: () {
+                    log("message");
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
