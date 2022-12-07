@@ -60,7 +60,7 @@ public class AppointmentController {
             canAccess = true;
         }
 
-        if (role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
+        if (role.equals("ADMIN") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
                 showResepWarning = true;
@@ -72,12 +72,15 @@ public class AppointmentController {
             }
         }
 
+        String detailUrl = "/appointment/detail/" + apt.getKode();
+
         model.addAttribute("apt", apt);
         model.addAttribute("role", role);
         model.addAttribute("canAccess", canAccess);
         model.addAttribute("canCreateResep", canCreateResep);
         model.addAttribute("canUpdateStatus", canUpdateStatus);
         model.addAttribute("showResepWarning", showResepWarning);
+        model.addAttribute("detailUrl", detailUrl);
 
         return "dashboard/appointment/detail";
     }
