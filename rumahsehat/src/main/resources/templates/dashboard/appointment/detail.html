@@ -102,16 +102,38 @@
             </table>
             <br>
             <div class="col">
+              <div style="display: inline">
+                <a class="btn btn-secondary mr-8" th:href="@{/appointment}">Kembali ke List Appointment</a>
+              </div>
               <div th:if="${apt.resep != null}" style="display: inline">
-                <a class="btn btn-primary mr-2" th:href="@{#}">Lihat Resep</a>
+                <a class="btn btn-primary mr-8" th:href="@{#}">Lihat Resep</a> <!-- TODO: nav to detail resep -->
               </div>
-<!--              <br>-->
               <div th:if="${canCreateResep}" style="display: inline">
-                <a class="btn btn-primary mr-2" th:href="@{#}">Buat Resep</a>
+                <a class="btn btn-primary mr-8" th:href="@{#}">Buat Resep</a> <!-- TODO: nav to create resep -->
               </div>
-<!--              <br>-->
               <div th:if="${canUpdateStatus}" style="display: inline">
-                <a class="btn btn-primary mr-2" th:href="@{#}">Selesaikan Appointment</a>
+                <div th:if="${showResepWarning}" style="display: inline">
+                  <a class="btn btn-primary mr-8" data-toggle="modal" data-target="#exampleModalCenter">Selesaikan Appointment</a>
+                </div>
+                <div th:unless="${showResepWarning}" style="display: inline">
+                  <a class="btn btn-primary mr-8" th:href="@{/appointment/update/(kode=${apt.Kode})}">Selesaikan Appointment</a>
+                </div>
+              </div>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title" id="exampleModalLongTitle">Selesaikan Appointment Tanpa Resep</h3>
+                    </div>
+                    <div class="modal-body">
+                      <h5>Apakah Anda yakin untuk menyelesaikan appointment ini?</h5>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                      <a class="btn btn-primary mr-2" th:href="@{/appointment/update/(kode=${apt.Kode})}">Ya, Selesaikan</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -87,9 +87,7 @@
                                 <td th:if="${apt.isDone}">Is Done</td>
                                 <td th:unless="${apt.isDone}">Is Not Done</td>
                                 <td>
-                                    <div class="row">
-                                        <a class="btn btn-primary" th:href=${detailUrl}>Detail</a>
-                                    </div>
+                                    <a class="btn btn-primary" th:href="@{/appointment/detail/(kode=${apt.Kode})}">Detail</a>
                                 </td>
                             </tr>
                             </tbody>
