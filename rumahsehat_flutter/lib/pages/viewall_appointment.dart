@@ -176,10 +176,10 @@ class ViewAllAppointment extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return ViewAppointment(kodeApt: aptNow.kode);
-                                  })
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return ViewAppointment(kodeApt: aptNow.kode);
+                                })
                               );
                             },
                             child: Card(

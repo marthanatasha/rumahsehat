@@ -1,18 +1,15 @@
 package apap.tugas.akhir.rumahsehat.service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
-import org.apache.catalina.User;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.repository.UserDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import apap.tugas.akhir.rumahsehat.model.users.UserModel;
-import apap.tugas.akhir.rumahsehat.repository.UserDb;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,7 +22,8 @@ public class UserService {
     }
 
     public UserModel getUserById(String id) {
-        return userDb.findById(id).get();
+        Optional<UserModel> user = userDb.findById(id);
+        return user.orElse(null);
     }
 
     public UserModel getRestUserById(String id) {
