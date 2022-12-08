@@ -90,7 +90,7 @@ public class AppointmentService {
         if (appointment != null) {
             appointment.setIsDone(true);
         }
-        return appointment;
+        return appointment; // klk gaada dia return null
     }
 }
 

@@ -26,15 +26,15 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to get list of Dokter
   Future getDokter() async {
-    log("message2");
+    log("message2"); // TODO: debug
     var response = await http.get(
-      Uri.parse('http://localhost:8080/api/v1/dokter'),
+      Uri.parse('http://10.0.2.2:8080/api/v1/dokter'),
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
       }
     );
-    log("response");
+    log("response"); // TODO: debug
     var jsonData = jsonDecode(response.body);
     print(response.body); // TODO: debug
 
@@ -56,7 +56,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien3"); // TODO: pasienId masih hard code
+    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
     var response = await http.post(

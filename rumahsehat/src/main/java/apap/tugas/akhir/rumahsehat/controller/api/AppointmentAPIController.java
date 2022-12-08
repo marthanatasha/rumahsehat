@@ -29,9 +29,7 @@ public class AppointmentAPIController {
     @GetMapping("/appointment/{pasienId}")
     public List<AppointmentModel> getAppointmentList(@PathVariable("pasienId") String pasienId) {
         try {
-            System.out.println("masuk controller"); // TODO: debug
             PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
-            System.out.println("udh get pasien"); // TODO: debug
             return pasien.getListAppointment();
         } catch (NoSuchElementException e) {
             System.out.println("masuk not found"); // TODO: debug

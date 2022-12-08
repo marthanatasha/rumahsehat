@@ -25,6 +25,7 @@ public class DokterAPIController {
     @GetMapping("/dokter")
     public List<DokterModel> getDokterList() {
         try {
+            System.out.println("masuk rest controller"); // TODO: debug
             return dokterService.getListDokter();
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
