@@ -16,6 +16,9 @@ public class PasienService {
     @Autowired
     private PasienDb pasienDb;
 
+    @Autowired
+    private GeneralService generalService;
+
     public List<PasienModel> getListPasien() {
         return pasienDb.findAll();
     }
@@ -25,6 +28,8 @@ public class PasienService {
     }
 
     public void addPasien(PasienModel pasien) {
+        String pass = generalService.encrypt(pasien.getPassword());
+        pasien.setPassword(pass);
         pasienDb.save(pasien);
     }
 

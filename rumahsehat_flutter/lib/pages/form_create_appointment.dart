@@ -56,7 +56,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien3"); // TODO: pasienId masih hard code
+    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "8a85dae884f0d5820184f0d5c2280003"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
     var response = await http.post(

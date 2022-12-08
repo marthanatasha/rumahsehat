@@ -6,6 +6,7 @@ import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
 import apap.tugas.akhir.rumahsehat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,9 @@ public class ResepController {
 
     @Autowired
     TagihanService tagihanService;
+
+    @Autowired
+    ApotekerService apotekerService;
 
     // List resep
     @GetMapping("/resep")
@@ -164,9 +168,13 @@ public class ResepController {
 
     // Update resep
     @GetMapping("/resep/update/{id}")
-    public String resepUpdate(@PathVariable Long id, Model model){
+    public String resepUpdate(@PathVariable Long id, Model model, Authentication authentication){
         ResepModel resep = resepService.getResepById(id);
         //to do: ambil id apoteker masih gatau caranya T_T
+        // to do: cek rolenya apoteker ato bukan
+        String username = authentication.getName();
+        ApotekerModel apoteker = apotekerService.getApotekerByUsername(username);
+
 
         //cek kuantitas obat
         boolean canConfirm = true;
@@ -186,7 +194,9 @@ public class ResepController {
                 harga += jml.getObat().getHarga();
             }
             resep.setIsDone(true);
+            resep.setApoteker(apoteker);
             resepService.updateResep(resep);
+            resep.getAppointment().setIsDone(true);
             TagihanModel bill = new TagihanModel();
             bill.setAppointment(resep.getAppointment());
             //to do: identifiers custom generator buat kode tagihan
