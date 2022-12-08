@@ -14,7 +14,7 @@ class ViewAppointment extends StatelessWidget {
   // Function to get appointment details
   Future getDetailAppointment(String kodeApt) async {
     var response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'),
+      Uri.parse('http://localhost:8080/api/v1/appointment/detail/$kodeApt'),
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"

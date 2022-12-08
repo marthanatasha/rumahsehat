@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:rumahsehat_flutter/pages/view_appointment.dart';
 
 class ViewDetailResep extends StatelessWidget {
+  // ini di uncomment
   // late final String idResep;
   // ViewDetailResep({required this.idResep});
 
@@ -15,7 +16,7 @@ class ViewDetailResep extends StatelessWidget {
   // func to get resep detail
   Future getDetailResep(String idResep) async {
     var response = await http.get(
-        Uri.parse('http://localhost:8080/api/v1/resep/12'),
+        Uri.parse('http://localhost:8080/api/v1/resep/2'), // harusnya $idResep, ini masih hardcode
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
@@ -45,7 +46,7 @@ class ViewDetailResep extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getDetailResep("12"),
+        future: getDetailResep("2"), //idresep masih hardcode
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
