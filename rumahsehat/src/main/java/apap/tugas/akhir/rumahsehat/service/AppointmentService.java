@@ -3,16 +3,14 @@ package apap.tugas.akhir.rumahsehat.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
-import net.bytebuddy.asm.Advice;
-import org.hibernate.validator.internal.util.privilegedactions.LoadClass;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,22 @@ public class AppointmentService {
     }
 
     public AppointmentModel getAppointmentById(String id) {
-        return appointmentDb.findById(id).get();
+        Optional<AppointmentModel> apt = appointmentDb.findById(id);
+        if (apt.isPresent()) {
+            return apt.get();
+        } else {
+            return null;
+        }
+    }
+
+    public AppointmentModel getRestAppointmentById(String id) {
+        Optional<AppointmentModel> apt = appointmentDb.findById(id);
+        if (apt.isPresent()) {
+            return apt.get();
+        } else {
+            System.out.println("not found"); // TODO: debug
+            throw new NoSuchElementException();
+        }
     }
 
     public AppointmentModel addAppointment(AppointmentDTO appointmentDTO) {
@@ -79,12 +92,16 @@ public class AppointmentService {
     }
 
     public AppointmentModel updateAppointment(AppointmentModel appointment) {
-        appointmentDb.save(appointment);
+        System.out.println("masuk service"); // TODO: debug
+        if (appointment != null) {
+            appointment.setIsDone(true);
+        }
         return appointment;
     }
 
-    public AppointmentModel deleteAppointment(AppointmentModel appointment) {
-        appointmentDb.delete(appointment);
-        return appointment;
-    }
+//    public AppointmentModel deleteAppointment(AppointmentModel appointment) {
+//        appointmentDb.delete(appointment);
+//        return appointment;
+//    }
 }
+

@@ -54,10 +54,50 @@
 
                 <div layout:fragment="content">
                     <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <h1>List</h1>
-
-
-
+                    <h1 class="font-weight-bold">Daftar Appointment</h1>
+                    <br>
+                    <div th:if="${appointments == null}">
+                        <h3>Forbidden</h3>
+                    </div>
+                    <div th:unless="${appointments == null}">
+                        <div th:if="${appointments.size() != 0}">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Id Appointment</th>
+                                <div th:if="${role == 'ADMIN'}">
+                                    <th>Nama Dokter</th>
+                                </div>
+                                <th>Nama Pasien</th>
+                                <th>Waktu Awal</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="apt, iterationStatus: ${appointments}">
+                                <td th:text="${iterationStatus.count}"></td>
+                                <td th:text="${apt.Kode}"></td>
+                                <div th:if="${role == 'ADMIN'}">
+                                    <td th:text="${apt.dokter.nama}"></td>
+                                </div>
+                                <td th:text="${apt.pasien.nama}"></td>
+                                <td th:text="${apt.waktuAwal}"></td>
+                                <td th:if="${apt.isDone}">Is Done</td>
+                                <td th:unless="${apt.isDone}">Is Not Done</td>
+                                <td>
+                                    <a class="btn btn-primary" th:href="@{/appointment/detail/(kode=${apt.Kode})}">Detail</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div th:unless="${appointments.size() != 0}">
+                            <h3>Tidak ada appointment.</h3>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary" th:href="@{/}">Home</a>
                 </div>
 
             </section>

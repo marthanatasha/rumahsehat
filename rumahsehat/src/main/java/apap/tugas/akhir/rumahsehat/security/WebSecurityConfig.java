@@ -27,6 +27,10 @@ public class WebSecurityConfig {
                 .antMatchers("/plugins/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/login-sso", "/validate-ticket").permitAll()
+                .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
+                .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
+                .antMatchers("/appointment/update/**").hasAuthority("ADMIN") // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
+//                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: kalo udah ada jwt2an, tambahin ini
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

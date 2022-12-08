@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:rumahsehat_flutter/DTO/AppointmentDTO.dart';
-import 'package:rumahsehat_flutter/DTO/DokterDTO.dart';
+import 'package:rumahsehat_flutter/DTO/CreateAppointmentDTO.dart';
+import 'package:rumahsehat_flutter/DTO/GetDokterDTO.dart';
 
 class FormCreateAppointment extends StatefulWidget {
   const FormCreateAppointment({super.key});
@@ -16,7 +17,7 @@ class FormCreateAppointment extends StatefulWidget {
 class _FormCreateAppointment extends State<FormCreateAppointment> {
   final _formKey = GlobalKey<FormState>();
   final dateTimeController = TextEditingController();
-  List<DokterDTO> listDokter = [];
+  List<GetDokterDTO> listDokter = [];
   bool runGetDokter = false;
 
   // Form values
@@ -25,13 +26,21 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to get list of Dokter
   Future getDokter() async {
-    var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/dokter'));
+    log("message2");
+    var response = await http.get(
+      Uri.parse('http://localhost:8080/api/v1/dokter'),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+      }
+    );
+    log("response");
     var jsonData = jsonDecode(response.body);
     print(response.body); // TODO: debug
 
     listDokter = [];
     for (var d in jsonData) {
-      DokterDTO dokter = DokterDTO(d["id"], d["nama"], d["tarif"]);
+      GetDokterDTO dokter = GetDokterDTO(d["id"], d["nama"], d["tarif"]);
       print('get dokter ${dokter.dokterId}'); // TODO: debug
       listDokter.add(dokter);
     }
@@ -47,12 +56,16 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    AppointmentDTO appointment = AppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
+    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien3"); // TODO: pasienId masih hard code
     var aptJson = json.encode(appointment.toJson());
     print(aptJson); // TODO: debug
     var response = await http.post(
         Uri.parse('http://10.0.2.2:8080/api/v1/appointment/add'),
-        headers: {"Accept": "application/json", "content-type": "application/json"},
+        headers: {
+          "Accept": "application/json", "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+        },
         body: aptJson
     );
     print(response.body); // TODO: debug
@@ -62,10 +75,10 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Appointment Created!'),
-            content: const Text('Coba cek DB bang...'),
+            content: const Text('Appointment Anda sudah kami catat.'),
             actions: <Widget> [
               TextButton(
-                child: const Text('Okede bang'),
+                child: const Text('Oke'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -81,7 +94,7 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Create Appointment Failed!'),
-            content: const Text('Oh no! Coba buat di waktu yang lain...'),
+            content: const Text('Dokter yang Anda pilih tidak tersedia di waktu ini.'),
             actions: <Widget> [
               TextButton(
                 child: const Text('Okede bang'),
@@ -266,24 +279,6 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   postAppointment();
-                                  // showDialog (
-                                  //   context: context,
-                                  //   builder: (BuildContext context) {
-                                  //     return AlertDialog(
-                                  //       title: const Text('Belom Siap Bang'),
-                                  //       content: Text('Tapi coba cek db nya deh kak >_<'),
-                                  //       actions: <Widget> [
-                                  //         TextButton(
-                                  //           child: const Text('Oke deh bang'),
-                                  //           onPressed: () {
-                                  //             Navigator.pop(context);
-                                  //             Navigator.pop(context);
-                                  //           },
-                                  //         ),
-                                  //       ],
-                                  //     );
-                                  //   }
-                                  // );
                                 }
                               },
                               child: const Text('Submit'),

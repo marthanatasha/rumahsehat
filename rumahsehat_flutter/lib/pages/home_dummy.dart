@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:rumahsehat_flutter/pages/detail_resep.dart';
+import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
 
 import 'form_create_appointment.dart';
 
-// TODO: Ini dummy. Kalo mau nambah nav ke fitur lain, tambahin button baru aja (yang widget Container)
+// TODO: Ini dummy. Kalo mau nambah nav ke fitur lain, tambahin button baru aja (yang widget ElevatedButton)
 class HomeDummy extends StatelessWidget {
 
   @override
@@ -41,19 +44,38 @@ class HomeDummy extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24,),
-                Container(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                ElevatedButton(
+                  onPressed: () {
+                    log("message");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return const FormCreateAppointment();
+                      })
+                    );
+                  },
+                  child: const Text('Buat Appointment'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return const FormCreateAppointment();
+                          return ViewAllAppointment();
                         })
-                      );
-                    },
-                    child: const Text('Buat Appointment'),
-                  )
+                    );
+                  },
+                  child: const Text('Lihat Semua Appointment'),
+                ),
+                ElevatedButton(onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return ViewDetailResep();
+                    })
+                  );
+                }, 
+                child: const Text('Lihat Detail Resep'),
                 ),
                 const SizedBox(height: 40,),
               ],

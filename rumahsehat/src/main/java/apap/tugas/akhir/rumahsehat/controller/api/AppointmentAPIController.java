@@ -1,6 +1,9 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
+import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,11 @@ import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+@CrossOrigin()
 @RestController
 @RequestMapping("/api/v1")
 public class AppointmentAPIController {
@@ -19,17 +27,32 @@ public class AppointmentAPIController {
     @Autowired
     AppointmentService appointmentService;
 
+    @Autowired
+    UserService userService;
+
     // List appointment
-    @GetMapping("/appointment")
-    public String getAppointmentList(Model model) {
-        model.addAttribute("appointments", appointmentService.getListAppointment());
-        return "pages/appointment/list";
+    @GetMapping("/appointment/{pasienId}")
+    public List<AppointmentModel> getAppointmentList(@PathVariable("pasienId") String pasienId) {
+        try {
+            System.out.println("masuk controller"); // TODO: debug
+            PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
+            System.out.println("udh get pasien"); // TODO: debug
+            return pasien.getListAppointment();
+        } catch (NoSuchElementException e) {
+            System.out.println("masuk not found"); // TODO: debug
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
+        }
     }
 
     // Detail appointment
-    @GetMapping("/appointment/{id}")
-    public String getAppointmentById(@PathVariable Long id, Model model) {
-        return "pages/appointment/detail";
+    @GetMapping("/appointment/detail/{kode}")
+    public AppointmentModel getAppointmentById(@PathVariable("kode") String kode) {
+        try {
+            return appointmentService.getRestAppointmentById(kode);
+        } catch (NoSuchElementException e) {
+            System.out.println("masuk not found"); // TODO: debug
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment Kode " + kode + " not found.");
+        }
     }
 
     // Form create appointment
@@ -48,13 +71,6 @@ public class AppointmentAPIController {
         }
     }
 
-//    // Confirmation create appointment
-//    @PostMapping(value = "/appointment/add")
-//    public String postAppointmentAddForm(
-//            @ModelAttribute AppointmentModel appointment, Model model) {
-//        return "pages/appointment/confirmation-add";
-//    }
-
     // Form update appointment
     @GetMapping("/appointment/update/{id}")
     public String getAppointmentAddUpdate(@PathVariable Long id, Model model) {
@@ -66,11 +82,5 @@ public class AppointmentAPIController {
     public String postAppointmentUpdateForm(
             @ModelAttribute AppointmentModel appointment, Model model) {
         return "pages/appointment/confirmation-update";
-    }
-
-    // Delete appointment
-    @PostMapping("/appointment/delete")
-    public String deletePengajarSubmit(@ModelAttribute AppointmentModel appointment, Model model) {
-        return "pages/appointment/confirmation-delete";
     }
 }
