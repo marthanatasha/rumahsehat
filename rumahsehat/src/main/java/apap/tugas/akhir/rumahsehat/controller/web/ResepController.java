@@ -4,6 +4,7 @@ import apap.tugas.akhir.rumahsehat.model.*;
 import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,9 @@ public class ResepController {
 
     @Autowired
     ApotekerService apotekerService;
+
+    @Autowired
+    UserService userService;
 
     // List resep
     @GetMapping("/resep")
@@ -64,20 +69,26 @@ public class ResepController {
 
     // Form create resep
     @GetMapping("/resep/add/{kode}")
-    public String getResepAddForm(Model model, @PathVariable String kode) {
-        ResepModel resep = new ResepModel();
-        List<ObatModel> listObat = obatService.getListObat();
-        List<JumlahModel> listJumlah = jumlahService.getListJumlah();
+    public String getResepAddForm(Model model, @PathVariable String kode, Principal principal) {
+        if (userService.isDokter(principal)){
+            ResepModel resep = new ResepModel();
+            List<ObatModel> listObat = obatService.getListObat();
+            List<JumlahModel> listJumlah = jumlahService.getListJumlah();
 
-        resep.setJumlah(new ArrayList<>());
-        resep.getJumlah().add(new JumlahModel());
+            resep.setJumlah(new ArrayList<>());
+            resep.getJumlah().add(new JumlahModel());
 
-        model.addAttribute("resep", resep);
-        model.addAttribute("listObat", listObat);
-        model.addAttribute("listJumlah", listJumlah);
-        model.addAttribute("kode", kode);
+            model.addAttribute("resep", resep);
+            model.addAttribute("listObat", listObat);
+            model.addAttribute("listJumlah", listJumlah);
+            model.addAttribute("kode", kode);
 
-        return "dashboard/resep/form-add";
+            return "dashboard/resep/form-add";
+        }
+        else {
+            return "error/404";
+        }
+
     }
 
     // Confirmation create resep
