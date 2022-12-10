@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import apap.tugas.akhir.rumahsehatapi.repository.UserRepo;
+import apap.tugas.akhir.rumahsehatapi.repository.UserDb;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDb userDb;
+
     @Autowired
     private JWTFilter filter;
     @Autowired
