@@ -42,35 +42,52 @@ public class ResepController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    DokterService dokterService;
+
     // List resep
     @GetMapping("/resep")
-    public String getResepList(Model model) {
-        List<ResepModel> listResep = resepService.getListResep();
-        model.addAttribute("listResep", listResep);
-        return "dashboard/resep/list";
+    public String getResepList(Model model, Principal principal) {
+        if (userService.isApoteker(principal) || userService.isAdmin(principal)){
+            List <ResepModel> listResep = resepService.getListResep();
+            model.addAttribute("listResep", listResep);
+            return "dashboard/resep/list";
+        }
+        else {
+            System.out.println("salah role");
+            return "error/404";
+        }
     }
 
     // Detail resep
     @GetMapping("/resep/{id}")
-    public String getResepById(@PathVariable Long id, Model model) {
+    public String getResepById(@PathVariable Long id, Model model, Principal principal, Authentication authentication) {
         ResepModel resep = resepService.getResepById(id);
         List<JumlahModel> listJumlah = resep.getJumlah();
-        System.out.println(listJumlah);
-        DokterModel dokter = resep.getAppointment().getDokter();
-        PasienModel pasien = resep.getAppointment().getPasien();
-        ApotekerModel apoteker = resep.getApoteker();
+        Boolean isApoteker = false;
+        Boolean canConfirm = resepService.canConfirm(resep);
+
+        if (userService.isApoteker(principal)){
+            isApoteker = true;
+        }
+
         model.addAttribute("resep",resep);
         model.addAttribute("listJumlah", listJumlah);
-        model.addAttribute("dokter", dokter);
-        model.addAttribute("pasien", pasien);
-        model.addAttribute("apoteker", apoteker);
+        model.addAttribute("isApoteker", isApoteker);
+        model.addAttribute("canConfirm", canConfirm);
         return "dashboard/resep/detail";
     }
 
     // Form create resep
-    @GetMapping("/resep/add/{kode}")
-    public String getResepAddForm(Model model, @PathVariable String kode, Principal principal) {
-        if (userService.isDokter(principal)){
+    @GetMapping("/resep/add/{kodeApt}")
+    public String getResepAddForm(Model model, @PathVariable("kodeApt") String kodeApt, Principal principal, Authentication authentication) {
+        String dokterLogin = authentication.getName();
+//        System.out.println("login:" + dokterLogin);
+
+        AppointmentModel apt = appointmentService.getAppointmentById(kodeApt);
+//        System.out.println("apt:" + apt.getDokter().getUsername());
+        // cek: role dokter, dokter yg login = dokter yg bersangkutan dgn appointment, appointment blm pny resep
+        if (userService.isDokter(principal) && apt.getDokter().getUsername().equals(dokterLogin) && apt.getResep() == null){
             ResepModel resep = new ResepModel();
             List<ObatModel> listObat = obatService.getListObat();
             List<JumlahModel> listJumlah = jumlahService.getListJumlah();
@@ -81,10 +98,20 @@ public class ResepController {
             model.addAttribute("resep", resep);
             model.addAttribute("listObat", listObat);
             model.addAttribute("listJumlah", listJumlah);
-            model.addAttribute("kode", kode);
+            model.addAttribute("kodeApt", kodeApt);
 
             return "dashboard/resep/form-add";
         }
+        // Debug, delete klo udah
+
+//        else if (!apt.getDokter().getUsername().equals(dokterLogin)){
+//            System.out.println("salah dokter");
+//            return "dashboard/index";
+//        }
+//        else if (apt.getResep() != null){
+//            System.out.println("udh ada resep");
+//            return "dashboard/index";
+//        }
         else {
             return "error/404";
         }
@@ -92,11 +119,11 @@ public class ResepController {
     }
 
     // Confirmation create resep
-    @PostMapping(value = "/resep/add/{kode}")
-    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, @PathVariable String kode) {
-        AppointmentModel app = appointmentService.getAppointmentById(kode);
-        app.setResep(resep);
-        resep.setAppointment(app);
+    @PostMapping(value = "/resep/add/{kodeApt}")
+    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, @PathVariable String kodeApt) {
+        AppointmentModel apt = appointmentService.getAppointmentById(kodeApt);
+        apt.setResep(resep);
+        resep.setAppointment(apt);
 
         if (resep.getJumlah() == null){
             resep.setJumlah(new ArrayList<>());
@@ -112,15 +139,6 @@ public class ResepController {
         }
         resep.setIsDone(false);
         resep.setCreatedAt(LocalDateTime.now());
-
-//        List<AppointmentModel> listAppointment = appointmentService.getListAppointment();
-//        for (AppointmentModel a : listAppointment){
-//            if (a.getKode().equals(kode)){
-//                resep.setAppointment(a);
-//                a.setResep(resep);
-//            }
-//        }
-
         resepService.addResep(resep);
 
         model.addAttribute("idResep", resep.getId());
@@ -161,25 +179,9 @@ public class ResepController {
         return "dashboard/resep/form-add";
     }
 
-    /**
-    // Form update resep
-    @GetMapping("/resep/update/{id}")
-    public String getResepAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/resep/form-update";
-    }
-
-    // Confirmation update resep
-    @PostMapping(value = "/resep/update")
-    public String postResepUpdateForm(
-            @ModelAttribute ResepModel resep, Model model) {
-        return "dashboard/resep/confirmation-update";
-    }
-
-     */
-
     // Update resep
     @GetMapping("/resep/update/{id}")
-    public String resepUpdate(@PathVariable Long id, Model model, Authentication authentication){
+    public String resepUpdate(@PathVariable Long id, Model model, Principal principal, Authentication authentication){
         ResepModel resep = resepService.getResepById(id);
         //to do: ambil id apoteker masih gatau caranya T_T
         // to do: cek rolenya apoteker ato bukan
