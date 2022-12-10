@@ -1,6 +1,8 @@
 package apap.tugas.akhir.rumahsehatapi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import apap.tugas.akhir.rumahsehatapi.models.users.AdminModel;
+import apap.tugas.akhir.rumahsehatapi.security.JWTUtil;
 import apap.tugas.akhir.rumahsehatapi.service.AdminService;
 
 @RestController
@@ -17,7 +20,13 @@ import apap.tugas.akhir.rumahsehatapi.service.AdminService;
 public class AdminAPIController {
 
     @Autowired
-    AdminService adminService;
+AdminService adminService;
+    @Autowired
+    private JWTUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // List admin
     @GetMapping("/admin")
