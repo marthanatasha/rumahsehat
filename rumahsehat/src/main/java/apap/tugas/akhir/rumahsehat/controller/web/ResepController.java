@@ -62,11 +62,19 @@ public class ResepController {
     // Detail resep
     @GetMapping("/resep/{id}")
     public String getResepById(@PathVariable Long id, Model model, Principal principal, Authentication authentication) {
+        if (userService.isPasien(principal)){
+            return "error/404";
+        }
+
         ResepModel resep = resepService.getResepById(id);
         List<JumlahModel> listJumlah = resep.getJumlah();
         Boolean isApoteker = false;
         Boolean canConfirm = resepService.canConfirm(resep);
 
+        if (userService.isDokter(principal) && !authentication.getName().equals(resep.getAppointment().getDokter().getUsername())){
+            System.out.println("salah dokter");
+            return "error/404";
+        }
         if (userService.isApoteker(principal)){
             isApoteker = true;
         }
