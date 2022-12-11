@@ -6,6 +6,8 @@ import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import apap.tugas.akhir.rumahsehat.service.TagihanService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,8 @@ public class AppointmentController {
     @Autowired
     TagihanService tagihanService;
 
+    Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+
     // List appointment
     @GetMapping("/appointment")
     public String getAppointmentList(Model model, Principal principal) {
@@ -40,7 +44,6 @@ public class AppointmentController {
         } else if (role.equals("DOKTER")) {
             DokterModel dokter = (DokterModel) user;
             aptList = dokter.getListAppointment();
-            // TODO: blm bisa testing
         }
 
         model.addAttribute("appointments", aptList);
@@ -57,7 +60,7 @@ public class AppointmentController {
 
         boolean canAccess = false;
         boolean canCreateResep = false;
-        boolean canUpdateStatus = false; // canUpdateStatus true saat appointment tidak punya resep
+        boolean canUpdateStatus = false;
         boolean showResepWarning = false;
 
         Long kodeResep = null;
@@ -66,7 +69,7 @@ public class AppointmentController {
             canAccess = true;
         }
 
-        if (apt != null && role.equals("ADMIN") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
+        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
                 canCreateResep = true;
@@ -74,12 +77,9 @@ public class AppointmentController {
             }
         }
 
-        // TODO: debug
-        System.out.println("role: " + role);
-        System.out.println("can create resep: " + canCreateResep);
-        System.out.println("can update status: " + canUpdateStatus);
-        System.out.println("can update with warning: " + showResepWarning);
-
+        if (apt == null) {
+            logger.error("Kode appointment tidak ditemukan.");
+        }
 
         model.addAttribute("apt", apt);
         model.addAttribute("role", role);
@@ -94,27 +94,21 @@ public class AppointmentController {
 
     // Update appointment
     @GetMapping("/appointment/update")
-    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode) {
-        System.out.println("masuk controller"); // TODO: debug
+    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode, Principal principal) {
         AppointmentModel apt = appointmentService.getAppointmentById(kode);
         AppointmentModel updated = appointmentService.updateAppointment(apt);
 
         String redirectUrl;
         if (updated != null) {
-            System.out.println("berhasil update"); // TODO: debug
             redirectUrl = "/appointment/detail/?kode=" + updated.getKode();
 
-            System.out.println("otomatis create tagihan"); // TODO: debug
-            Integer harga = apt.getDokter().getTarif(); // udh pasti gapunya resep
+            Integer harga = apt.getDokter().getTarif();
             TagihanModel newBill = new TagihanModel();
-            TagihanModel createdBill = tagihanService.addTagihan(newBill, harga, apt);
-
-            System.out.println("kode tagihan:  " + createdBill.getKode()); // TODO: debug
-            System.out.println("jumlah tagihan: " + createdBill.getKode()); // TODO: debug
+            tagihanService.addTagihan(newBill, harga, apt);
 
         } else {
-            System.out.println("gagal update"); // TODO: debug
             redirectUrl = "/appointment/detail/?kode=APT-null";
+            logger.error("Gagal update status Appointment. Kode appointment tidak ditemukan.");
         }
 
         return new RedirectView(redirectUrl);

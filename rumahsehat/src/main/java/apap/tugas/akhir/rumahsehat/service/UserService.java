@@ -31,13 +31,10 @@ public class UserService {
     }
 
     public UserModel getRestUserById(String id) {
-        System.out.println("masuk service"); // TODO: debug
         Optional<UserModel> user = userDb.findById(id);
         if (user.isPresent()) {
-            System.out.println(user.get().getId()); // TODO: debug
             return user.get();
         } else {
-            System.out.println("not found"); // TODO: debug
             throw new NoSuchElementException();
         }
     }

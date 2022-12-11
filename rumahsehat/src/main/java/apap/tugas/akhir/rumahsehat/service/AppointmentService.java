@@ -41,7 +41,6 @@ public class AppointmentService {
         if (apt.isPresent()) {
             return apt.get();
         } else {
-            System.out.println("not found"); // TODO: debug
             throw new NoSuchElementException();
         }
     }
@@ -79,7 +78,6 @@ public class AppointmentService {
     }
 
     public AppointmentModel updateAppointment(AppointmentModel appointment) {
-        System.out.println("masuk service"); // TODO: debug
         if (appointment != null) {
             appointment.setIsDone(true);
         }
