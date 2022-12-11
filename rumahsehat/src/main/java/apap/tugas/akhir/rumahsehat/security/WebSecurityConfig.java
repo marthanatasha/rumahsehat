@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                 .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
                 .antMatchers("/appointment/update/**").hasAuthority("ADMIN") // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
 //                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: kalo udah ada jwt2an, tambahin ini
+                .antMatchers("resep/add/{kode}").hasAnyAuthority("DOKTER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

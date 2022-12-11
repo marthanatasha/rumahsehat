@@ -75,6 +75,7 @@ class HomeDummy extends StatelessWidget {
                     })
                   );
                 }, 
+                // hapus karna harusnya tombolnya ga ada di home, ini cm buat test
                 child: const Text('Lihat Detail Resep'),
                 ),
                 const SizedBox(height: 40,),

@@ -97,32 +97,32 @@ public class BaseController {
 //        }
 //        if (dokterService.getListDokter().size() == 0) {
 //            DokterModel dokter = new DokterModel();
-//            dokter.setEmail("doktern@rumahsehat.com");
-//            dokter.setNama("dokter satu");
-//            dokter.setPassword("dokter");
+//            dokter.setEmail("dokter2@rumahsehat.com");
+//            dokter.setNama("dokter dua");
+//            dokter.setPassword("dokter2");
 //            dokter.setRole(UserType.DOKTER);
-//            dokter.setUsername("dokter");
+//            dokter.setUsername("dokter2");
 //            dokter.setIsSso(false);
-//            Integer tarif = 100000;
+//            Integer tarif = 200000;
 //            dokter.setTarif(tarif);
 //            dokterService.addDokter(dokter);
 //        }
 //        if (pasienService.getListPasien().size() == 0) {
 //            PasienModel pasien = new PasienModel();
-//            pasien.setEmail("pasien@rumahsehat.com");
-//            pasien.setNama("pasien satu");
-//            pasien.setPassword("pasien");
+//            pasien.setEmail("pasien2@rumahsehat.com");
+//            pasien.setNama("pasien dua");
+//            pasien.setPassword("pasien2");
 //            pasien.setRole(UserType.PASIEN);
-//            pasien.setUsername("pasien");
+//            pasien.setUsername("pasien2");
 //            pasien.setIsSso(false);
-//            pasien.setSaldo(50000);
-//            pasien.setUmur(25);
+//            pasien.setSaldo(70000);
+//            pasien.setUmur(20);
 //            pasien.setListAppointment(new ArrayList<>());
 //            pasienService.addPasien(pasien);
 //        }
-//
-//
-////         return "pages/home";
+
+
+//         return "pages/home";
 //        return ("redirect:/");
 //     }
 

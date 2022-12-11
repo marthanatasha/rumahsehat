@@ -60,34 +60,59 @@
                                 <div class="justify-content-center">
                                     <h2>Detail Resep</h2>
                                     <br>
-                                    <p th:text="'ID Resep: ' + ${resep.id}"></p>
-                                    <p th:text="'Nama Dokter: ' + ${dokter.nama}"></p>
-                                    <p th:text="'Nama Pasien: ' + ${pasien.nama}"></p>
-                                    <p>
-                                        <span th:if="${resep.isDone == false}" th:text="'Status: Belum Selesai'"></span>
-                                        <span th:if="${resep.isDone == true}" th:text="'Status: Selesai'"></span>
-                                    </p>
-                                    <p>
-                                        <span th:if="${apoteker == null}" th:text="'Apoteker: Belum ada'"></span>
-                                        <span th:if="${apoteker != null}" th:text="'Apoteker: ' + ${apoteker.nama}"></span>
-                                    </p>
-                                    <br>
-                                    <a>Daftar Obat</a>
-                                    <br>
-                                    <table class="table">
-                                        <thead>
+                                    <table style="width:40%">
                                         <tr>
-                                            <th>Nama Obat</th>
-                                            <th>Kuantitas</th>
+                                            <th>ID Resep</th>
+                                            <td><h4 th:text="${resep.id}"></h4></td>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="obat, iterationStatus : ${listJumlah}">
-                                            <td th:text="${obat.obat.namaObat}"></td>
-                                            <td th:text="${obat.kuantitas}"></td>
+                                        <tr>
+                                            <th>Dokter</th>
+                                            <td><h4 th:text="${resep.appointment.dokter.nama}"></h4></td>
                                         </tr>
-                                        </tbody>
+                                        <tr>
+                                            <th>Pasien</th>
+                                            <td><h4 th:text="${resep.appointment.pasien.nama}"></h4></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>
+                                                <div th:if="${resep.isDone}"><h4>Selesai</h4></div>
+                                                <div th:unless="${resep.isDone}"><h4>Belum Selesai</h4></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Apoteker</th>
+                                            <td>
+                                                <div th:if="${resep.apoteker != null}"><h4 th:text="${resep.apoteker.nama}"></h4></div>
+                                                <div th:unless="${resep.apoteker != null}"><h4>-</h4></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Daftar Obat</th>
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Nama Obat</th>
+                                                    <th>Kuantitas</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="obat, iterationStatus : ${listJumlah}">
+                                                    <td th:text="${obat.obat.namaObat}"></td>
+                                                    <td th:text="${obat.kuantitas}"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </tr>
                                     </table>
+                                    <div th:if="${isApoteker}" style="display: inline">
+                                        <div th:if="${canConfirm}" style="display: inline">
+                                            <a class="btn btn-primary mr-8" th:href="@{/}">Konfirmasi</a>
+                                        </div>
+                                        <div th:unless="${canConfirm}" style="display: inline">
+                                            <a class="btn btn-primary mr-8" th:disabled="${canConfirm == false}">Konfirmasi</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
