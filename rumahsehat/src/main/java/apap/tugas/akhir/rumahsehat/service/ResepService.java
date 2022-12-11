@@ -54,9 +54,19 @@ public class ResepService {
         return apiResep;
     }
 
-    public ResepModel updateResep(ResepModel resep) {
+    public Boolean canConfirm(ResepModel resep) {
+        Boolean canConfirm = true;
+        for (JumlahModel obat : resep.getJumlah()){
+            if (obat.getObat().getStok() < obat.getKuantitas()){
+                canConfirm = false;
+                break;
+            }
+        }
+        return canConfirm;
+    }
+
+    public void updateResep (ResepModel resep){
         resepDb.save(resep);
-        return resep;
     }
 
     public ResepModel deleteResep(ResepModel resep) {

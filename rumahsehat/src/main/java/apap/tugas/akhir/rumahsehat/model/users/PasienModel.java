@@ -32,7 +32,6 @@ public class PasienModel extends UserModel {
     private Integer saldo;
 
     @NotNull
-    @Column(name = "umur", nullable = false)
     private Integer umur;
 
     @OneToMany(mappedBy = "pasien", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

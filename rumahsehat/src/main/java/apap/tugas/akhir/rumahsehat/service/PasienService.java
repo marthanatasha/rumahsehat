@@ -18,6 +18,9 @@ public class PasienService {
     @Autowired
     private PasienDb pasienDb;
 
+    @Autowired
+    private GeneralService generalService;
+
     public List<PasienModel> getListPasien() {
         return pasienDb.findAll();
     }

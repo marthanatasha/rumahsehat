@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:rumahsehat_flutter/pages/list_tagihan.dart';
 import 'package:rumahsehat_flutter/pages/detail_resep.dart';
 import 'package:rumahsehat_flutter/pages/view_profile_user.dart';
 import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
@@ -90,6 +91,21 @@ class HomeDummy extends StatelessWidget {
                     }));
                   },
                   child: const Text('Lihat Semua Appointment'),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ViewAllTagihan();
+                    }));
+                  },
+                  child: const Text('Detail Tagihan'),
+                ),
+                const SizedBox(
+                  height: 40,
                 ),
                 ElevatedButton(
                   onPressed: () {

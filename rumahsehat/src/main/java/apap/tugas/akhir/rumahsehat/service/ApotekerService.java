@@ -16,15 +16,24 @@ public class ApotekerService {
     @Autowired
     private ApotekerDb apotekerDb;
 
+    @Autowired
+    private GeneralService generalService;
+
     public List<ApotekerModel> getListApoteker() {
         return apotekerDb.findAll();
     }
 
-    public ApotekerModel getApotekerById(Long id) {
+    public ApotekerModel getApotekerById(String id) {
         return apotekerDb.findById(id).get();
     }
 
+    public ApotekerModel getApotekerByUsername(String username){
+        return apotekerDb.findByUsername(username);
+    }
+
     public void addApoteker(ApotekerModel apoteker) {
+        String pass = generalService.encrypt(apoteker.getPassword());
+        apoteker.setPassword(pass);
         apotekerDb.save(apoteker);
     }
 
