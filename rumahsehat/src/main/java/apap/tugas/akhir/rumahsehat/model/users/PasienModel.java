@@ -28,10 +28,12 @@ import lombok.Setter;
 public class PasienModel extends UserModel {
 
     @NotNull
+//    @Size(max = 50)
     @Column(name = "saldo", nullable = false)
     private Integer saldo;
 
     @NotNull
+//    @Size(max = 50)
     @Column(name = "umur", nullable = false)
     private Integer umur;
 
