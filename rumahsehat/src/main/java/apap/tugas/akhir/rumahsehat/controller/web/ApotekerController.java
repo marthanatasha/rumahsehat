@@ -47,6 +47,7 @@ public class ApotekerController {
     public String postApotekerAddForm(
             @ModelAttribute ApotekerModel apoteker, Model model) {
         apoteker.setRole(UserType.APOTEKER);
+        apoteker.setIsSso(false);
         apotekerService.addApoteker(apoteker);
         return "dashboard/apoteker/confirmation-add";
     }

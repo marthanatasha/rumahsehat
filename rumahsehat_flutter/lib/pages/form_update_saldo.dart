@@ -1,44 +1,76 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:rumahsehat_flutter/DTO/GetPasienDTO.dart';
+import 'package:rumahsehat_flutter/DTO/SaldoUpdateDTO.dart';
 
-class FormRegistrasiPasien extends StatefulWidget {
-  const FormRegistrasiPasien({super.key});
+class FormUpdateSaldo extends StatefulWidget {
+  final String? username;
+  const FormUpdateSaldo({super.key, required this.username});
 
   @override
-  _FormRegistrasiPasien createState() => _FormRegistrasiPasien();
+  _FormUpdateSaldo createState() => _FormUpdateSaldo(username);
 }
 
-class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
+class _FormUpdateSaldo extends State<FormUpdateSaldo> {
   final _formKey = GlobalKey<FormState>();
-  String? nama;
-  String? username;
-  String? password = "";
-  String? email;
-  int? saldo;
-  int? umur;
 
-  // Function to post Appointment as Json
-  Future postPasien() async {
-    GetPasienDTO pasien = GetPasienDTO(
-        nama, username, password, email, saldo, umur); // TODO: BINGUNG INI APA
-    var pasienJson = json.encode(pasien.toJson());
+  late GetPasienDTO pasienDetails;
+
+  int? saldo;
+  String? username = "";
+
+  _FormUpdateSaldo(String? username) {
+    this.username = username;
+  }
+
+  // Future GetSaldo(String kodePasien) async {
+  //   var response = await http.get(
+  //       Uri.parse('http://localhost:8000/api/v1/pasien/$kodePasien'),
+  //       headers: {
+  //         "Access-Control-Allow-Origin": "*",
+  //         "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+  //       });
+  //   var jsonData = jsonDecode(response.body);
+
+  //   if (response.statusCode == 200) {
+  //     pasienDetails = GetPasienDTO(
+  //       jsonData["nama"],
+  //       jsonData["username"],
+  //       jsonData["password"],
+  //       jsonData["email"],
+  //       jsonData["saldo"],
+  //       jsonData["umur"],
+  //     );
+  //     return pasienDetails;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // Function to top up saldo as Json
+  Future updateSaldo() async {
+    print("masuk");
+    SaldoUpdateDTO topUp = SaldoUpdateDTO(username, saldo);
+    var topUpJson = json.encode(topUp.toJson());
     var response = await http.post(
-        Uri.parse('http://localhost:8000/api/v1/pasien/add'),
+        Uri.parse('http://localhost:8000/api/v1/pasien/addSaldo'),
         headers: {
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
         },
-        body: pasienJson);
+        body: topUpJson);
+    // print(response.body);
     if (response.statusCode == 200) {
+      print("response ok ==============");
       return showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Pasien Created!'),
-              content: const Text('Registrasi akun pasien berhasil dilakukan'),
+              title: const Text('Top Up Successful!'),
+              content: const Text('Saldo anda berhasil ditambahkan.'),
               actions: <Widget>[
                 TextButton(
                   child: const Text('Ok'),
@@ -51,12 +83,13 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
             );
           });
     } else {
+      print(response.statusCode);
       return showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Create Pasien Failed!'),
-              content: const Text('Oh no! Coba buat di waktu yang lain...'),
+              title: const Text('Update Saldo Failed!'),
+              content: const Text('Coba di waktu lain.'),
               actions: <Widget>[
                 TextButton(
                   child: const Text('Ok'),
@@ -78,6 +111,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
         centerTitle: true,
       ),
       body: FutureBuilder(
+        // future: updateSaldo(),
         builder: (context, snapshot) {
           return Form(
             key: _formKey,
@@ -90,7 +124,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     const Text(
-                      'Registrasi Pasien',
+                      'Top Up Saldo',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
@@ -101,58 +135,13 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       child: TextField(
-                        onChanged: (String value) => nama = value,
+                        onChanged: (String value) => saldo = int.parse(value),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Nama *',
+                          hintText: 'Masukkan jumlah saldo tambahan',
                         ),
                       ),
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: TextField(
-                        onChanged: (String value) => username = value,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Username *',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: TextField(
-                        onChanged: (String value) => password = value,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Password *',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: TextField(
-                        onChanged: (String value) => email = value,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'E-mail *',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: TextField(
-                        onChanged: (String value) => umur = int.parse(value),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Umur *',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -171,7 +160,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
                           padding: const EdgeInsets.only(top: 12),
                           child: ElevatedButton(
                             onPressed: () async {
-                              await postPasien();
+                              await updateSaldo();
                               // if (_formKey.currentState!.validate()) {
                               //   postPasien();
                               // }
@@ -180,7 +169,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

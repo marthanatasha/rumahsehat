@@ -7,7 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import apap.tugas.akhir.rumahsehat.model.DTO.PasienDTO;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.repository.PasienDb;
 
 @Service
@@ -24,13 +26,24 @@ public class PasienService {
         return pasienDb.findById(id).get();
     }
 
-    public void addPasien(PasienModel pasien) {
-        pasienDb.save(pasien);
+    public PasienModel addPasien(PasienDTO pasien) {
+        PasienModel newPasien = new PasienModel();
+        newPasien.setNama(pasien.getNama());
+        newPasien.setUsername(pasien.getUsername());
+        newPasien.setPassword(pasien.getPassword());
+        newPasien.setEmail(pasien.getEmail());
+        newPasien.setUmur(pasien.getUmur());
+        newPasien.setSaldo(0);
+        newPasien.setIsSso(false);
+        newPasien.setRole(UserType.PASIEN);
+        return pasienDb.save(newPasien);
     }
 
-    public PasienModel updatePasien(PasienModel pasien) {
-        pasienDb.save(pasien);
-        return pasien;
+    public PasienModel updatePasien(String username, int saldo) {
+        PasienModel updatePasien = pasienDb.findByUsername(username);
+        System.out.println(updatePasien.getSaldo() + "======");
+        updatePasien.setSaldo(updatePasien.getSaldo()+saldo);
+        return pasienDb.save(updatePasien);
     }
 
     public PasienModel deletePasien(PasienModel pasien) {

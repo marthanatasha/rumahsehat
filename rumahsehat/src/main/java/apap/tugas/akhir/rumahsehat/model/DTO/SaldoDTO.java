@@ -5,18 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// import java.time.LocalDateTime;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class PasienDTO {
-    // private String id;
-    private String nama;
+public class SaldoDTO {
     private String username;
-    private String password;
-    private String email;
     private Integer saldo;
-    private Integer umur;
+
+    public SaldoDTO(String username, Integer saldo){
+        this.username = username;
+        this.saldo = saldo;
+    }
 }
