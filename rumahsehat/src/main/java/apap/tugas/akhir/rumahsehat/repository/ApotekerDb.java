@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
 
 @Repository
-public interface ApotekerDb extends JpaRepository<ApotekerModel, Long> {
-
+public interface ApotekerDb extends JpaRepository<ApotekerModel, String> {
+    ApotekerModel findByUsername(String username);
 }

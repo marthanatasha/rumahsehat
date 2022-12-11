@@ -56,18 +56,32 @@ public class AppointmentController {
 
         boolean canAccess = false;
         boolean canCreateResep = false;
-        boolean canUpdateStatus = false;
+        boolean canUpdateStatus = false; // canUpdateStatus true saat appointment tidak punya resep
         boolean showResepWarning = false;
+        Long kodeResep = null;
 
         if (role.equals("DOKTER") || role.equals("ADMIN")) {
             canAccess = true;
         }
 
+<<<<<<< HEAD
         if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
+=======
+        //
+        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
+>>>>>>> 5f958767785246bc2a964f2d6e14a71a4818921d
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
                 canCreateResep = true;
+<<<<<<< HEAD
                 showResepWarning = true;
+=======
+            } else {
+                if (apt.getResep().getIsDone()) {
+                    canUpdateStatus = true;
+                }
+                kodeResep = apt.getResep().getId();
+>>>>>>> 5f958767785246bc2a964f2d6e14a71a4818921d
             }
         }
 
@@ -77,6 +91,7 @@ public class AppointmentController {
         model.addAttribute("canCreateResep", canCreateResep);
         model.addAttribute("canUpdateStatus", canUpdateStatus);
         model.addAttribute("showResepWarning", showResepWarning);
+        model.addAttribute("kodeResep", kodeResep);
 
         return "dashboard/appointment/detail";
     }

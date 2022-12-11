@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 // @JsonIgnoreProperties(value={"resep"}, allowSetters = true)
 @Setter
@@ -60,10 +61,11 @@ public class ResepModel implements Serializable {
     private AppointmentModel appointment;
 
     @OneToMany(mappedBy = "resep", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<JumlahModel> jumlah;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "confirmer_uuid", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true, name = "confirmer_uuid", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ApotekerModel apoteker;
 

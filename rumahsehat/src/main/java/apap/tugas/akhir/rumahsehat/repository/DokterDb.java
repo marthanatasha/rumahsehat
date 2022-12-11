@@ -7,5 +7,4 @@ import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 
 @Repository
 public interface DokterDb extends JpaRepository<DokterModel, String> {
-    
 }
