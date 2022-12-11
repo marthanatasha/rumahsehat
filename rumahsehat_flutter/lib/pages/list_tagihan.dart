@@ -2,33 +2,34 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:rumahsehat_flutter/pages/view_appointment.dart';
+import 'package:rumahsehat_flutter/pages/detail_tagihan.dart';
+import 'package:rumahsehat_flutter/pages/list_tagihan.dart';
+import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
 
-import '../DTO/GetAppointmentDTO.dart';
+import '../DTO/TagihanDTO.dart';
 
-class ViewAllAppointment extends StatelessWidget {
-  List<GetAppointmentDTO> listApt = [];
+class ViewAllTagihan extends StatelessWidget {
+  List<TagihanDTO> listTagihan = [];
 
   // Function to get list of Appointment
-  Future getAppointment(String pasienId) async {
+  Future getTagihan(String pasienId) async {
     var response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'),
+        Uri.parse('http://localhost:8080/api/v1/tagihan/$pasienId'),
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
         });
     var jsonData = jsonDecode(response.body);
 
-    listApt = [];
+    listTagihan = [];
 
     if (response.statusCode == 200) {
       for (var a in jsonData) {
-        var raw = a["waktuAwal"].split('T');
-        GetAppointmentDTO apt = GetAppointmentDTO(
-            a["kode"], a["dokter"]["nama"], raw[0], raw[1], a["isDone"]);
-        listApt.add(apt);
+        TagihanDTO bill = TagihanDTO(a["nomorTagihan"], a["tanggalTerbuat"],
+            a["status"], a["idPasien"], a["jumlahTagihan"], a["tanggalBayar"]);
+        listTagihan.add(bill);
       }
-      return listApt;
+      return listTagihan;
     } else {
       return false;
     }
@@ -42,7 +43,7 @@ class ViewAllAppointment extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getAppointment("pasien3"), // TODO: pasienId masih hard code
+        future: getTagihan("pasien3"), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
@@ -92,7 +93,7 @@ class ViewAllAppointment extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: const <Widget>[
                   Text(
-                    'Daftar Appointment',
+                    'Daftar Tagihan Anda',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -105,7 +106,7 @@ class ViewAllAppointment extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'Mencari appointment Anda.',
+                    'Mencari Tagihan Anda.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -124,7 +125,7 @@ class ViewAllAppointment extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text(
-                      'Daftar Appointment',
+                      'Daftar Tagihan Anda',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
@@ -135,7 +136,7 @@ class ViewAllAppointment extends StatelessWidget {
                       height: 20,
                     ),
                     const Text(
-                      'Anda belum memiliki appointment.',
+                      'Anda belum memiliki tagihan.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
@@ -161,7 +162,7 @@ class ViewAllAppointment extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     const Text(
-                      'Daftar Appointment',
+                      'Daftar Tagihan Anda',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
@@ -179,13 +180,13 @@ class ViewAllAppointment extends StatelessWidget {
                                 height: 12,
                               ),
                           itemBuilder: (context, index) {
-                            final GetAppointmentDTO aptNow =
-                                snapshot.data[index];
+                            final TagihanDTO tagihan = snapshot.data[index];
                             return InkWell(
                               onTap: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return ViewAppointment(kodeApt: aptNow.kode);
+                                  return DetailTagihan(
+                                      noTagihan: tagihan.nomorTagihan);
                                 }));
                               },
                               child: Card(
@@ -208,7 +209,7 @@ class ViewAllAppointment extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            'Appointment ${aptNow.kode}',
+                                            'Kode Tagihan: ${tagihan.nomorTagihan}',
                                             style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w500,
@@ -218,7 +219,7 @@ class ViewAllAppointment extends StatelessWidget {
                                             height: 12,
                                           ),
                                           Text(
-                                            'Dokter: ${aptNow.namaDokter}',
+                                            'Tanggal Terbuat: ${tagihan.tanggalTerbuat}',
                                             style:
                                                 const TextStyle(fontSize: 16),
                                           ),
@@ -226,7 +227,7 @@ class ViewAllAppointment extends StatelessWidget {
                                             height: 4,
                                           ),
                                           Text(
-                                            'Tanggal: ${aptNow.tanggal}',
+                                            'Tanggal Terbayar: ${tagihan.tanggalBayar}',
                                             style:
                                                 const TextStyle(fontSize: 16),
                                           ),
@@ -234,7 +235,7 @@ class ViewAllAppointment extends StatelessWidget {
                                             height: 4,
                                           ),
                                           Text(
-                                            'Jam: ${aptNow.jam}',
+                                            'Status Pembayaran: ${tagihan.status}',
                                             style:
                                                 const TextStyle(fontSize: 16),
                                           ),
@@ -242,11 +243,12 @@ class ViewAllAppointment extends StatelessWidget {
                                             height: 4,
                                           ),
                                           Text(
-                                            aptNow.isDone
-                                                ? 'Status: Is Done'
-                                                : 'Status: Is Not Done',
+                                            'Tarif Tagihan: ${tagihan.jumlahTagihan}',
                                             style:
                                                 const TextStyle(fontSize: 16),
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
                                           ),
                                         ],
                                       ),
@@ -261,8 +263,9 @@ class ViewAllAppointment extends StatelessWidget {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return ViewAppointment(
-                                                kodeApt: aptNow.kode);
+                                            return DetailTagihan(
+                                                noTagihan:
+                                                    tagihan.nomorTagihan);
                                           }));
                                         },
                                       ),

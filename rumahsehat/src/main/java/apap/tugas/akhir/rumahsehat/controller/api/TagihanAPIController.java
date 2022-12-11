@@ -1,11 +1,14 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import apap.tugas.akhir.rumahsehat.model.TagihanModel;
+import apap.tugas.akhir.rumahsehat.model.DTO.TagihanDTO;
 import apap.tugas.akhir.rumahsehat.service.TagihanService;
 
 @CrossOrigin()
@@ -16,23 +19,22 @@ public class TagihanAPIController {
     @Autowired
     TagihanService tagihanService;
 
-    // List tagihan
-    @GetMapping("/tagihan")
-    public String getTagihanList(Model model) {
-        model.addAttribute("tagihans", tagihanService.getListTagihan());
-        return "pages/tagihan/list";
-    }
-
-    // Detail tagihan
+    // All tagihan pasien
     @GetMapping("/tagihan/{id}")
-    public String getTagihanById(@PathVariable Long id, Model model) {
-        return "pages/tagihan/detail";
+    public List<TagihanDTO> getTagihanPasien(@PathVariable("id") String id) {
+        return tagihanService.getTagihanDTO(id);
     }
 
-    // Form create tagihan
-    @GetMapping("/tagihan/add")
-    public String getTagihanAddForm(Model model) {
-        return "pages/tagihan/form-add";
+    // Detail tagihan pasien
+    @GetMapping("/tagihan/detail/{id}")
+    public TagihanDTO getDetailTagihan(@PathVariable("id") String id) {
+        return tagihanService.getTagihanById(id);
+    }
+
+    // Pembayaran tagihan
+    @GetMapping("/tagihan/pembayaran/{noTagihan}")
+    public TagihanDTO pembayaranTagihan(@PathVariable("noTagihan") String noTagihan) {
+        return tagihanService.pembayaranTagihan(noTagihan);
     }
 
     // Confirmation create tagihan
