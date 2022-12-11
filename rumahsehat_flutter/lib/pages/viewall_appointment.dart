@@ -42,8 +42,7 @@ class ViewAllAppointment extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getAppointment(
-            "8a85dae884f0d5820184f0d5c2280003"), // TODO: pasienId masih hard code
+        future: getAppointment("pasien1"), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(

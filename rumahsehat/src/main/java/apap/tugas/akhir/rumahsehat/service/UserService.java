@@ -1,5 +1,4 @@
 package apap.tugas.akhir.rumahsehat.service;
-
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,7 +26,8 @@ public class UserService {
     }
 
     public UserModel getUserById(String id) {
-        return userDb.findById(id).get();
+        Optional<UserModel> user = userDb.findById(id);
+        return user.orElse(null);
     }
 
     public UserModel getRestUserById(String id) {

@@ -1,17 +1,15 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
+import apap.tugas.akhir.rumahsehat.model.*;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.service.AppointmentService;
+import apap.tugas.akhir.rumahsehat.service.TagihanService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
-import apap.tugas.akhir.rumahsehat.service.AppointmentService;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,6 +24,9 @@ public class AppointmentController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TagihanService tagihanService;
 
     // List appointment
     @GetMapping("/appointment")
@@ -58,25 +59,27 @@ public class AppointmentController {
         boolean canCreateResep = false;
         boolean canUpdateStatus = false; // canUpdateStatus true saat appointment tidak punya resep
         boolean showResepWarning = false;
+
         Long kodeResep = null;
 
         if (role.equals("DOKTER") || role.equals("ADMIN")) {
             canAccess = true;
         }
 
-        //
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
+        if (apt != null && role.equals("ADMIN") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
-                showResepWarning = true;
                 canCreateResep = true;
-            } else {
-                if (apt.getResep().getIsDone()) {
-                    canUpdateStatus = true;
-                }
-                kodeResep = apt.getResep().getId();
+                showResepWarning = true;
             }
         }
+
+        // TODO: debug
+        System.out.println("role: " + role);
+        System.out.println("can create resep: " + canCreateResep);
+        System.out.println("can update status: " + canUpdateStatus);
+        System.out.println("can update with warning: " + showResepWarning);
+
 
         model.addAttribute("apt", apt);
         model.addAttribute("role", role);
@@ -91,50 +94,29 @@ public class AppointmentController {
 
     // Update appointment
     @GetMapping("/appointment/update")
-    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode, Model model, Principal principal) {
+    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode) {
         System.out.println("masuk controller"); // TODO: debug
         AppointmentModel apt = appointmentService.getAppointmentById(kode);
         AppointmentModel updated = appointmentService.updateAppointment(apt);
-        String redirectUrl = "";
+
+        String redirectUrl;
         if (updated != null) {
-            System.out.println("updated: " + updated.getKode() + " - " + updated.getIsDone()); // TODO: debug
+            System.out.println("berhasil update"); // TODO: debug
             redirectUrl = "/appointment/detail/?kode=" + updated.getKode();
+
+            System.out.println("otomatis create tagihan"); // TODO: debug
+            Integer harga = apt.getDokter().getTarif(); // udh pasti gapunya resep
+            TagihanModel newBill = new TagihanModel();
+            TagihanModel createdBill = tagihanService.addTagihan(newBill, harga, apt);
+
+            System.out.println("kode tagihan:  " + createdBill.getKode()); // TODO: debug
+            System.out.println("jumlah tagihan: " + createdBill.getKode()); // TODO: debug
+
         } else {
+            System.out.println("gagal update"); // TODO: debug
             redirectUrl = "/appointment/detail/?kode=APT-null";
         }
 
         return new RedirectView(redirectUrl);
     }
-
-//    // Form create appointment
-//    @GetMapping("/appointment/add")
-//    public String getAppointmentAddForm(Model model) {
-//        return "dashboard/appointment/form-add";
-//    }
-
-//    // Confirmation create appointment
-//    @PostMapping(value = "/appointment/add")
-//    public String postAppointmentAddForm(
-//            @ModelAttribute AppointmentModel appointment, Model model) {
-//        return "dashboard/appointment/confirmation-add";
-//    }
-
-//    // Form update appointment
-//    @GetMapping("/appointment/update/{id}")
-//    public String getAppointmentAddUpdate(@PathVariable Long id, Model model) {
-//        return "dashboard/appointment/form-update";
-//    }
-//
-//    // Confirmation update appointment
-//    @PostMapping(value = "/appointment/update")
-//    public String postAppointmentUpdateForm(
-//            @ModelAttribute AppointmentModel appointment, Model model) {
-//        return "dashboard/appointment/confirmation-update";
-//    }
-//
-//    // Delete appointment
-//    @PostMapping("/appointment/delete")
-//    public String deletePengajarSubmit(@ModelAttribute AppointmentModel appointment, Model model) {
-//        return "dashboard/appointment/confirmation-delete";
-//    }
 }
