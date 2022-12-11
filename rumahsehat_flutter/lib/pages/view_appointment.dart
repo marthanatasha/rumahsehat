@@ -264,11 +264,14 @@ class _ButtonLihatResep extends State<ButtonLihatResep> {
           ));
     } else {
       return Container(
-          padding: const EdgeInsets.only(top: 12),
-          child: ElevatedButton(
-            onPressed: () {}, // TODO: navigate to detail resep
-            child: const Text('Lihat Resep'),
-          ));
+        padding: const EdgeInsets.only(top: 12),
+        child: ElevatedButton(
+          onPressed: () {
+            // TODO: navigate to detail resep, pake parameter idResep buat dioper ke page detail resep
+          },
+          child: const Text('Lihat Resep'),
+        )
+      );
     }
   }
 }

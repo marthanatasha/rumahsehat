@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,8 +111,18 @@ public class TagihanService {
         return tagihanDTO;
     }
 
-    public void addTagihan(TagihanModel tagihan) {
-        tagihanDb.save(tagihan);
+    public void addTagihan(TagihanModel newTagihan, Integer jumlahTagihan, AppointmentModel appointment) {
+        // set default values
+        int count = getListTagihan().size();
+        newTagihan.setKode("BILL-" + (count+1));
+        newTagihan.setIsPaid(false);
+        newTagihan.setTanggalTerbuat(LocalDateTime.now());
+        newTagihan.setTanggalBayar(null);
+        newTagihan.setJumlahTagihan(jumlahTagihan);
+        newTagihan.setAppointment(appointment);
+
+        // save
+        tagihanDb.save(newTagihan);
     }
 
     public TagihanModel updateTagihan(TagihanModel tagihan) {

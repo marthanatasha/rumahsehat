@@ -15,7 +15,8 @@ class ViewAllAppointment extends StatelessWidget {
         Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'),
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+          // "Authorization": "Bearer $token" // TODO: token nya dapet dr mana pak?
         });
     var jsonData = jsonDecode(response.body);
 
@@ -42,8 +43,7 @@ class ViewAllAppointment extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getAppointment(
-            "8a85dae884f0d5820184f0d5c2280003"), // TODO: pasienId masih hard code
+        future: getAppointment("pasien1"), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
