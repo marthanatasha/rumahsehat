@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import apap.tugas.akhir.rumahsehatapi.models.users.UserModel;
-import apap.tugas.akhir.rumahsehatapi.repository.UserDb;
+import apap.tugas.akhir.rumahsehatapi.repository.UserRepo;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -17,11 +17,11 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserDb userDb;
+    private UserRepo userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserModel> userRes = userDb.findByEmail(email);
+        Optional<UserModel> userRes = userRepo.findByEmail(email);
         if (userRes.isEmpty())
             throw new UsernameNotFoundException("Could not findUser with email = " + email);
         UserModel user = userRes.get();

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import apap.tugas.akhir.rumahsehatapi.models.LoginCredentials;
 import apap.tugas.akhir.rumahsehatapi.models.users.UserModel;
-import apap.tugas.akhir.rumahsehatapi.repository.UserDb;
+import apap.tugas.akhir.rumahsehatapi.repository.UserRepo;
 import apap.tugas.akhir.rumahsehatapi.security.JWTUtil;
 
 import java.util.Collections;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private UserDb userDb;
+    private UserRepo userRepo;
     @Autowired
     private JWTUtil jwtUtil;
     @Autowired
@@ -35,7 +35,7 @@ public class AuthController {
     public Map<String, Object> registerHandler(@RequestBody UserModel user) {
         String encodedPass = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPass);
-        user = userDb.save(user);
+        user = userRepo.save(user);
         String token = jwtUtil.generateToken(user.getEmail());
         return Collections.singletonMap("jwt-token", token);
     }
