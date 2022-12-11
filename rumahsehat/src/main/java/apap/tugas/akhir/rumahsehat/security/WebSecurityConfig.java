@@ -27,7 +27,8 @@ public class WebSecurityConfig {
                 .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
                 .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
                 .antMatchers("/appointment/update/**").hasAuthority("DOKTER") // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
-//                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: kalo udah ada jwt2an, tambahin ini
+//                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
+//                .antMatchers("/api/v1/dokter").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
                 .antMatchers("resep/add/{kode}").hasAnyAuthority("DOKTER")
                 .anyRequest().authenticated()
                 .and()

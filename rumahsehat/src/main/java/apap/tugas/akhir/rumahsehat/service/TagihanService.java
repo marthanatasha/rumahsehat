@@ -111,7 +111,7 @@ public class TagihanService {
         return tagihanDTO;
     }
 
-    public TagihanModel addTagihan(TagihanModel newTagihan, Integer jumlahTagihan, AppointmentModel appointment) {
+    public void addTagihan(TagihanModel newTagihan, Integer jumlahTagihan, AppointmentModel appointment) {
         // set default values
         int count = getListTagihan().size();
         newTagihan.setKode("BILL-" + (count+1));
@@ -122,7 +122,7 @@ public class TagihanService {
         newTagihan.setAppointment(appointment);
 
         // save
-        return tagihanDb.save(newTagihan);
+        tagihanDb.save(newTagihan);
     }
 
     public TagihanModel updateTagihan(TagihanModel tagihan) {

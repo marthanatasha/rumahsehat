@@ -15,7 +15,8 @@ class ViewAllAppointment extends StatelessWidget {
         Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'),
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+          // "Authorization": "Bearer $token" // TODO: token nya dapet dr mana pak?
         });
     var jsonData = jsonDecode(response.body);
 

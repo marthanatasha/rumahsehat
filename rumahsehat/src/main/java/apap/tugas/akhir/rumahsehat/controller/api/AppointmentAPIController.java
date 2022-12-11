@@ -1,10 +1,13 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import apap.tugas.akhir.rumahsehat.controller.web.AppointmentController;
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -25,15 +28,18 @@ public class AppointmentAPIController {
     @Autowired
     UserService userService;
 
+    Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+
     // List appointment
     @GetMapping("/appointment/{pasienId}")
     public List<AppointmentModel> getAppointmentList(@PathVariable("pasienId") String pasienId) {
         try {
             PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
+            logger.info("API GET: Daftar appointment milik pasien " + pasien.getId() + ".");
             return pasien.getListAppointment();
         } catch (NoSuchElementException e) {
-            System.out.println("masuk not found"); // TODO: debug
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
+            logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kode Pasien " + pasienId + " not found.");
         }
     }
 
@@ -41,9 +47,10 @@ public class AppointmentAPIController {
     @GetMapping("/appointment/detail/{kode}")
     public AppointmentModel getAppointmentById(@PathVariable("kode") String kode) {
         try {
+            logger.info("API GET: Detail appointment " + kode + ".");
             return appointmentService.getRestAppointmentById(kode);
         } catch (NoSuchElementException e) {
-            System.out.println("masuk not found"); // TODO: debug
+            logger.error("Gagal API GET: Kode appointment tidak ditemukan.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment Kode " + kode + " not found.");
         }
     }
@@ -51,29 +58,18 @@ public class AppointmentAPIController {
     // Form create appointment
     @PostMapping("/appointment/add")
     public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentDTO appointmentDTO, BindingResult bindingResult) {
-        System.out.println("masuk controller"); // TODO: debug
         if (bindingResult.hasFieldErrors()) {
+            logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
             AppointmentModel result = appointmentService.addAppointment(appointmentDTO);
             if (result == null) {
+                logger.error("Gagal membuat appointment. Dokter tidak tersedia di waktu tersebut.");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Waktu appointment tidak tersedia.");
             } else {
+                logger.info("API POST: Appointment baru berhasil dibuat.");
                 return result;
             }
         }
     }
-
-//    // Form update appointment
-//    @GetMapping("/appointment/update/{id}")
-//    public String getAppointmentAddUpdate(@PathVariable Long id, Model model) {
-//        return "pages/appointment/form-update";
-//    }
-
-//    // Confirmation update appointment
-//    @PostMapping(value = "/appointment/update")
-//    public String postAppointmentUpdateForm(
-//            @ModelAttribute AppointmentModel appointment, Model model) {
-//        return "pages/appointment/confirmation-update";
-//    }
 }
