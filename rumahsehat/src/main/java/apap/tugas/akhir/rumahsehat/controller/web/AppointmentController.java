@@ -94,7 +94,7 @@ public class AppointmentController {
 
     // Update appointment
     @GetMapping("/appointment/update")
-    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode, Principal principal) {
+    public RedirectView updateAppointment(@RequestParam(value = "kode") String kode) {
         AppointmentModel apt = appointmentService.getAppointmentById(kode);
         AppointmentModel updated = appointmentService.updateAppointment(apt);
 
