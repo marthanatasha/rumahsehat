@@ -47,8 +47,6 @@ public class AppointmentService {
     }
 
     public AppointmentModel addAppointment(AppointmentDTO appointmentDTO) {
-        System.out.println("masuk service"); // TODO: debug
-
         // get Dokter & Pasien objects
         DokterModel chosenDokter = dokterService.getDokterById(appointmentDTO.getDokterId());
         PasienModel registeredPasien = pasienService.getPasienById(appointmentDTO.getPasienId());
@@ -63,11 +61,6 @@ public class AppointmentService {
         newAppointment.setWaktuAwal(appointmentDTO.getWaktuAwal());
         newAppointment.setDokter(chosenDokter);
         newAppointment.setPasien(registeredPasien);
-
-        System.out.println("set default values"); // TODO: debug
-        System.out.println(newAppointment.getWaktuAwal()); // TODO: debug
-        System.out.println(newAppointment.getDokter().getId()); // TODO: debug
-        System.out.println(newAppointment.getPasien().getId()); // TODO: debug
 
         // overlapping constraint
         LocalDateTime aptStart = newAppointment.getWaktuAwal();
@@ -90,7 +83,7 @@ public class AppointmentService {
         if (appointment != null) {
             appointment.setIsDone(true);
         }
-        return appointment; // klk gaada dia return null
+        return appointment;
     }
 }
 

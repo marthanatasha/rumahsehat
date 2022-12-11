@@ -183,11 +183,8 @@ public class ResepController {
     @GetMapping("/resep/update/{id}")
     public String resepUpdate(@PathVariable Long id, Model model, Principal principal, Authentication authentication){
         ResepModel resep = resepService.getResepById(id);
-        //to do: ambil id apoteker masih gatau caranya T_T
-        // to do: cek rolenya apoteker ato bukan
         String username = authentication.getName();
         ApotekerModel apoteker = apotekerService.getApotekerByUsername(username);
-
 
         //cek kuantitas obat
         boolean canConfirm = true;
@@ -200,25 +197,24 @@ public class ResepController {
             }
         }
 
-        // update status resep dan buat tagihan
+        // update status resep, update appointment, dan buat tagihan
         if (canConfirm){
-            int harga = 0;
-            for (JumlahModel jml : listJumlah){
-                harga += jml.getObat().getHarga();
-            }
+            // update resep
             resep.setIsDone(true);
             resep.setApoteker(apoteker);
             resepService.updateResep(resep);
+
+            // update appointment
             resep.getAppointment().setIsDone(true);
-            TagihanModel bill = new TagihanModel();
-            bill.setAppointment(resep.getAppointment());
-            //to do: identifiers custom generator buat kode tagihan
-            List<TagihanModel> allBill = tagihanService.getListTagihan();
-            bill.setKode("BILL-" + allBill.size()+1);
-            bill.setIsPaid(false);
-            bill.setTanggalTerbuat(LocalDateTime.now());
-            bill.setJumlahTagihan(resep.getAppointment().getDokter().getTarif() + harga);
-            tagihanService.addTagihan(bill);
+
+            // buat tagihan
+            Integer harga = 0;
+            for (JumlahModel jml : listJumlah){
+                harga += jml.getObat().getHarga();
+            }
+            harga += resep.getAppointment().getDokter().getTarif();
+            TagihanModel newBill = new TagihanModel();
+            tagihanService.addTagihan(newBill, harga, resep.getAppointment());
         }
 
         model.addAttribute("resep", resep);

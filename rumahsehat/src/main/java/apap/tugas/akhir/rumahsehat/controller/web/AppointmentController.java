@@ -1,12 +1,10 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
-import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
-import apap.tugas.akhir.rumahsehat.model.JumlahModel;
-import apap.tugas.akhir.rumahsehat.model.ObatModel;
-import apap.tugas.akhir.rumahsehat.model.ResepModel;
+import apap.tugas.akhir.rumahsehat.model.*;
 import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
+import apap.tugas.akhir.rumahsehat.service.TagihanService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,9 @@ public class AppointmentController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TagihanService tagihanService;
 
     // List appointment
     @GetMapping("/appointment")
@@ -58,32 +59,27 @@ public class AppointmentController {
         boolean canCreateResep = false;
         boolean canUpdateStatus = false; // canUpdateStatus true saat appointment tidak punya resep
         boolean showResepWarning = false;
+
         Long kodeResep = null;
 
         if (role.equals("DOKTER") || role.equals("ADMIN")) {
             canAccess = true;
         }
 
-<<<<<<< HEAD
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
-=======
-        //
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
->>>>>>> 5f958767785246bc2a964f2d6e14a71a4818921d
+        if (apt != null && role.equals("ADMIN") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
                 canCreateResep = true;
-<<<<<<< HEAD
                 showResepWarning = true;
-=======
-            } else {
-                if (apt.getResep().getIsDone()) {
-                    canUpdateStatus = true;
-                }
-                kodeResep = apt.getResep().getId();
->>>>>>> 5f958767785246bc2a964f2d6e14a71a4818921d
             }
         }
+
+        // TODO: debug
+        System.out.println("role: " + role);
+        System.out.println("can create resep: " + canCreateResep);
+        System.out.println("can update status: " + canUpdateStatus);
+        System.out.println("can update with warning: " + showResepWarning);
+
 
         model.addAttribute("apt", apt);
         model.addAttribute("role", role);
@@ -108,17 +104,13 @@ public class AppointmentController {
             System.out.println("berhasil update"); // TODO: debug
             redirectUrl = "/appointment/detail/?kode=" + updated.getKode();
 
-            System.out.println("siapin harga buat create tagihan"); // TODO: debug
-            Integer jumlahTagihan = apt.getDokter().getTarif();
-            if (apt.getResep() != null) {
-                ResepModel resep = apt.getResep();
-                for (JumlahModel j : resep.getJumlah()) {
-                    ObatModel obatJ = j.getObat();
-                    Integer kuantitasJ = j.getKuantitas();
-                    jumlahTagihan += (obatJ.getHarga() * kuantitasJ);
-                }
-            }
-            // TODO: create TAGIHAN pake jumlahTagihan ini
+            System.out.println("otomatis create tagihan"); // TODO: debug
+            Integer harga = apt.getDokter().getTarif(); // udh pasti gapunya resep
+            TagihanModel newBill = new TagihanModel();
+            TagihanModel createdBill = tagihanService.addTagihan(newBill, harga, apt);
+
+            System.out.println("kode tagihan:  " + createdBill.getKode()); // TODO: debug
+            System.out.println("jumlah tagihan: " + createdBill.getKode()); // TODO: debug
 
         } else {
             System.out.println("gagal update"); // TODO: debug
