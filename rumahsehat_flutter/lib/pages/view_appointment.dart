@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/DTO/GetDetailAppointmentDTO.dart';
+import 'package:rumahsehat_flutter/pages/view_appointment.dart';
+import 'package:rumahsehat_flutter/pages/detail_resep.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -264,14 +266,15 @@ class _ButtonLihatResep extends State<ButtonLihatResep> {
           ));
     } else {
       return Container(
-        padding: const EdgeInsets.only(top: 12),
-        child: ElevatedButton(
-          onPressed: () {
-            // TODO: navigate to detail resep, pake parameter idResep buat dioper ke page detail resep
-          },
-          child: const Text('Lihat Resep'),
-        )
-      );
+          padding: const EdgeInsets.only(top: 12),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ViewDetailResep(idResep: idResep);
+              }));
+            }, // TODO: navigate to detail resep
+            child: const Text('Lihat Resep'),
+          ));
     }
   }
 }

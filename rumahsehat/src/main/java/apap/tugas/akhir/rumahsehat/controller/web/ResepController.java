@@ -62,11 +62,19 @@ public class ResepController {
     // Detail resep
     @GetMapping("/resep/{id}")
     public String getResepById(@PathVariable Long id, Model model, Principal principal, Authentication authentication) {
+        if (userService.isPasien(principal)){
+            return "error/404";
+        }
+
         ResepModel resep = resepService.getResepById(id);
         List<JumlahModel> listJumlah = resep.getJumlah();
         Boolean isApoteker = false;
         Boolean canConfirm = resepService.canConfirm(resep);
 
+        if (userService.isDokter(principal) && !authentication.getName().equals(resep.getAppointment().getDokter().getUsername())){
+            System.out.println("salah dokter");
+            return "error/404";
+        }
         if (userService.isApoteker(principal)){
             isApoteker = true;
         }
@@ -182,44 +190,46 @@ public class ResepController {
     // Update resep
     @GetMapping("/resep/update/{id}")
     public String resepUpdate(@PathVariable Long id, Model model, Principal principal, Authentication authentication){
-        ResepModel resep = resepService.getResepById(id);
-        String username = authentication.getName();
-        ApotekerModel apoteker = apotekerService.getApotekerByUsername(username);
+        if (userService.isApoteker(principal)) {
+            ResepModel resep = resepService.getResepById(id);
+            ApotekerModel apoteker = apotekerService.getApotekerByUsername(authentication.getName());
 
-        //cek kuantitas obat
-        boolean canConfirm = true;
-        List<JumlahModel> listJumlah = resep.getJumlah();
-        for (JumlahModel jml : listJumlah){
-            ObatModel obat = jml.getObat();
-            if (obat.getStok() < jml.getKuantitas()){
+
+            //cek kuantitas obat, ada semua --> bisa confirm
+            boolean canConfirm = true;
+            canConfirm = resepService.canConfirm(resep);
+
+            // update status resep, update appointment, dan buat tagihan
+            if (canConfirm) {
+                // update resep
+                resep.setIsDone(true);
+                resep.setApoteker(apoteker);
+                resepService.updateResep(resep);
+
+                // update appointment
+                resep.getAppointment().setIsDone(true);
+
+                // buat tagihan
+                Integer harga = resep.getAppointment().getDokter().getTarif();
+                for (JumlahModel jml : resep.getJumlah()){
+                    harga += jml.getObat().getHarga();
+                }
+                TagihanModel newBill = new TagihanModel();
+                tagihanService.addTagihan(newBill, harga, resep.getAppointment());
+            }
+            else {
                 canConfirm = false;
-                break;
+                System.out.println("gacukup obatnya");
+                return "error/404";
             }
+            model.addAttribute("resep", resep);
+            model.addAttribute("canConfirm", canConfirm);
+            return "dashboard/resep/confirmation-update";
         }
-
-        // update status resep, update appointment, dan buat tagihan
-        if (canConfirm){
-            // update resep
-            resep.setIsDone(true);
-            resep.setApoteker(apoteker);
-            resepService.updateResep(resep);
-
-            // update appointment
-            resep.getAppointment().setIsDone(true);
-
-            // buat tagihan
-            Integer harga = 0;
-            for (JumlahModel jml : listJumlah){
-                harga += jml.getObat().getHarga();
-            }
-            harga += resep.getAppointment().getDokter().getTarif();
-            TagihanModel newBill = new TagihanModel();
-            tagihanService.addTagihan(newBill, harga, resep.getAppointment());
+        else {
+            System.out.println("bukan apoteker");
+            return "error/404";
         }
-
-        model.addAttribute("resep", resep);
-        model.addAttribute("canConfirm", canConfirm);
-        return "dashboard/resep/confirmation-update";
     }
 
     // Delete resep
