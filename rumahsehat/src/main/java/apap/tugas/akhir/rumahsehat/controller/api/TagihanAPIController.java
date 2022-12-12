@@ -1,15 +1,19 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import apap.tugas.akhir.rumahsehat.model.TagihanModel;
+import apap.tugas.akhir.rumahsehat.controller.web.TagihanController;
 import apap.tugas.akhir.rumahsehat.model.DTO.TagihanDTO;
 import apap.tugas.akhir.rumahsehat.service.TagihanService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CrossOrigin()
 @RestController
@@ -19,47 +23,42 @@ public class TagihanAPIController {
     @Autowired
     TagihanService tagihanService;
 
+    Logger logger = LoggerFactory.getLogger(TagihanController.class);
+
     // All tagihan pasien
     @GetMapping("/tagihan/{id}")
     public List<TagihanDTO> getTagihanPasien(@PathVariable("id") String id) {
-        return tagihanService.getTagihanDTO(id);
+        try {
+            List<TagihanDTO> tagihanDTO = tagihanService.getTagihanDTO(id);
+            logger.info("API GET: Daftar tagihan milik pasien");
+            return tagihanDTO;
+        } catch (NoSuchElementException e) {
+            logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kode Pasien not found.");
+        }
     }
 
     // Detail tagihan pasien
     @GetMapping("/tagihan/detail/{id}")
     public TagihanDTO getDetailTagihan(@PathVariable("id") String id) {
-        return tagihanService.getTagihanById(id);
+        try {
+            logger.info("API GET: Detail Tagihan " + id + ".");
+            return tagihanService.getTagihanById(id);
+        } catch (Exception e) {
+            logger.error("Gagal API GET: Kode tagihan tidak ditemukan.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tagihan not found.");
+        }
     }
 
     // Pembayaran tagihan
     @GetMapping("/tagihan/pembayaran/{noTagihan}")
     public TagihanDTO pembayaranTagihan(@PathVariable("noTagihan") String noTagihan) {
-        return tagihanService.pembayaranTagihan(noTagihan);
-    }
-
-    // Confirmation create tagihan
-    @PostMapping(value = "/tagihan/add")
-    public String postTagihanAddForm(
-            @ModelAttribute TagihanModel tagihan, Model model) {
-        return "pages/tagihan/confirmation-add";
-    }
-
-    // Form update tagihan
-    @GetMapping("/tagihan/update/{id}")
-    public String getTagihanAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/tagihan/form-update";
-    }
-
-    // Confirmation update tagihan
-    @PostMapping(value = "/tagihan/update")
-    public String postTagihanUpdateForm(
-            @ModelAttribute TagihanModel tagihan, Model model) {
-        return "pages/tagihan/confirmation-update";
-    }
-
-    // Delete tagihan
-    @PostMapping("/tagihan/delete")
-    public String deletePengajarSubmit(@ModelAttribute TagihanModel tagihan, Model model) {
-        return "pages/tagihan/confirmation-delete";
+        try {
+            logger.info("API GET: Validitas pembayaran tagihan " + noTagihan + ".");
+            return tagihanService.pembayaranTagihan(noTagihan);
+        } catch (Exception e) {
+            logger.error("Gagal API GET: Kode tagihan tidak ditemukan.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tagihan not found.");
+        }
     }
 }
