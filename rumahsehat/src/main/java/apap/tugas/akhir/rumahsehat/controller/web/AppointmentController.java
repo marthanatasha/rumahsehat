@@ -69,7 +69,7 @@ public class AppointmentController {
             canAccess = true;
         }
 
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) { // TODO: harusnya "DOKTER, "ADMIN" buat testing aja
+        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) {
             if (apt.getResep() == null) {
                 canUpdateStatus = true;
                 canCreateResep = true;
