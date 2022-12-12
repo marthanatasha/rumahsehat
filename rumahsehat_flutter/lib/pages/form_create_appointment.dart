@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
@@ -8,13 +7,16 @@ import 'package:rumahsehat_flutter/DTO/CreateAppointmentDTO.dart';
 import 'package:rumahsehat_flutter/DTO/GetDokterDTO.dart';
 
 class FormCreateAppointment extends StatefulWidget {
-  const FormCreateAppointment({super.key});
+  late final String token;
+  FormCreateAppointment({required this.token});
 
-  @override
-  _FormCreateAppointment createState() => _FormCreateAppointment();
+  _FormCreateAppointment createState() => _FormCreateAppointment(token: token);
 }
 
 class _FormCreateAppointment extends State<FormCreateAppointment> {
+  late final String token;
+  _FormCreateAppointment({required this.token});
+
   final _formKey = GlobalKey<FormState>();
   final dateTimeController = TextEditingController();
   List<GetDokterDTO> listDokter = [];
@@ -26,85 +28,117 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
 
   // Function to get list of Dokter
   Future getDokter() async {
-    log("message2"); // TODO: debug
-    var response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/v1/dokter'),
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-      }
+    print("====== GET DOKTER ======"); // TODO: debug
+    // get auth
+    var auth = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+          "Authorization": "Bearer $token"
+        }
     );
-    log("response"); // TODO: debug
-    var jsonData = jsonDecode(response.body);
-    print(response.body); // TODO: debug
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienId = jsonAuth["id"];
+    String pasienRole = jsonAuth["role"];
+    print("token: $pasienId"); // TODO: debug
 
-    listDokter = [];
-    for (var d in jsonData) {
-      GetDokterDTO dokter = GetDokterDTO(d["id"], d["nama"], d["tarif"]);
-      print('get dokter ${dokter.dokterId}'); // TODO: debug
-      listDokter.add(dokter);
-    }
+    if (pasienRole == "PASIEN") {
+      // get response
+      var response = await http.get(
+          Uri.parse('http://10.0.2.2:8080/api/v1/dokter'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          }
+      );
+      var jsonData = jsonDecode(response.body);
+      print("response:\n$jsonData"); // TODO: debug
 
-    if (runGetDokter == false) {
-      chosenDoctorId = listDokter[0].dokterId;
+      listDokter = [];
+      for (var d in jsonData) {
+        GetDokterDTO dokter = GetDokterDTO(d["id"], d["nama"], d["tarif"]);
+        listDokter.add(dokter);
+      }
+
+      if (runGetDokter == false) {
+        chosenDoctorId = listDokter[0].dokterId;
+      }
+      runGetDokter = true;
+      return listDokter;
     }
-    print('Default doctor value: ${chosenDoctorId!}'); // TODO: debug
-    print('Doctor count: ${listDokter.length}'); // TODO: debug
-    runGetDokter = true;
-    return listDokter;
   }
 
   // Function to post Appointment as Json
   Future postAppointment() async {
-    CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, "pasien1"); // TODO: pasienId masih hard code
-    var aptJson = json.encode(appointment.toJson());
-    print(aptJson); // TODO: debug
-    var response = await http.post(
-        Uri.parse('http://localhost:8080/api/v1/appointment/add'),
+    print("====== POST APT ======"); // TODO: debug
+    // get auth
+    var auth = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
         headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        },
-        body: aptJson);
-    print(response.body); // TODO: debug
-    if (response.statusCode == 200) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Appointment Created!'),
-              content: const Text('Appointment Anda sudah kami catat.'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Oke'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          });
-    } else {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Create Appointment Failed!'),
-              content: const Text(
-                  'Dokter yang Anda pilih tidak tersedia di waktu ini.'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Okede bang'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          });
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+          "Authorization": "Bearer $token"
+        }
+    );
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienId = jsonAuth["id"];
+    String pasienRole = jsonAuth["role"];
+
+    if (pasienRole == "PASIEN") {
+      // post response
+      CreateAppointmentDTO appointment = CreateAppointmentDTO(chosenDateTime!, chosenDoctorId!, pasienId);
+      var aptJson = json.encode(appointment.toJson());
+      var response = await http.post(
+          Uri.parse('http://10.0.2.2:8080/api/v1/appointment/add'),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          },
+          body: aptJson
+      );
+      print("apt:\n$aptJson"); // TODO: debug
+      if (response.statusCode == 200) {
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Appointment Created!'),
+                content: const Text('Appointment Anda sudah kami catat.'),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Oke'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            }
+        );
+      } else {
+        return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Create Appointment Failed!'),
+                content: const Text(
+                    'Dokter yang Anda pilih tidak tersedia di waktu ini.'),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Okede bang'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            }
+        );
+      }
     }
   }
 
@@ -267,13 +301,14 @@ class _FormCreateAppointment extends State<FormCreateAppointment> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                              padding: const EdgeInsets.only(top: 12),
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                              )),
+                            padding: const EdgeInsets.only(top: 12),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            )
+                          ),
                           const SizedBox(
                             width: 12,
                           ),

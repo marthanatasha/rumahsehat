@@ -24,7 +24,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "pasien")
-
 public class PasienModel extends UserModel {
 
     @NotNull

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rumahsehat_flutter/pages/home_dummy.dart';
+import 'package:rumahsehat_flutter/pages/auth_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: Scaffold(
-        body: HomeDummy(), // TODO: Masih dummy
+        body: AuthPage(invalid: false),
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

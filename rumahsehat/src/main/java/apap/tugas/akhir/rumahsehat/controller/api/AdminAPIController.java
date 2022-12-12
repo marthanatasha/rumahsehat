@@ -1,11 +1,17 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.service.AdminService;
+import apap.tugas.akhir.rumahsehat.service.AuthService;
 
 @CrossOrigin()
 @RestController
@@ -15,11 +21,16 @@ public class AdminAPIController {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    AuthService authService;
+
     // List admin
     @GetMapping("/admin")
-    public String getAdminList(Model model) {
-        model.addAttribute("admins", adminService.getListAdmin());
-        return "pages/admin/list";
+    public ResponseEntity<?> getAdminList(@RequestHeader("Authorization") String bearerToken, Model model) {
+        if (!authService.tokenCheck(bearerToken)) {
+            return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(adminService.getListAdmin(), HttpStatus.OK);
     }
 
     // Detail admin

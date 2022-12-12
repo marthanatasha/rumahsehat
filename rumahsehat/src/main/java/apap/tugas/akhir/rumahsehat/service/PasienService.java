@@ -29,11 +29,18 @@ public class PasienService {
         return pasienDb.findById(id).get();
     }
 
+    public void addPasienInitial(PasienModel pasien) {
+        String pass = generalService.encrypt(pasien.getPassword());
+        pasien.setPassword(pass);
+        pasienDb.save(pasien);
+    }
+
     public PasienModel addPasien(PasienDTO pasien) {
         PasienModel newPasien = new PasienModel();
         newPasien.setNama(pasien.getNama());
         newPasien.setUsername(pasien.getUsername());
-        newPasien.setPassword(pasien.getPassword());
+        String pass = generalService.encrypt(pasien.getPassword());
+        newPasien.setPassword(pass);
         newPasien.setEmail(pasien.getEmail());
         newPasien.setUmur(pasien.getUmur());
         newPasien.setSaldo(0);
