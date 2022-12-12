@@ -107,7 +107,7 @@
                                     </table>
                                     <div th:if="${isApoteker}" style="display: inline">
                                         <div th:if="${canConfirm}" style="display: inline">
-                                            <a class="btn btn-primary mr-8" th:href="@{/}">Konfirmasi</a>
+                                            <a class="btn btn-primary mr-8" th:href="@{/resep/update/} + ${resep.id}">Konfirmasi</a>
                                         </div>
                                         <div th:unless="${canConfirm}" style="display: inline">
                                             <a class="btn btn-primary mr-8" th:disabled="${canConfirm == false}">Konfirmasi</a>

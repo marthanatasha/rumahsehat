@@ -69,8 +69,4 @@ public class ResepService {
         resepDb.save(resep);
     }
 
-    public ResepModel deleteResep(ResepModel resep) {
-        resepDb.delete(resep);
-        return resep;
-    }
 }

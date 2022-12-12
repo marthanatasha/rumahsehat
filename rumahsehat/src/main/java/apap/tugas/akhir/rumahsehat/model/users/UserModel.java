@@ -65,8 +65,7 @@ public class UserModel implements Serializable {
     @Column(name = "is_Sso", nullable = false, columnDefinition = "integer default 0")
     private Boolean isSso;
 
-    @NotNull
-    @Column(name = "token", columnDefinition = "string default 0")
+    @Column(name = "token")
     private String token;
 
 }

@@ -3,10 +3,12 @@ package apap.tugas.akhir.rumahsehat.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.transaction.Transactional;
 
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
+import apap.tugas.akhir.rumahsehat.model.JumlahModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -135,5 +137,19 @@ public class TagihanService {
     public TagihanModel deleteTagihan(TagihanModel tagihan) {
         tagihanDb.delete(tagihan);
         return tagihan;
+    }
+
+    public Long getTotalPendapatan (String month){
+        Long result = 0L;
+        List<TagihanModel> listBill = tagihanDb.findAll();
+
+        for (TagihanModel check : listBill){
+            if (check.getIsPaid() == true && check.getTanggalBayar().getMonth().toString().equals(month)){
+                for (JumlahModel obat : check.getAppointment().getResep().getJumlah()){
+                    result = result + (obat.getObat().getHarga() * obat.getKuantitas());
+                }
+            }
+        }
+        return result;
     }
 }
