@@ -299,7 +299,7 @@ class ViewAllTagihan extends StatelessWidget {
                                   Navigator.pop(context);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return ViewAllAppointment();
+                                    return ViewAllTagihan();
                                   }));
                                 },
                                 child: const Text('Reload'),

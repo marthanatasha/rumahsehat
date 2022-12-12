@@ -136,6 +136,14 @@ class Pembayaran extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+                                    const Text(
+                                      'Saldo Anda telat terpotong sesuai dengan jumlah tagihan.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
                                     const SizedBox(
                                       height: 24,
                                     ),
@@ -151,11 +159,19 @@ class Pembayaran extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     const Text(
-                                      'Maaf saldo Anda tidak mencukupi',
+                                      'Maaf Pembayaran Tidak Dapat Dilakukan',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Saldo Anda tidak mencukupi. Untuk melanjutkan pembayaran silakan top-up saldo.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
                                       ),
                                     ),
                                     const SizedBox(

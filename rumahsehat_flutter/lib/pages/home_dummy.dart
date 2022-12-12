@@ -102,7 +102,7 @@ class HomeDummy extends StatelessWidget {
                       return ViewAllTagihan();
                     }));
                   },
-                  child: const Text('Detail Tagihan'),
+                  child: const Text('Lihat Semua Tagihan'),
                 ),
                 const SizedBox(
                   height: 40,

@@ -1,5 +1,7 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import apap.tugas.akhir.rumahsehat.model.ObatModel;
 import apap.tugas.akhir.rumahsehat.service.ObatService;
+import apap.tugas.akhir.rumahsehat.service.UserService;
 
 @Controller
 public class ObatController {
@@ -17,30 +20,24 @@ public class ObatController {
     @Autowired
     ObatService obatService;
 
+    @Autowired
+    UserService userService;
+
     // List obat
     @GetMapping("/obat")
-    public String getObatList(Model model) {
-        model.addAttribute("daftarObat", obatService.getListObat());
-        return "dashboard/obat/list";
+    public String getObatList(Model model, Principal principal) {
+        if(userService.isApoteker(principal) || userService.isAdmin(principal)){
+            model.addAttribute("daftarObat", obatService.getListObat());
+            return "dashboard/obat/list";
+        } else {
+            return "error/404";
+        }
     }
 
     // Detail obat
     @GetMapping("/obat/{id}")
     public String getObatById(@PathVariable Long id, Model model) {
         return "dashboard/obat/detail";
-    }
-
-    // Form create obat
-    @GetMapping("/obat/add")
-    public String getObatAddForm(Model model) {
-        return "dashboard/obat/form-add";
-    }
-
-    // Confirmation create obat
-    @PostMapping(value = "/obat/add")
-    public String postObatAddForm(
-            @ModelAttribute ObatModel obat, Model model) {
-        return "dashboard/obat/confirmation-add";
     }
 
     // Form update obat
@@ -54,15 +51,14 @@ public class ObatController {
     // Confirmation update obat
     @PostMapping(value = "/obat/update")
     public String postObatUpdateForm(
-            @ModelAttribute ObatModel obat, Model model) {
-        ObatModel updatedObat = obatService.updateObat(obat);
-        model.addAttribute("updatedObat", updatedObat);
-        return "dashboard/obat/confirmation-update";
-    }
-
-    // Delete obat
-    @PostMapping("/obat/delete")
-    public String deletePengajarSubmit(@ModelAttribute ObatModel obat, Model model) {
-        return "dashboard/obat/confirmation-delete";
+            @ModelAttribute ObatModel obat, Model model, Principal principal) {
+        if(userService.isApoteker(principal) || userService.isAdmin(principal)){
+            ObatModel updatedObat = obatService.updateObat(obat);
+            model.addAttribute("updatedObat", updatedObat);
+            return "dashboard/obat/confirmation-update";
+        } else {
+            return "error/404";
+        }
+        
     }
 }

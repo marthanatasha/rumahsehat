@@ -32,9 +32,4 @@ public class ObatService {
         obatDb.save(obat);
         return obat;
     }
-
-    public ObatModel deleteObat(ObatModel obat) {
-        obatDb.delete(obat);
-        return obat;
-    }
 }
