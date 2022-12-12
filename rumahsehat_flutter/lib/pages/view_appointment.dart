@@ -16,14 +16,12 @@ class ViewAppointment extends StatelessWidget {
   // Function to get appointment details
   Future getDetailAppointment(String kodeApt) async {
     // get auth
-    var auth = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
-          "Authorization": "Bearer $token"
-        }
-    );
+    var auth = await http
+        .get(Uri.parse('http://192.168.42.12:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
     var jsonAuth = jsonDecode(auth.body);
     String pasienRole = jsonAuth["role"];
     print("role: " + pasienRole); // TODO: debug
@@ -31,12 +29,12 @@ class ViewAppointment extends StatelessWidget {
     if (pasienRole == "PASIEN") {
       // get response
       var response = await http.get(
-          Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'),
+          Uri.parse(
+              'http://192.168.42.12:8080/api/v1/appointment/detail/$kodeApt'),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-          }
-      );
+          });
       var jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -45,8 +43,13 @@ class ViewAppointment extends StatelessWidget {
         if (jsonData["resep"] != null) {
           idResep = jsonData["resep"]["id"].toString();
         }
-        aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"],
-            raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
+        aptDetails = GetDetailAppointmentDTO(
+            jsonData["kode"],
+            jsonData["isDone"],
+            raw[0],
+            raw[1],
+            jsonData["dokter"]["nama"],
+            idResep);
         return aptDetails;
       } else {
         return false;
@@ -140,7 +143,8 @@ class ViewAppointment extends StatelessWidget {
           } else {
             return SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 child: SizedBox(
                   width: double.infinity,
                   child: Column(
@@ -250,7 +254,7 @@ class ViewAppointment extends StatelessWidget {
                         children: <Widget>[
                           Expanded(
                             child:
-                                ButtonLihatResep(idResep: aptDetails.idResep),
+                                ButtonLihatResep(idResep: aptDetails.idResep, token: token),
                           ),
                         ],
                       ),
@@ -268,14 +272,16 @@ class ViewAppointment extends StatelessWidget {
 
 class ButtonLihatResep extends StatefulWidget {
   late final String idResep;
-  ButtonLihatResep({required this.idResep});
+  late final String token;
+  ButtonLihatResep({required this.idResep, required this.token});
 
-  _ButtonLihatResep createState() => _ButtonLihatResep(idResep: idResep);
+  _ButtonLihatResep createState() => _ButtonLihatResep(idResep: idResep, token: token);
 }
 
 class _ButtonLihatResep extends State<ButtonLihatResep> {
   late final String idResep;
-  _ButtonLihatResep({required this.idResep});
+  late final String token;
+  _ButtonLihatResep({required this.idResep, required this.token});
 
   Widget build(BuildContext context) {
     if (idResep == "NO RESEP") {
@@ -291,7 +297,7 @@ class _ButtonLihatResep extends State<ButtonLihatResep> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ViewDetailResep(idResep: idResep);
+                return ViewDetailResep(token: token, idResep: idResep);
               }));
             }, // TODO: navigate to detail resep
             child: const Text('Lihat Resep'),

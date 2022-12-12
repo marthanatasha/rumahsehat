@@ -15,7 +15,7 @@ class ViewAllAppointment extends StatelessWidget {
   Future getAppointment() async {
     // get auth
     var auth = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
+        Uri.parse('http://192.168.42.12:8080/api/v1/info'),
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
@@ -29,7 +29,7 @@ class ViewAllAppointment extends StatelessWidget {
     if (pasienRole == "PASIEN") {
       // get response
       var response = await http.get(
-          Uri.parse('http://10.0.2.2:8080/api/v1/appointment/$pasienId'),
+          Uri.parse('http://192.168.42.12:8080/api/v1/appointment/$pasienId'),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"

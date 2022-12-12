@@ -113,11 +113,11 @@ public class BaseController {
 //     if (pasienService.getListPasien().size() == 0) {
 
      PasienDTO pasien = new PasienDTO();
-     pasien.setEmail("pasien@rumahsehat.com");
-     pasien.setNama("pasien satu");
-     pasien.setPassword("pasien");
-     pasien.setUsername("pasien");
-     pasien.setSaldo(70000);
+     pasien.setEmail("pasien3@rumahsehat.com");
+     pasien.setNama("pasien tiga");
+     pasien.setPassword("pasien3");
+     pasien.setUsername("pasien3");
+     pasien.setSaldo(80000);
      pasien.setUmur(20);
      pasienService.addPasien(pasien);
 //     }
