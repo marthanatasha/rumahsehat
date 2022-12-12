@@ -1,5 +1,3 @@
-// import 'dart:ffi';
-
 class GetDetailResepDTO {
   String id;
   String namaDokter;

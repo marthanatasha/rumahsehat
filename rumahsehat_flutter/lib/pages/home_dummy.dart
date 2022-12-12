@@ -69,9 +69,6 @@ class HomeDummy extends StatelessWidget {
                   },
                   child: const Text('Lihat Semua Appointment'),
                 ),
-                const SizedBox(
-                  height: 40,
-                ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
@@ -80,9 +77,6 @@ class HomeDummy extends StatelessWidget {
                     }));
                   },
                   child: const Text('Detail Tagihan'),
-                ),
-                const SizedBox(
-                  height: 40,
                 ),
                 ElevatedButton(
                   onPressed: () {
