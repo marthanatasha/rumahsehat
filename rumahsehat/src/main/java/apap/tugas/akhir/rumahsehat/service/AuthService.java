@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.repository.AdminDb;
 import apap.tugas.akhir.rumahsehat.repository.UserDb;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -38,7 +40,7 @@ public class AuthService {
             user.setToken(token);
             return token;
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
     }
 
     public UserModel getUserInfo(String token) {
