@@ -9,27 +9,49 @@ import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
 import '../DTO/TagihanDTO.dart';
 
 class ViewAllTagihan extends StatelessWidget {
+  late final String token;
+  ViewAllTagihan({required this.token});
+
   List<TagihanDTO> listTagihan = [];
 
   // Function to get list of Appointment
-  Future getTagihan(String pasienId) async {
-    var response = await http.get(
-        Uri.parse('http://localhost:8080/api/v1/tagihan/$pasienId'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        });
-    var jsonData = jsonDecode(response.body);
+  Future getTagihan() async {
+    var auth = await http
+        .get(Uri.parse('http://localhost:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienId = jsonAuth["id"];
+    String pasienRole = jsonAuth["role"];
 
-    listTagihan = [];
+    if (pasienRole == "PASIEN") {
+      var response = await http.get(
+          Uri.parse('http://localhost:8080/api/v1/tagihan/$pasienId'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          });
+      var jsonData = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      for (var a in jsonData) {
-        TagihanDTO bill = TagihanDTO(a["nomorTagihan"], a["tanggalTerbuat"],
-            a["status"], a["idPasien"], a["jumlahTagihan"], a["tanggalBayar"]);
-        listTagihan.add(bill);
+      listTagihan = [];
+
+      if (response.statusCode == 200) {
+        for (var a in jsonData) {
+          TagihanDTO bill = TagihanDTO(
+              a["nomorTagihan"],
+              a["tanggalTerbuat"],
+              a["status"],
+              a["idPasien"],
+              a["jumlahTagihan"],
+              a["tanggalBayar"]);
+          listTagihan.add(bill);
+        }
+        return listTagihan;
+      } else {
+        return false;
       }
-      return listTagihan;
     } else {
       return false;
     }
@@ -43,7 +65,7 @@ class ViewAllTagihan extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getTagihan("pasien3"), // TODO: pasienId masih hard code
+        future: getTagihan(), // TODO: pasienId masih hard code
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
@@ -186,6 +208,7 @@ class ViewAllTagihan extends StatelessWidget {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return DetailTagihan(
+                                      token: token,
                                       noTagihan: tagihan.nomorTagihan);
                                 }));
                               },
@@ -264,6 +287,7 @@ class ViewAllTagihan extends StatelessWidget {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return DetailTagihan(
+                                                token: token,
                                                 noTagihan:
                                                     tagihan.nomorTagihan);
                                           }));
@@ -299,7 +323,7 @@ class ViewAllTagihan extends StatelessWidget {
                                   Navigator.pop(context);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return ViewAllTagihan();
+                                    return ViewAllTagihan(token: token);
                                   }));
                                 },
                                 child: const Text('Reload'),

@@ -9,29 +9,46 @@ import 'package:rumahsehat_flutter/pages/konfirmasi_pembayaran.dart';
 
 class DetailTagihan extends StatelessWidget {
   late final String noTagihan;
-  DetailTagihan({required this.noTagihan});
+  late final String token;
+
+  DetailTagihan({required this.token, required this.noTagihan});
 
   late TagihanDTO newTagihan = new TagihanDTO("", "", "", "", 0, "");
 
   // Async function: Get Detail Tagihan
   Future getDetailTagihan(String noTagihan) async {
-    var response = await http.get(
-        Uri.parse('http://localhost:8080/api/v1/tagihan/detail/$noTagihan'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        });
-    var jsonData = jsonDecode(response.body);
+    var auth = await http
+        .get(Uri.parse('http://localhost:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
 
-    if (response.statusCode == 200) {
-      newTagihan = TagihanDTO(
-          jsonData["nomorTagihan"],
-          jsonData["tanggalTerbuat"],
-          jsonData["status"],
-          jsonData["idPasien"],
-          jsonData["jumlahTagihan"],
-          jsonData["tanggalBayar"]);
-      return newTagihan;
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienRole = jsonAuth["role"];
+
+    if (pasienRole == "PASIEN") {
+      var response = await http.get(
+          Uri.parse('http://localhost:8080/api/v1/tagihan/detail/$noTagihan'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          });
+
+      var jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        newTagihan = TagihanDTO(
+            jsonData["nomorTagihan"],
+            jsonData["tanggalTerbuat"],
+            jsonData["status"],
+            jsonData["idPasien"],
+            jsonData["jumlahTagihan"],
+            jsonData["tanggalBayar"]);
+        return newTagihan;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -218,6 +235,7 @@ class DetailTagihan extends StatelessWidget {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
                                       return DetailTagihan(
+                                          token: token,
                                           noTagihan: newTagihan.nomorTagihan);
                                     }));
                                   },
@@ -232,7 +250,8 @@ class DetailTagihan extends StatelessWidget {
                             child: ButtonBayarTagihan(
                                 noTagihan: newTagihan.nomorTagihan,
                                 status: newTagihan.status,
-                                newTagihan: newTagihan),
+                                newTagihan: newTagihan,
+                                token: token),
                           ),
                         ],
                       ),
@@ -253,11 +272,13 @@ class ButtonBayarTagihan extends StatelessWidget {
   late final String status;
   late final int jumlahTagihan;
   late final TagihanDTO newTagihan;
+  late final String token;
 
   ButtonBayarTagihan(
       {required this.noTagihan,
       required this.status,
-      required this.newTagihan});
+      required this.newTagihan,
+      required this.token});
 
   Widget build(BuildContext context) {
     if (status == "LUNAS") {
@@ -273,7 +294,8 @@ class ButtonBayarTagihan extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return KonfirmasiPembayaran(newTagihan: newTagihan);
+                return KonfirmasiPembayaran(
+                    token: token, newTagihan: newTagihan);
               }));
             },
             child: const Text('Bayar Tagihan'),

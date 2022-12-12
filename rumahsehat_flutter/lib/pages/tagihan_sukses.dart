@@ -8,28 +8,44 @@ import 'package:rumahsehat_flutter/DTO/TagihanDTO.dart';
 
 class Pembayaran extends StatelessWidget {
   late final String noTagihan;
+  late final String token;
   late final TagihanDTO updatedTagihan;
 
-  Pembayaran({required this.noTagihan});
+  Pembayaran({required this.token, required this.noTagihan});
 
   Future tagihanAfterPembayaran(String noTagihan) async {
-    var response = await http.get(
-        Uri.parse('http://localhost:8080/api/v1/tagihan/pembayaran/$noTagihan'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        });
-    var jsonData = jsonDecode(response.body);
+    // get auth
+    var auth = await http
+        .get(Uri.parse('http://localhost:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienRole = jsonAuth["role"];
 
-    if (response.statusCode == 200) {
-      updatedTagihan = TagihanDTO(
-          jsonData["nomorTagihan"],
-          jsonData["tanggalTerbuat"],
-          jsonData["status"],
-          jsonData["idPasien"],
-          jsonData["jumlahTagihan"],
-          jsonData["tanggalBayar"]);
-      return updatedTagihan;
+    if (pasienRole == "PASIEN") {
+      var response = await http.get(
+          Uri.parse(
+              'http://localhost:8080/api/v1/tagihan/pembayaran/$noTagihan'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          });
+      var jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        updatedTagihan = TagihanDTO(
+            jsonData["nomorTagihan"],
+            jsonData["tanggalTerbuat"],
+            jsonData["status"],
+            jsonData["idPasien"],
+            jsonData["jumlahTagihan"],
+            jsonData["tanggalBayar"]);
+        return updatedTagihan;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }

@@ -16,14 +16,12 @@ class ViewAppointment extends StatelessWidget {
   // Function to get appointment details
   Future getDetailAppointment(String kodeApt) async {
     // get auth
-    var auth = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
-          "Authorization": "Bearer $token"
-        }
-    );
+    var auth =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
     var jsonAuth = jsonDecode(auth.body);
     String pasienRole = jsonAuth["role"];
     print("role: " + pasienRole); // TODO: debug
@@ -35,8 +33,7 @@ class ViewAppointment extends StatelessWidget {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-          }
-      );
+          });
       var jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -45,8 +42,13 @@ class ViewAppointment extends StatelessWidget {
         if (jsonData["resep"] != null) {
           idResep = jsonData["resep"]["id"].toString();
         }
-        aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"],
-            raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
+        aptDetails = GetDetailAppointmentDTO(
+            jsonData["kode"],
+            jsonData["isDone"],
+            raw[0],
+            raw[1],
+            jsonData["dokter"]["nama"],
+            idResep);
         return aptDetails;
       } else {
         return false;
@@ -140,7 +142,8 @@ class ViewAppointment extends StatelessWidget {
           } else {
             return SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 child: SizedBox(
                   width: double.infinity,
                   child: Column(
