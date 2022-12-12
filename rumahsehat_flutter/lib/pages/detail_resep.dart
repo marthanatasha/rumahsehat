@@ -9,8 +9,8 @@ import 'package:rumahsehat_flutter/pages/view_appointment.dart';
 
 class ViewDetailResep extends StatelessWidget {
   // ini di uncomment
-  // late final String idResep;
-  // ViewDetailResep({required this.idResep});
+  late final String idResep;
+  ViewDetailResep({required this.idResep});
 
   late GetDetailResepDTO resepDetails;
 
@@ -18,7 +18,7 @@ class ViewDetailResep extends StatelessWidget {
   Future getDetailResep(String idResep) async {
     var response = await http.get(
         Uri.parse(
-            'http://localhost:8080/api/v1/resep/3'), // harusnya $idResep, ini masih hardcode
+            'http://localhost:8080/api/v1/resep/$idResep'), // harusnya $idResep, ini masih hardcode
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
@@ -50,7 +50,7 @@ class ViewDetailResep extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: FutureBuilder(
-            future: getDetailResep("3"), //idresep masih hardcode
+            future: getDetailResep(idResep), //idresep masih hardcode
             builder: (context, snapshot) {
               if (snapshot.data == false) {
                 return SafeArea(
@@ -246,7 +246,7 @@ class ViewDetailResep extends StatelessWidget {
                                         Navigator.push(context,
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return ViewDetailResep();
+                                          return ViewDetailResep(idResep: resepDetails.id);
                                         }));
                                       },
                                       child: const Text('Reload'),

@@ -107,18 +107,19 @@ class HomeDummy extends StatelessWidget {
                 const SizedBox(
                   height: 40,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ViewDetailResep();
-                    }));
-                  },
-                  child: const Text('Lihat Detail Resep'),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) {
+                //       return ViewDetailResep();
+                //     }));
+                //   },
+                //   // hapus karna harusnya tombolnya ga ada di home, ini cm buat test
+                //   child: const Text('Lihat Detail Resep'),
+                // ),
+                // const SizedBox(
+                //   height: 40,
+                // ),
               ],
             ),
           ),
