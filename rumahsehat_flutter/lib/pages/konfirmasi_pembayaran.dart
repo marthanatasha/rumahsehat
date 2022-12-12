@@ -10,7 +10,9 @@ import 'package:rumahsehat_flutter/pages/tagihan_sukses.dart';
 class KonfirmasiPembayaran extends StatelessWidget {
   // Handle tagihan lanjutan
   late final TagihanDTO newTagihan;
-  KonfirmasiPembayaran({required this.newTagihan});
+  late final String token;
+
+  KonfirmasiPembayaran({required this.token, required this.newTagihan});
 
   // Handle untuk fix pembayaran
   late final String noTagihan;
@@ -73,7 +75,7 @@ class KonfirmasiPembayaran extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: ButtonPembayaran(
-                            noTagihan: newTagihan.nomorTagihan),
+                            token: token, noTagihan: newTagihan.nomorTagihan),
                       ),
                     ],
                   ),
@@ -87,9 +89,10 @@ class KonfirmasiPembayaran extends StatelessWidget {
 
 class ButtonPembayaran extends StatelessWidget {
   late final String noTagihan;
+  late final String token;
   // late final TagihanDTO updatedTagihan;
 
-  ButtonPembayaran({required this.noTagihan});
+  ButtonPembayaran({required this.token, required this.noTagihan});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +101,7 @@ class ButtonPembayaran extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Pembayaran(noTagihan: noTagihan);
+              return Pembayaran(token: token, noTagihan: noTagihan);
             }));
           },
           child: const Text('Bayar Tagihan'),

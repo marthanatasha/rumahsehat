@@ -9,6 +9,9 @@ import javax.transaction.Transactional;
 
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.model.JumlahModel;
+import apap.tugas.akhir.rumahsehat.model.ObatModel;
+import apap.tugas.akhir.rumahsehat.model.ResepModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -88,13 +91,27 @@ public class TagihanService {
         PasienModel pasien = tagihan.getAppointment().getPasien();
         int saldoBaru = pasien.getSaldo() - tagihan.getJumlahTagihan();
 
-        // Pembayaran valid: Set pembayaran terbayar dan tanggal
+        // Pembayaran valid: Set pembayaran terbayar dan tanggal ke model tagihan
         if(pasien.getSaldo() > tagihan.getJumlahTagihan()){
+            ResepModel resep = tagihan.getAppointment().getResep(); 
+            // Mengecek apakah terdapat tagihan untuk resep obat
+            if (resep != null){
+                List<JumlahModel> listResepTagihan = resep.getJumlah();
+                for(JumlahModel jumlahModel: listResepTagihan){
+                    ObatModel obat = jumlahModel.getObat();
+                    int jumlahObat = jumlahModel.getKuantitas();
+                    
+                    // Update stok onat
+                    obat.setStok(obat.getStok() - jumlahObat);
+                }
+
+            }
             tagihan.setTanggalBayar(LocalDateTime.now());
             tagihan.setIsPaid(true);
             pasien.setSaldo(saldoBaru);
         } 
 
+        // Buat tagihanDTO untuk di-pass
         tagihanDTO.setIdPasien(tagihan.getAppointment().getPasien().getId());
         tagihanDTO.setNomorTagihan(tagihan.getKode());
         tagihanDTO.setTanggalTerbuat(tagihan.getTanggalTerbuat().toString());
@@ -109,7 +126,6 @@ public class TagihanService {
             tagihanDTO.setTanggalBayar("Anda belum melunasi pembayarab");
         }
 
-        System.out.println("Saldo: " + pasien.getSaldo());
         return tagihanDTO;
     }
 

@@ -1,5 +1,7 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,8 @@ import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.service.ApotekerService;
 import apap.tugas.akhir.rumahsehat.service.DokterService;
+import apap.tugas.akhir.rumahsehat.service.UserService;
+import net.bytebuddy.utility.nullability.AlwaysNull;
 
 @Controller
 public class DokterController {
@@ -22,12 +26,19 @@ public class DokterController {
     @Autowired
     ApotekerService apotekerService;
 
+    @Autowired
+    UserService userService;
+
     // List dokter
     @GetMapping("/dokter")
-    public String getDokterList(Model model) {
-        model.addAttribute("dokters", dokterService.getListDokter());
-        model.addAttribute("apotekers", apotekerService.getListApoteker());
-        return "dashboard/dokter/list";
+    public String getDokterList(Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            model.addAttribute("dokters", dokterService.getListDokter());
+            model.addAttribute("apotekers", apotekerService.getListApoteker());
+            return "dashboard/dokter/list";
+        } else {
+            return "error/404";
+        }
     }
 
     // Detail dokter
@@ -38,36 +49,25 @@ public class DokterController {
 
     // Form create dokter
     @GetMapping("/dokter/add")
-    public String getDokterAddForm(Model model) {
-        return "dashboard/dokter/form-add";
+    public String getDokterAddForm(Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            return "dashboard/dokter/form-add";
+        } else {
+            return "error/404"; 
+        }
     }
 
     // Confirmation create dokter
     @PostMapping(value = "/dokter/add")
-    public String postDokterAddForm(
-            @ModelAttribute DokterModel dokter, Model model) {
-        dokter.setRole(UserType.DOKTER);
-        dokter.setIsSso(false);
-        dokterService.addDokter(dokter);
-        return "dashboard/dokter/confirmation-add";
-    }
-
-    // Form update dokter
-    @GetMapping("/dokter/update/{id}")
-    public String getDokterAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/dokter/form-update";
-    }
-
-    // Confirmation update dokter
-    @PostMapping(value = "/dokter/update")
-    public String postDokterUpdateForm(
-            @ModelAttribute DokterModel dokter, Model model) {
-        return "dashboard/dokter/confirmation-update";
-    }
-
-    // Delete dokter
-    @PostMapping("/dokter/delete")
-    public String deletePengajarSubmit(@ModelAttribute DokterModel dokter, Model model) {
-        return "dashboard/dokter/confirmation-delete";
+    public String postDokterAddForm(@ModelAttribute DokterModel dokter, Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            dokter.setRole(UserType.DOKTER);
+            dokter.setIsSso(false);
+            dokterService.addDokter(dokter);
+            return "dashboard/dokter/confirmation-add";
+        } else {
+            return "error/404";
+        }
+        
     }
 }
