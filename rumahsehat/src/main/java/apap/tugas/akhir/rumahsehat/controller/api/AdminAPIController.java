@@ -29,9 +29,7 @@ public class AdminAPIController {
     public ResponseEntity<?> getAdminList(@RequestHeader("Authorization") String bearerToken, Model model) {
         if (!authService.tokenCheck(bearerToken)) {
             return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
-
         }
-
         return new ResponseEntity<>(adminService.getListAdmin(), HttpStatus.OK);
     }
 
