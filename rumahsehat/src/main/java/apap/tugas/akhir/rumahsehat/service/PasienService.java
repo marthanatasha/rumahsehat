@@ -44,13 +44,7 @@ public class PasienService {
 
     public PasienModel updatePasien(String username, int saldo) {
         PasienModel updatePasien = pasienDb.findByUsername(username);
-        System.out.println(updatePasien.getSaldo() + "======");
         updatePasien.setSaldo(updatePasien.getSaldo()+saldo);
         return pasienDb.save(updatePasien);
-    }
-
-    public PasienModel deletePasien(PasienModel pasien) {
-        pasienDb.delete(pasien);
-        return pasien;
     }
 }

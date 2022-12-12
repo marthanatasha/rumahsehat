@@ -52,22 +52,4 @@ public class ApotekerController {
         return "dashboard/apoteker/confirmation-add";
     }
 
-    // Form update apoteker
-    @GetMapping("/apoteker/update/{id}")
-    public String getApotekerAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/apoteker/form-update";
-    }
-
-    // Confirmation update apoteker
-    @PostMapping(value = "/apoteker/update")
-    public String postApotekerUpdateForm(
-            @ModelAttribute ApotekerModel apoteker, Model model) {
-        return "dashboard/apoteker/confirmation-update";
-    }
-
-    // Delete apoteker
-    @PostMapping("/apoteker/delete")
-    public String deletePengajarSubmit(@ModelAttribute ApotekerModel apoteker, Model model) {
-        return "dashboard/apoteker/confirmation-delete";
-    }
 }

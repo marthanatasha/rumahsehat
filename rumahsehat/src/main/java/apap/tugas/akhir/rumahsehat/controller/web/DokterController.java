@@ -51,23 +51,4 @@ public class DokterController {
         dokterService.addDokter(dokter);
         return "dashboard/dokter/confirmation-add";
     }
-
-    // Form update dokter
-    @GetMapping("/dokter/update/{id}")
-    public String getDokterAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/dokter/form-update";
-    }
-
-    // Confirmation update dokter
-    @PostMapping(value = "/dokter/update")
-    public String postDokterUpdateForm(
-            @ModelAttribute DokterModel dokter, Model model) {
-        return "dashboard/dokter/confirmation-update";
-    }
-
-    // Delete dokter
-    @PostMapping("/dokter/delete")
-    public String deletePengajarSubmit(@ModelAttribute DokterModel dokter, Model model) {
-        return "dashboard/dokter/confirmation-delete";
-    }
 }

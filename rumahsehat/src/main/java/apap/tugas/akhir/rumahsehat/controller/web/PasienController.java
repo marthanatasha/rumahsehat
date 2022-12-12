@@ -24,12 +24,6 @@ public class PasienController {
         return "dashboard/pasien/list";
     }
 
-    // Detail pasien
-    @GetMapping("/pasien/{id}")
-    public String getPasienById(@PathVariable Long id, Model model) {
-        return "dashboard/pasien/detail";
-    }
-
     // Form create pasien
     @GetMapping("/pasien/add")
     public String getPasienAddForm(Model model) {
@@ -41,24 +35,5 @@ public class PasienController {
     public String postPasienAddForm(
             @ModelAttribute PasienModel pasien, Model model) {
         return "dashboard/pasien/confirmation-add";
-    }
-
-    // Form update pasien
-    @GetMapping("/pasien/update/{id}")
-    public String getPasienAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/pasien/form-update";
-    }
-
-    // Confirmation update pasien
-    @PostMapping(value = "/pasien/update")
-    public String postPasienUpdateForm(
-            @ModelAttribute PasienModel pasien, Model model) {
-        return "dashboard/pasien/confirmation-update";
-    }
-
-    // Delete pasien
-    @PostMapping("/pasien/delete")
-    public String deletePengajarSubmit(@ModelAttribute PasienModel pasien, Model model) {
-        return "dashboard/pasien/confirmation-delete";
     }
 }

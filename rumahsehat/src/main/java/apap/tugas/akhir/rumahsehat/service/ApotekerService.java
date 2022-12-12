@@ -36,14 +36,4 @@ public class ApotekerService {
         apoteker.setPassword(pass);
         apotekerDb.save(apoteker);
     }
-
-    public ApotekerModel updateApoteker(ApotekerModel apoteker) {
-        apotekerDb.save(apoteker);
-        return apoteker;
-    }
-
-    public ApotekerModel deleteApoteker(ApotekerModel apoteker) {
-        apotekerDb.delete(apoteker);
-        return apoteker;
-    }
 }
