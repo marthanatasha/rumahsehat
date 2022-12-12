@@ -1,9 +1,12 @@
 package apap.tugas.akhir.rumahsehat.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -11,6 +14,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    
+    public BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,9 +34,12 @@ public class WebSecurityConfig {
                 .antMatchers("/login-sso", "/validate-ticket").permitAll()
                 .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
                 .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
-                .antMatchers("/appointment/update/**").hasAuthority("DOKTER") // TODO: harusnya "DOKTER", "ADMIN" buat testing aja
-//                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
-//                .antMatchers("/api/v1/dokter").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
+                .antMatchers("/appointment/update/**").hasAuthority("DOKTER") // TODO: harusnya "DOKTER", "ADMIN" buat
+                                                                              // testing aja
+                // .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO:
+                // uncomment kalo jwt udh bisa
+                // .antMatchers("/api/v1/dokter").hasAuthority("PASIEN") // TODO: uncomment kalo
+                // jwt udh bisa
                 .antMatchers("resep/add/{kode}").hasAnyAuthority("DOKTER")
                 .anyRequest().authenticated()
                 .and()
@@ -40,17 +51,10 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
+
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
     }
-
-    // @Autowired
-    // private UserDetailsService userDetailsService;
-
-    // @Autowired
-    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-    // }
 
 }
