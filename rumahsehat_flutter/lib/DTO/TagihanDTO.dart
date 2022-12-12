@@ -1,5 +1,4 @@
 // Yang belum: tanggaldibuat tanggal dibayar, dan appoinment
-import 'dart:html';
 
 class TagihanDTO {
   final String nomorTagihan;

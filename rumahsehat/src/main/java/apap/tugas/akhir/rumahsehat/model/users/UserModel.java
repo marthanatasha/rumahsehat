@@ -65,4 +65,7 @@ public class UserModel implements Serializable {
     @Column(name = "is_Sso", nullable = false, columnDefinition = "integer default 0")
     private Boolean isSso;
 
+    @Column(name = "token")
+    private String token;
+
 }

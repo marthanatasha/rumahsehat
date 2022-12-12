@@ -3,6 +3,7 @@ package apap.tugas.akhir.rumahsehat.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.transaction.Transactional;
 
@@ -143,4 +144,28 @@ public class TagihanService {
         return tagihanDb.save(newTagihan);
     }
 
+
+    public TagihanModel updateTagihan(TagihanModel tagihan) {
+        tagihanDb.save(tagihan);
+        return tagihan;
+    }
+
+    public TagihanModel deleteTagihan(TagihanModel tagihan) {
+        tagihanDb.delete(tagihan);
+        return tagihan;
+    }
+
+    public Long getTotalPendapatan (String month){
+        Long result = 0L;
+        List<TagihanModel> listBill = tagihanDb.findAll();
+
+        for (TagihanModel check : listBill){
+            if (check.getIsPaid() == true && check.getTanggalBayar().getMonth().toString().equals(month)){
+                for (JumlahModel obat : check.getAppointment().getResep().getJumlah()){
+                    result = result + (obat.getObat().getHarga() * obat.getKuantitas());
+                }
+            }
+        }
+        return result;
+    }
 }

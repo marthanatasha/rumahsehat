@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "admin")
-
 public class AdminModel extends UserModel {
 
 }

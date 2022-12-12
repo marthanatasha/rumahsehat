@@ -2,37 +2,57 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/DTO/GetDetailAppointmentDTO.dart';
-import 'package:rumahsehat_flutter/pages/view_appointment.dart';
 import 'package:rumahsehat_flutter/pages/detail_resep.dart';
 
 import 'package:http/http.dart' as http;
 
 class ViewAppointment extends StatelessWidget {
+  late final String token;
   late final String kodeApt;
-  ViewAppointment({required this.kodeApt});
+  ViewAppointment({required this.token, required this.kodeApt});
 
   late GetDetailAppointmentDTO aptDetails;
 
   // Function to get appointment details
   Future getDetailAppointment(String kodeApt) async {
-    var response = await http.get(
-        Uri.parse('http://localhost:8080/api/v1/appointment/detail/$kodeApt'),
+    // get auth
+    var auth = await http.get(
+        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        });
-    var jsonData = jsonDecode(response.body);
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+          "Authorization": "Bearer $token"
+        }
+    );
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienRole = jsonAuth["role"];
+    print("role: " + pasienRole); // TODO: debug
 
-    if (response.statusCode == 200) {
-      var raw = jsonData["waktuAwal"].split('T');
-      String idResep = "NO RESEP";
-      if (jsonData["resep"] != null) {
-        idResep = jsonData["resep"]["id"].toString();
+    if (pasienRole == "PASIEN") {
+      // get response
+      var response = await http.get(
+          Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+          }
+      );
+      var jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        var raw = jsonData["waktuAwal"].split('T');
+        String idResep = "NO RESEP";
+        if (jsonData["resep"] != null) {
+          idResep = jsonData["resep"]["id"].toString();
+        }
+        aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"],
+            raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
+        return aptDetails;
+      } else {
+        return false;
       }
-      aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"],
-          raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
-      return aptDetails;
     } else {
+      // not pasien
       return false;
     }
   }
@@ -120,8 +140,7 @@ class ViewAppointment extends StatelessWidget {
           } else {
             return SafeArea(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 child: SizedBox(
                   width: double.infinity,
                   child: Column(
@@ -217,7 +236,9 @@ class ViewAppointment extends StatelessWidget {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
                                       return ViewAppointment(
-                                          kodeApt: aptDetails.kode);
+                                        token: token,
+                                        kodeApt: aptDetails.kode,
+                                      );
                                     }));
                                   },
                                   child: const Text('Reload'),
