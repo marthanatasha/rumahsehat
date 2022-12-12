@@ -1,18 +1,21 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import apap.tugas.akhir.rumahsehat.controller.web.PasienController;
@@ -54,8 +57,7 @@ public class PasienAPIController {
         if (bindingResult.hasFieldErrors()) {
             logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field."
-            );
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field.");
         } else {
             logger.info("API POST: Pasien baru berhasil dibuat.");
             return pasienService.addPasien(pasien);
@@ -80,10 +82,9 @@ public class PasienAPIController {
             logger.info("API GET: Informasi Pasien " + pasienId + ".");
             PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
             return pasien;
-        } catch 
-            (NoSuchElementException e) {
-                logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
+        } catch (NoSuchElementException e) {
+            logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
         }
     }
 
@@ -92,8 +93,7 @@ public class PasienAPIController {
         if (bindingResult.hasFieldErrors()) {
             logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field."
-            );
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field.");
         } else {
             logger.info("API POST: Saldo pasien berhasil diubah.");
             SaldoDTO saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());

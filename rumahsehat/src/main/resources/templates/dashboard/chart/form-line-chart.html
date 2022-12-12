@@ -53,48 +53,62 @@
             <section class="content">
 
                 <div layout:fragment="content">
+
                     <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <div class="chart-container" style="margin: 0 auto; height:50vh; width:80vw">
-                        <canvas id="myChart"></canvas>
+                    <div class="container">
+                        <div class="card m-4 p-4">
+                            <div class="card-body">
+                                <form th:action="@{/chart/line-obat}" th:object="${lineChartDTO}" method="POST">
+                                    <h3>Pilih Obat</h3>
+                                    <select name="obat1" id="obat1" class="form-select">
+                                        <option value="" selected disabled hidden>Obat ke-1</option>
+                                        <option value="" selected disabled hidden>Obat ke-1</option>
+                                        <option th:each="i :${obatList} " th:value="${i.idObat} "
+                                            th:text="${i.namaObat} ">
+                                        </option>
+                                    </select>
+                                    <select name="obat2" id="obat2" class="form-select">
+                                        <option value="" selected disabled hidden>Obat ke-2</option>
+                                        <option th:each="i :${obatList} " th:value="${i.idObat} "
+                                            th:text="${i.namaObat} ">
+                                        </option>
+                                    </select>
+
+                                    <select name="obat3" id="obat3" class="form-select">
+                                        <option value="" selected disabled hidden>Obat ke-3</option>
+                                        <option th:each="i :${obatList} " th:value="${i.idObat} "
+                                            th:text="${i.namaObat} ">
+                                        </option>
+                                    </select>
+
+                                    <select name="obat4" id="obat4" class="form-select">
+                                        <option value="" selected disabled hidden>Obat ke-4</option>
+                                        <option th:each="i :${obatList} " th:value="${i.idObat} "
+                                            th:text="${i.namaObat} ">
+                                        </option>
+                                    </select>
+
+                                    <select name="obat5" id="obat5" class="form-select">
+                                        <option value="" selected disabled hidden>Obat ke-5</option>
+                                        <option th:each="i :${obatList} " th:value="${i.idObat} "
+                                            th:text="${i.namaObat} ">
+                                        </option>
+                                    </select>
+
+                                    <select name="periode" id="periode" class="form-select">
+                                        <option value="" selected disabled hidden>Periode</option>
+                                        <option value="30 Hari">30 Hari
+                                        </option>
+                                        <option value="12 Bulan">12 Bulan
+                                        </option>
+                                    </select>
+
+                                    <button class=" btn btn-primary " type="submit " name="save ">Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script th:inline="javascript">
-                        var htmldata = /*[[${data}]]*/'noValue';
-                        var ctx = document.getElementById('myChart').getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-                                datasets: [{
-                                    label: 'Total Pemasukan Obat',
-                                    data: Object.keys(htmldata).map(function (key) { return htmldata[key]; }),
-                                    backgroundColor: [
-                                        'rgb(0,255,255)',
-                                        'rgb(46,139,87)',
-                                        'rgb(255,165,0)'
-                                    ],
-                                    borderColor: [
-                                        'rgb(0,255,255)',
-                                        'rgb(46,139,87)',
-                                        'rgb(255,165,0)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Pemasukan Semua Obat Periode Bulanan'
-                                    }
-                                }
-                            },
-                        });
-                    </script>
+
 
 
                 </div>

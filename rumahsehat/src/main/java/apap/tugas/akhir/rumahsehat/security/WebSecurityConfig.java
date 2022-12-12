@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                 .antMatchers("/pasien").hasAnyAuthority("ADMIN")
                 .antMatchers("/apoteker/add").hasAnyAuthority("ADMIN")
                 .antMatchers("/dokter/add").hasAnyAuthority("ADMIN")
+                .antMatchers("/chart/*").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -51,13 +52,4 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // @Autowired
-    // private UserDetailsService userDetailsService;
-
-    // @Autowired
-    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-    // }
-
 }

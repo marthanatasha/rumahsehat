@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import apap.tugas.akhir.rumahsehat.model.DTO.LoginAPIDTO;
-import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.service.AuthService;
 
 @CrossOrigin()

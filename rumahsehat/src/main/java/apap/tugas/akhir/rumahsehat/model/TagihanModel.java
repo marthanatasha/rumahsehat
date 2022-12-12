@@ -13,15 +13,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// @JsonIgnoreProperties(value={"appointment"}, allowSetters = true)
 @Setter
 @Getter
 @AllArgsConstructor
@@ -48,7 +48,6 @@ public class TagihanModel implements Serializable {
     private LocalDateTime tanggalBayar;
 
     @NotNull
-//    @Size(max = 50)
     @Column(name = "jumlah_tagihan", nullable = false)
     private Integer jumlahTagihan;
 
