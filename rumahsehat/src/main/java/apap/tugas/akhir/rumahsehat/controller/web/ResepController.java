@@ -54,7 +54,6 @@ public class ResepController {
             return "dashboard/resep/list";
         }
         else {
-            System.out.println("salah role");
             return "error/404";
         }
     }
@@ -90,10 +89,8 @@ public class ResepController {
     @GetMapping("/resep/add/{kodeApt}")
     public String getResepAddForm(Model model, @PathVariable("kodeApt") String kodeApt, Principal principal, Authentication authentication) {
         String dokterLogin = authentication.getName();
-//        System.out.println("login:" + dokterLogin);
 
         AppointmentModel apt = appointmentService.getAppointmentById(kodeApt);
-//        System.out.println("apt:" + apt.getDokter().getUsername());
         // cek: role dokter, dokter yg login = dokter yg bersangkutan dgn appointment, appointment blm pny resep
         if (userService.isDokter(principal) && apt.getDokter().getUsername().equals(dokterLogin) && apt.getResep() == null){
             ResepModel resep = new ResepModel();
@@ -110,20 +107,9 @@ public class ResepController {
 
             return "dashboard/resep/form-add";
         }
-        // Debug, delete klo udah
-
-//        else if (!apt.getDokter().getUsername().equals(dokterLogin)){
-//            System.out.println("salah dokter");
-//            return "dashboard/index";
-//        }
-//        else if (apt.getResep() != null){
-//            System.out.println("udh ada resep");
-//            return "dashboard/index";
-//        }
         else {
             return "error/404";
         }
-
     }
 
     // Confirmation create resep
@@ -194,7 +180,6 @@ public class ResepController {
             ResepModel resep = resepService.getResepById(id);
             ApotekerModel apoteker = apotekerService.getApotekerByUsername(authentication.getName());
 
-
             //cek kuantitas obat, ada semua --> bisa confirm
             boolean canConfirm = true;
             canConfirm = resepService.canConfirm(resep);
@@ -219,7 +204,6 @@ public class ResepController {
             }
             else {
                 canConfirm = false;
-                System.out.println("gacukup obatnya");
                 return "error/404";
             }
             model.addAttribute("resep", resep);
@@ -227,7 +211,6 @@ public class ResepController {
             return "dashboard/resep/confirmation-update";
         }
         else {
-            System.out.println("bukan apoteker");
             return "error/404";
         }
     }
