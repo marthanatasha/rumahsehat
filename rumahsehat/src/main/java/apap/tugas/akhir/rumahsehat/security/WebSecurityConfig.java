@@ -30,9 +30,6 @@ public class WebSecurityConfig {
 //                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
 //                .antMatchers("/api/v1/dokter").hasAuthority("PASIEN") // TODO: uncomment kalo jwt udh bisa
                 .antMatchers("resep/add/{kode}").hasAnyAuthority("DOKTER")
-                .antMatchers("/resep").hasAnyAuthority("ADMIN", "APOTEKER")
-                .antMatchers("/resep/{id}").hasAnyAuthority("DOKTER", "ADMIN", "APOTEKER")
-                .antMatchers("/resep/update/{id}").hasAnyAuthority("APOTEKER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
