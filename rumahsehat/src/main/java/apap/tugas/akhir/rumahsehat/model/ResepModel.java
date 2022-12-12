@@ -44,7 +44,7 @@ public class ResepModel implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "isPaid", nullable = false)
+    @Column(name = "isDone", nullable = false)
     private Boolean isDone;
 
     @NotNull

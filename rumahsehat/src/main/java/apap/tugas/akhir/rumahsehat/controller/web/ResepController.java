@@ -190,48 +190,47 @@ public class ResepController {
     // Update resep
     @GetMapping("/resep/update/{id}")
     public String resepUpdate(@PathVariable Long id, Model model, Principal principal, Authentication authentication){
-        ResepModel resep = resepService.getResepById(id);
-        //to do: ambil id apoteker masih gatau caranya T_T
-        // to do: cek rolenya apoteker ato bukan
-        String username = authentication.getName();
-        ApotekerModel apoteker = apotekerService.getApotekerByUsername(username);
+        if (userService.isApoteker(principal)) {
+            ResepModel resep = resepService.getResepById(id);
+            ApotekerModel apoteker = apotekerService.getApotekerByUsername(authentication.getName());
 
 
-        //cek kuantitas obat
-        boolean canConfirm = true;
-        List<JumlahModel> listJumlah = resep.getJumlah();
-        for (JumlahModel jml : listJumlah){
-            ObatModel obat = jml.getObat();
-            if (obat.getStok() < jml.getKuantitas()){
+            //cek kuantitas obat, ada semua --> bisa confirm
+            boolean canConfirm = true;
+            canConfirm = resepService.canConfirm(resep);
+
+            // update status resep, update appointment, dan buat tagihan
+            if (canConfirm) {
+                // update resep
+                resep.setIsDone(true);
+                resep.setApoteker(apoteker);
+                resepService.updateResep(resep);
+
+                // update appointment
+                resep.getAppointment().setIsDone(true);
+
+                // buat tagihan
+                Integer harga = resep.getAppointment().getDokter().getTarif();
+                for (JumlahModel jml : resep.getJumlah()){
+                    harga += jml.getObat().getHarga();
+                }
+                TagihanModel newBill = new TagihanModel();
+                tagihanService.addTagihan(newBill, harga, resep.getAppointment());
+            }
+            else {
                 canConfirm = false;
-                break;
+                System.out.println("gacukup obatnya");
+                return "error/404";
             }
-        }
 
-        // update status resep dan buat tagihan
-        if (canConfirm){
-            int harga = 0;
-            for (JumlahModel jml : listJumlah){
-                harga += jml.getObat().getHarga();
-            }
-            resep.setIsDone(true);
-            resep.setApoteker(apoteker);
-            resepService.updateResep(resep);
-            resep.getAppointment().setIsDone(true);
-            TagihanModel bill = new TagihanModel();
-            bill.setAppointment(resep.getAppointment());
-            //to do: identifiers custom generator buat kode tagihan
-            List<TagihanModel> allBill = tagihanService.getListTagihan();
-            bill.setKode("BILL-" + allBill.size()+1);
-            bill.setIsPaid(false);
-            bill.setTanggalTerbuat(LocalDateTime.now());
-            bill.setJumlahTagihan(resep.getAppointment().getDokter().getTarif() + harga);
-            tagihanService.addTagihan(bill);
+            model.addAttribute("resep", resep);
+            model.addAttribute("canConfirm", canConfirm);
+            return "dashboard/resep/confirmation-update";
         }
-
-        model.addAttribute("resep", resep);
-        model.addAttribute("canConfirm", canConfirm);
-        return "dashboard/resep/confirmation-update";
+        else {
+            System.out.println("bukan apoteker");
+            return "error/404";
+        }
     }
 
     // Delete resep
