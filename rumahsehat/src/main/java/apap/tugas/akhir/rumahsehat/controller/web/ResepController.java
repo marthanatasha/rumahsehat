@@ -115,7 +115,7 @@ public class ResepController {
 
     // Confirmation create resep
     @PostMapping(value = "/resep/add/{kodeApt}")
-    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, @PathVariable String kodeApt) {
+    public String postResepAddForm(@ModelAttribute ResepModel resep, Model model, @PathVariable("kodeApt") String kodeApt) {
         AppointmentModel apt = appointmentService.getAppointmentById(kodeApt);
         apt.setResep(resep);
         resep.setAppointment(apt);
@@ -141,8 +141,8 @@ public class ResepController {
     }
 
     // Add Row obat
-    @PostMapping(value="/resep/add/{kode}", params = {"addRow"})
-    public String addRowObat(@ModelAttribute ResepModel resep, Model model, @PathVariable String kode){
+    @PostMapping(value="/resep/add/{kodeApt}", params = {"addRow"})
+    public String addRowObat(@ModelAttribute ResepModel resep, Model model, @PathVariable("kodeApt") String kodeApt){
         List<ObatModel> listObat = obatService.getListObat();
         if (resep.getJumlah() == null){
             resep.setJumlah(new ArrayList<>());
@@ -159,8 +159,8 @@ public class ResepController {
     }
 
     // Delete Row obat
-    @PostMapping(value = "/resep/add/{kode}", params = {"deleteRow"})
-    public String deleteRowObat(@ModelAttribute ResepModel resep, Model model, @RequestParam("deleteRow") Integer row, @PathVariable String kode){
+    @PostMapping(value = "/resep/add/{kodeApt}", params = {"deleteRow"})
+    public String deleteRowObat(@ModelAttribute ResepModel resep, Model model, @RequestParam("deleteRow") Integer row, @PathVariable("kodeApt") String kodeApt){
         List<ObatModel> listObat = obatService.getListObat();
         final Integer rowInt = Integer.valueOf(row);
         resep.getJumlah().remove(rowInt.intValue());
@@ -186,12 +186,10 @@ public class ResepController {
             canConfirm = resepService.canConfirm(resep);
 
             // update status resep, update appointment, dan buat tagihan
-            if (canConfirm) {
+            if (canConfirm && !resep.getIsDone()) {
                 // update resep
                 resep.setIsDone(true);
                 resep.setApoteker(apoteker);
-                resepService.updateResep(resep);
-
                 // update appointment
                 resep.getAppointment().setIsDone(true);
 
@@ -202,14 +200,15 @@ public class ResepController {
                 }
                 TagihanModel newBill = new TagihanModel();
                 tagihanService.addTagihan(newBill, harga, resep.getAppointment());
+
+                model.addAttribute("resep", resep);
+                model.addAttribute("canConfirm", canConfirm);
+                return "dashboard/resep/confirmation-update";
             }
             else {
                 canConfirm = false;
                 return "error/404";
             }
-            model.addAttribute("resep", resep);
-            model.addAttribute("canConfirm", canConfirm);
-            return "dashboard/resep/confirmation-update";
         }
         else {
             logger.error("Gagal mengkonfirmasi resep. Role Anda bukan Apoteker");
