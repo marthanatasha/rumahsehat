@@ -1,38 +1,35 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:rumahsehat_flutter/DTO/GetDetailAppointmentDTO.dart';
-import 'package:rumahsehat_flutter/pages/view_appointment.dart';
-import 'package:rumahsehat_flutter/pages/detail_resep.dart';
-
+import 'package:rumahsehat_flutter/DTO/GetPasienDTO.dart';
+import 'package:rumahsehat_flutter/pages/form_update_saldo.dart';
 import 'package:http/http.dart' as http;
 
-class ViewAppointment extends StatelessWidget {
-  late final String kodeApt;
-  ViewAppointment({required this.kodeApt});
+class ViewUserProfile extends StatelessWidget {
+  late final String kodePasien;
+  ViewUserProfile({required this.kodePasien});
 
-  late GetDetailAppointmentDTO aptDetails;
+  late GetPasienDTO pasienDetails;
 
   // Function to get appointment details
-  Future getDetailAppointment(String kodeApt) async {
+  Future GetUserProfile(String kodePasien) async {
     var response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/v1/appointment/detail/$kodeApt'),
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-      }
-    );
+        Uri.parse('http://localhost:8000/api/v1/pasien/$kodePasien'),
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+        });
     var jsonData = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      var raw = jsonData["waktuAwal"].split('T');
-      String idResep = "NO RESEP";
-      if (jsonData["resep"] != null) {
-        idResep = jsonData["resep"]["id"].toString();
-      }
-      aptDetails = GetDetailAppointmentDTO(jsonData["kode"], jsonData["isDone"],
-          raw[0], raw[1], jsonData["dokter"]["nama"], idResep);
-      return aptDetails;
+      pasienDetails = GetPasienDTO(
+        jsonData["nama"],
+        jsonData["username"],
+        jsonData["password"],
+        jsonData["email"],
+        jsonData["saldo"],
+        jsonData["umur"],
+      );
+      return pasienDetails;
     } else {
       return false;
     }
@@ -46,7 +43,7 @@ class ViewAppointment extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getDetailAppointment(kodeApt),
+        future: GetUserProfile("2"),
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
@@ -96,7 +93,7 @@ class ViewAppointment extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: const <Widget>[
                   Text(
-                    'Detail Appointment',
+                    'Profile User',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -109,7 +106,7 @@ class ViewAppointment extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'Membaca detail appointment Anda.',
+                    'Mencari data user.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -129,7 +126,7 @@ class ViewAppointment extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       const Text(
-                        'Detail Appointment',
+                        'Profile User',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 24,
@@ -156,38 +153,46 @@ class ViewAppointment extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Kode: ${aptDetails.kode}',
+                                  'Nama: ${pasienDetails.nama}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 Text(
-                                  'Dokter: ${aptDetails.namaDokter}',
+                                  'Username: ${pasienDetails.username}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 Text(
-                                  'Tanggal: ${aptDetails.tanggal}',
+                                  'Password: ${pasienDetails.password}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 Text(
-                                  'Jam: ${aptDetails.jam}',
+                                  'E-mail: ${pasienDetails.email}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 Text(
-                                  aptDetails.isDone
-                                      ? 'Status: Is Done'
-                                      : 'Status: Is Not Done',
+                                  'Saldo: ${pasienDetails.saldo}',
                                   style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Umur: ${pasienDetails.umur}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 8,
                                 ),
                               ],
                             ),
@@ -206,31 +211,12 @@ class ViewAppointment extends StatelessWidget {
                                   child: const Text('Back'),
                                 )),
                           ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Expanded(
-                            child: Container(
-                                padding: const EdgeInsets.only(top: 12),
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return ViewAppointment(
-                                          kodeApt: aptDetails.kode);
-                                    }));
-                                  },
-                                  child: const Text('Reload'),
-                                )),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
                           Expanded(
                             child:
-                                ButtonLihatResep(idResep: aptDetails.idResep),
+                                ButtonTopUp(username: pasienDetails.username),
+                          ),
+                          const SizedBox(
+                            width: 12,
                           ),
                         ],
                       ),
@@ -246,36 +232,27 @@ class ViewAppointment extends StatelessWidget {
   }
 }
 
-class ButtonLihatResep extends StatefulWidget {
-  late final String idResep;
-  ButtonLihatResep({required this.idResep});
+class ButtonTopUp extends StatefulWidget {
+  late final String? username;
+  ButtonTopUp({required this.username});
 
-  _ButtonLihatResep createState() => _ButtonLihatResep(idResep: idResep);
+  _ButtonTopUp createState() => _ButtonTopUp(username: username);
 }
 
-class _ButtonLihatResep extends State<ButtonLihatResep> {
-  late final String idResep;
-  _ButtonLihatResep({required this.idResep});
+class _ButtonTopUp extends State<ButtonTopUp> {
+  late final String? username;
+  _ButtonTopUp({required this.username});
 
   Widget build(BuildContext context) {
-    if (idResep == "NO RESEP") {
-      return Container(
-          padding: const EdgeInsets.only(top: 12),
-          child: const ElevatedButton(
-            onPressed: null,
-            child: Text('Tidak Ada Resep'),
-          ));
-    } else {
-      return Container(
-          padding: const EdgeInsets.only(top: 12),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ViewDetailResep(idResep: idResep);
-              }));
-            }, // TODO: navigate to detail resep
-            child: const Text('Lihat Resep'),
-          ));
-    }
+    return Container(
+        padding: const EdgeInsets.only(top: 12),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return FormUpdateSaldo(username: username);
+            }));
+          }, // TODO: navigate to detail resep
+          child: const Text('Top Up Saldo'),
+        ));
   }
 }

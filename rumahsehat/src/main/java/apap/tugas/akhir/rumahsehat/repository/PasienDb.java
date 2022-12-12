@@ -7,5 +7,5 @@ import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
 
 @Repository
 public interface PasienDb extends JpaRepository<PasienModel, String> {
-
+    PasienModel findByUsername(String username);
 }

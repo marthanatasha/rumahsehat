@@ -47,6 +47,7 @@ public class DokterController {
     public String postDokterAddForm(
             @ModelAttribute DokterModel dokter, Model model) {
         dokter.setRole(UserType.DOKTER);
+        dokter.setIsSso(false);
         dokterService.addDokter(dokter);
         return "dashboard/dokter/confirmation-add";
     }
