@@ -222,7 +222,6 @@ public class ResepController {
                 System.out.println("gacukup obatnya");
                 return "error/404";
             }
-
             model.addAttribute("resep", resep);
             model.addAttribute("canConfirm", canConfirm);
             return "dashboard/resep/confirmation-update";

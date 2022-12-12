@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:rumahsehat_flutter/pages/list_tagihan.dart';
 import 'package:rumahsehat_flutter/pages/detail_resep.dart';
+import 'package:rumahsehat_flutter/pages/view_profile_user.dart';
 import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
+import 'package:rumahsehat_flutter/pages/view_profile_user.dart';
+import 'package:rumahsehat_flutter/pages/form_registrasi_pasien.dart';
 
 import 'form_create_appointment.dart';
 
@@ -49,6 +52,26 @@ class HomeDummy extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 24,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return FormRegistrasiPasien();
+                    }));
+                  },
+                  child: const Text('Registrasi akun'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ViewUserProfile(
+                        kodePasien: "2",
+                      );
+                    }));
+                  },
+                  child: const Text('Lihat Profile User'),
                 ),
                 ElevatedButton(
                   onPressed: () {
