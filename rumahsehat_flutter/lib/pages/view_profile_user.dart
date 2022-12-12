@@ -5,8 +5,8 @@ import 'package:rumahsehat_flutter/pages/form_update_saldo.dart';
 import 'package:http/http.dart' as http;
 
 class ViewUserProfile extends StatelessWidget {
-  late final String kodePasien;
-  ViewUserProfile({required this.kodePasien});
+  late final String token;
+  ViewUserProfile({required this.token});
 
   late GetPasienDTO pasienDetails;
 
@@ -166,13 +166,13 @@ class ViewUserProfile extends StatelessWidget {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  'Password: ${pasienDetails.password}',
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
+                                // Text(
+                                //   'Password: ${pasienDetails.password}',
+                                //   style: const TextStyle(fontSize: 16),
+                                // ),
+                                // const SizedBox(
+                                //   height: 8,
+                                // ),
                                 Text(
                                   'E-mail: ${pasienDetails.email}',
                                   style: const TextStyle(fontSize: 16),
@@ -187,13 +187,13 @@ class ViewUserProfile extends StatelessWidget {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                  'Umur: ${pasienDetails.umur}',
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
+                                // Text(
+                                //   'Umur: ${pasienDetails.umur}',
+                                //   style: const TextStyle(fontSize: 16),
+                                // ),
+                                // const SizedBox(
+                                //   height: 8,
+                                // ),
                               ],
                             ),
                           ),
