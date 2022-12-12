@@ -14,12 +14,13 @@ import apap.tugas.akhir.rumahsehat.model.DTO.LoginAPIDTO;
 import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
 import apap.tugas.akhir.rumahsehat.repository.AdminDb;
+import apap.tugas.akhir.rumahsehat.repository.UserDb;
 
 @Service
 @Transactional
 public class AuthService {
     @Autowired
-    private AdminDb adminDb;
+    private UserDb userDb;
 
     @Autowired
     private UserService userService;
@@ -34,10 +35,32 @@ public class AuthService {
         UserModel user = userService.getUserByEmail(loginAPIDTO.getEmail());
 
         if (encoder.matches(loginAPIDTO.getPassword(), user.getPassword())) {
+            user.setToken(token);
             return token;
         }
+        return null;
+    }
 
-        return "0";
+    public UserModel getUserInfo(String token) {
+        List<UserModel> listUser = userDb.findAll();
+        String tokenparsed = token.split(" ")[1];
+        for (UserModel user : listUser) {
+            if (tokenparsed.equals(user.getToken())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public Boolean tokenCheck(String token) {
+        List<UserModel> listUser = userDb.findAll();
+        String tokenparsed = token.split(" ")[1];
+        for (UserModel user : listUser) {
+            if (tokenparsed.equals(user.getToken())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static String tokenGenerator(int n) {
