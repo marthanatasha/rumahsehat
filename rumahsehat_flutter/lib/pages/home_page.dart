@@ -56,9 +56,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ViewUserProfile(
-                          kodePasien: "2",
-                        );
+                        return ViewUserProfile(token: snapshot.data.toString());
                       }));
                     },
                     child: const Text('Lihat Profile User'),

@@ -33,13 +33,4 @@ public class DokterService {
         dokterDb.save(dokter);
     }
 
-    public DokterModel updateDokter(DokterModel dokter) {
-        dokterDb.save(dokter);
-        return dokter;
-    }
-
-    public DokterModel deleteDokter(DokterModel dokter) {
-        dokterDb.delete(dokter);
-        return dokter;
-    }
 }

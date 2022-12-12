@@ -1,5 +1,7 @@
 package apap.tugas.akhir.rumahsehat.controller.web;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.service.ApotekerService;
 import apap.tugas.akhir.rumahsehat.service.DokterService;
+import apap.tugas.akhir.rumahsehat.service.UserService;
 
 @Controller
 public class ApotekerController {
@@ -22,12 +25,20 @@ public class ApotekerController {
     @Autowired
     DokterService dokterService;
 
+    @Autowired
+    UserService userService;
+
     // List apoteker
     @GetMapping("/apoteker")
-    public String getApotekerList(Model model) {
-        model.addAttribute("dokters", dokterService.getListDokter());
-        model.addAttribute("apotekers", apotekerService.getListApoteker());
-        return "dashboard/apoteker/list";
+    public String getApotekerList(Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            model.addAttribute("dokters", dokterService.getListDokter());
+            model.addAttribute("apotekers", apotekerService.getListApoteker());
+            return "dashboard/apoteker/list";
+        } else {
+            return "error/404";
+        }
+        
     }
 
     // Detail apoteker
@@ -38,36 +49,27 @@ public class ApotekerController {
 
     // Form create apoteker
     @GetMapping("/apoteker/add")
-    public String getApotekerAddForm(Model model) {
-        return "dashboard/apoteker/form-add";
+    public String getApotekerAddForm(Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            return "dashboard/apoteker/form-add";
+        } else {
+            return "error/404";
+        }
+        
     }
 
     // Confirmation create apoteker
     @PostMapping(value = "/apoteker/add")
-    public String postApotekerAddForm(
-            @ModelAttribute ApotekerModel apoteker, Model model) {
-        apoteker.setRole(UserType.APOTEKER);
-        apoteker.setIsSso(false);
-        apotekerService.addApoteker(apoteker);
-        return "dashboard/apoteker/confirmation-add";
+    public String postApotekerAddForm(@ModelAttribute ApotekerModel apoteker, Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            apoteker.setRole(UserType.APOTEKER);
+            apoteker.setIsSso(false);
+            apotekerService.addApoteker(apoteker);
+            return "dashboard/apoteker/confirmation-add";
+        } else {
+            return "error/404";
+        }
+        
     }
 
-    // Form update apoteker
-    @GetMapping("/apoteker/update/{id}")
-    public String getApotekerAddUpdate(@PathVariable Long id, Model model) {
-        return "dashboard/apoteker/form-update";
-    }
-
-    // Confirmation update apoteker
-    @PostMapping(value = "/apoteker/update")
-    public String postApotekerUpdateForm(
-            @ModelAttribute ApotekerModel apoteker, Model model) {
-        return "dashboard/apoteker/confirmation-update";
-    }
-
-    // Delete apoteker
-    @PostMapping("/apoteker/delete")
-    public String deletePengajarSubmit(@ModelAttribute ApotekerModel apoteker, Model model) {
-        return "dashboard/apoteker/confirmation-delete";
-    }
 }

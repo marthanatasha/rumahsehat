@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import apap.tugas.akhir.rumahsehat.controller.web.PasienController;
 import apap.tugas.akhir.rumahsehat.model.DTO.PasienDTO;
 import apap.tugas.akhir.rumahsehat.model.DTO.SaldoDTO;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
@@ -30,18 +33,14 @@ public class PasienAPIController {
     @Autowired
     UserService userService;
 
+    Logger logger = LoggerFactory.getLogger(PasienController.class);
+
     // List pasien
     @GetMapping("/pasien")
     public String getPasienList(Model model) {
         model.addAttribute("pasiens", pasienService.getListPasien());
         return "pages/pasien/list";
     }
-
-    // Detail pasien
-    // @GetMapping("/pasien/{id}")
-    // public String getPasienById(@PathVariable Long id, Model model) {
-    //     return "pages/pasien/detail";
-    // }
 
     // Form create pasien
     @GetMapping("/pasien/add")
@@ -53,10 +52,12 @@ public class PasienAPIController {
     @PostMapping(value = "/pasien/add")
     public PasienModel createPasien(@RequestBody PasienDTO pasien, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
+            logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field."
             );
         } else {
+            logger.info("API POST: Pasien baru berhasil dibuat.");
             return pasienService.addPasien(pasien);
         }
     }
@@ -67,18 +68,6 @@ public class PasienAPIController {
         return "pages/pasien/form-update";
     }
 
-    // Confirmation update pasien
-    // @PutMapping(value = "/pasien/{pasienId}")
-    // public PasienModel updateSaldo(@PathVariable("pasienId") String pasienId, @RequestBody PasienModel pasien) {
-    //     try {
-    //         return pasienService.updatePasien(pasienId, pasien);
-    //     } catch (NoSuchElementException e) {
-    //         throw new ResponseStatusException(
-    //             HttpStatus.NOT_FOUND, "Pasien dengan id " + pasienId + " not found"
-    //         );
-    //     }
-    // }
-
     // Delete pasien
     @PostMapping("/pasien/delete")
     public String deletePengajarSubmit(@ModelAttribute PasienModel pasien, Model model) {
@@ -88,20 +77,25 @@ public class PasienAPIController {
     @GetMapping("/pasien/{pasienId}")
     public PasienModel getUserProfile(@PathVariable("pasienId") String pasienId) {
         try {
+            logger.info("API GET: Informasi Pasien " + pasienId + ".");
             PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
             return pasien;
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
+        } catch 
+            (NoSuchElementException e) {
+                logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
         }
     }
 
     @PostMapping("/pasien/addSaldo")
     public PasienModel updateSaldo(@RequestBody SaldoDTO saldoPasien, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
+            logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field."
             );
         } else {
+            logger.info("API POST: Saldo pasien berhasil diubah.");
             SaldoDTO saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());
             return pasienService.updatePasien(saldo.getUsername(), saldo.getSaldo());
         }
