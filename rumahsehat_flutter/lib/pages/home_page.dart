@@ -7,7 +7,6 @@ import 'package:rumahsehat_flutter/pages/viewall_appointment.dart';
 import 'form_create_appointment.dart';
 
 class HomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +56,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ViewUserProfile(
-                          kodePasien: "2",
-                        );
+                        return ViewUserProfile(token: snapshot.data.toString());
                       }));
                     },
                     child: const Text('Lihat Profile User'),
@@ -79,7 +76,9 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ViewAllAppointment(token: snapshot.data.toString(),);
+                        return ViewAllAppointment(
+                          token: snapshot.data.toString(),
+                        );
                       }));
                     },
                     child: const Text('Lihat Semua Appointment'),

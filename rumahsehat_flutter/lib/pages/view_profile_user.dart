@@ -6,32 +6,46 @@ import 'package:http/http.dart' as http;
 
 class ViewUserProfile extends StatelessWidget {
   late final String token;
+  late final String kodePasien;
   ViewUserProfile({required this.token});
 
   late GetPasienDTO pasienDetails;
 
   // Function to get appointment details
   Future GetUserProfile(String kodePasien) async {
-    var response = await http.get(
-        Uri.parse('http://localhost:8000/api/v1/pasien/$kodePasien'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-        });
-    var jsonData = jsonDecode(response.body);
+    var auth =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+      "Authorization": "Bearer $token"
+    });
+    var jsonAuth = jsonDecode(auth.body);
+    String pasienRole = jsonAuth["role"];
+    kodePasien = jsonAuth["id"];
 
-    if (response.statusCode == 200) {
-      pasienDetails = GetPasienDTO(
-        jsonData["nama"],
-        jsonData["username"],
-        jsonData["password"],
-        jsonData["email"],
-        jsonData["saldo"],
-        jsonData["umur"],
-      );
-      return pasienDetails;
-    } else {
-      return false;
+    if (pasienRole == "PASIEN") {
+      var response = await http.get(
+          Uri.parse('http://localhost:8000/api/v1/pasien/$kodePasien'),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+            "Authorization": "Bearer $token"
+          });
+      var jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        pasienDetails = GetPasienDTO(
+          jsonData["nama"],
+          jsonData["username"],
+          jsonData["password"],
+          jsonData["email"],
+          jsonData["saldo"],
+          jsonData["umur"],
+        );
+        return pasienDetails;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -43,7 +57,7 @@ class ViewUserProfile extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: GetUserProfile("2"),
+        future: GetUserProfile(kodePasien),
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(

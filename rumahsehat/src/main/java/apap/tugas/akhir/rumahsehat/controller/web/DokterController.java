@@ -49,17 +49,25 @@ public class DokterController {
 
     // Form create dokter
     @GetMapping("/dokter/add")
-    public String getDokterAddForm(Model model) {
-        return "dashboard/dokter/form-add";
+    public String getDokterAddForm(Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            return "dashboard/dokter/form-add";
+        } else {
+            return "error/404"; 
+        }
     }
 
     // Confirmation create dokter
     @PostMapping(value = "/dokter/add")
-    public String postDokterAddForm(
-            @ModelAttribute DokterModel dokter, Model model) {
-        dokter.setRole(UserType.DOKTER);
-        dokter.setIsSso(false);
-        dokterService.addDokter(dokter);
-        return "dashboard/dokter/confirmation-add";
+    public String postDokterAddForm(@ModelAttribute DokterModel dokter, Model model, Principal principal) {
+        if (userService.isAdmin(principal)) {
+            dokter.setRole(UserType.DOKTER);
+            dokter.setIsSso(false);
+            dokterService.addDokter(dokter);
+            return "dashboard/dokter/confirmation-add";
+        } else {
+            return "error/404";
+        }
+        
     }
 }

@@ -26,30 +26,6 @@ class _FormUpdateSaldo extends State<FormUpdateSaldo> {
     this.username = username;
   }
 
-  // Future GetSaldo(String kodePasien) async {
-  //   var response = await http.get(
-  //       Uri.parse('http://localhost:8000/api/v1/pasien/$kodePasien'),
-  //       headers: {
-  //         "Access-Control-Allow-Origin": "*",
-  //         "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-  //       });
-  //   var jsonData = jsonDecode(response.body);
-
-  //   if (response.statusCode == 200) {
-  //     pasienDetails = GetPasienDTO(
-  //       jsonData["nama"],
-  //       jsonData["username"],
-  //       jsonData["password"],
-  //       jsonData["email"],
-  //       jsonData["saldo"],
-  //       jsonData["umur"],
-  //     );
-  //     return pasienDetails;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   // Function to top up saldo as Json
   Future updateSaldo() async {
     print("masuk");
