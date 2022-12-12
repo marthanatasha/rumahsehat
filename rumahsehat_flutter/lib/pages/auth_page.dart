@@ -26,60 +26,51 @@ class _AuthPage extends State<AuthPage> {
   String password = "";
 
   // Function to post login request
-  Future loginRequest(BuildContext context, String email, String password) async {
-    var authJson = jsonEncode(<String, String>{
-      "password":password,
-      "email":email
-    });
-    var response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/v1/login'),
-      headers: {
-        "Accept": "application/json",
-        "content-type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
-      },
-      body: authJson
-    );
+  Future loginRequest(
+      BuildContext context, String email, String password) async {
+    var authJson =
+        jsonEncode(<String, String>{"password": password, "email": email});
+    var response =
+        await http.post(Uri.parse('http://192.168.42.12:8080/api/v1/login'),
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
+            },
+            body: authJson);
     var token = response.body;
+    print(response.statusCode); // TODO:
+    print(token); // TODO: debug
 
     if (response.statusCode == 200) {
       print("user found"); // TODO: debug
       // get auth
-      var auth = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/info'),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
-          "Authorization": "Bearer $token"
-        }
-      );
+      var auth = await http
+          .get(Uri.parse('http://192.168.42.12:8080/api/v1/info'), headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
+        "Authorization": "Bearer $token"
+      });
       var jsonAuth = jsonDecode(auth.body);
 
       if (jsonAuth["role"] == "PASIEN") {
         await FlutterSession().set("token", token);
         print("pasien bisa login"); // TODO: debug
-        Navigator.push(context,
-          MaterialPageRoute(builder: (context) {
-            return HomePage();
-          })
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return HomePage();
+        }));
       } else {
         print("bukan pasien"); // TODO: debug
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) {
-              return AuthPage(invalid: true);
-            })
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return AuthPage(invalid: true);
+        }));
       }
-
     } else {
       print("user not found"); // TODO: debug
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) {
-            return AuthPage(invalid: true);
-          })
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return AuthPage(invalid: true);
+      }));
     }
   }
 
@@ -95,7 +86,8 @@ class _AuthPage extends State<AuthPage> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 32),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 100, horizontal: 32),
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -106,11 +98,12 @@ class _AuthPage extends State<AuthPage> {
                 elevation: 20,
                 shadowColor: Colors.black26,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 28),
-                  child: Form (
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 20, top: 28),
+                  child: Form(
                     key: _formKey,
                     child: Column(
-                      children: <Widget> [
+                      children: <Widget>[
                         const Text(
                           'Login Rumah Sehat',
                           textAlign: TextAlign.center,
@@ -124,11 +117,10 @@ class _AuthPage extends State<AuthPage> {
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.green),
-                            )
-                          ),
+                              labelText: 'Email',
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              )),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Masukkan email Anda!';
@@ -147,8 +139,7 @@ class _AuthPage extends State<AuthPage> {
                               labelText: 'Password',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.green),
-                              )
-                          ),
+                              )),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Masukkan password Anda!';
@@ -166,7 +157,9 @@ class _AuthPage extends State<AuthPage> {
                         SizedBox(
                           height: invalid ? 20 : 0,
                           child: Text(
-                            invalid ? 'Periksa lagi email dan password Anda!' : '',
+                            invalid
+                                ? 'Periksa lagi email dan password Anda!'
+                                : '',
                             style: const TextStyle(
                               color: Colors.red,
                             ),
@@ -187,19 +180,17 @@ class _AuthPage extends State<AuthPage> {
                           ),
                         ),
                         SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              print("Push ke regis"); // TODO: debug
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return const FormRegistrasiPasien();
-                              }));
-                            },
-                            child: const Text(
-                              'Registrasi Pasien'
-                            ),
-                          )
-                        ),
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                print("Push ke regis"); // TODO: debug
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const FormRegistrasiPasien();
+                                }));
+                              },
+                              child: const Text('Registrasi Pasien'),
+                            )),
                       ],
                     ),
                   ),
