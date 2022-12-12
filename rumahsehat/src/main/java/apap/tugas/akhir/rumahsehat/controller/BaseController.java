@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +50,11 @@ public class BaseController {
     private WebClient webClient = WebClient.builder().build();
 
     @GetMapping("/")
-    private String Home() {
+    private String Home(Model model) {
+        model.addAttribute("users", userService.getListUser().size());
+        model.addAttribute("apoteker", apotekerService.getListApoteker().size());
+        model.addAttribute("dokter", dokterService.getListDokter().size());
+        model.addAttribute("pasien", pasienService.getListPasien().size());
         return "dashboard/index";
     }
 
@@ -60,19 +65,19 @@ public class BaseController {
 
     // @GetMapping("/api/initial")
     // private String Initial() {
-    //     if (adminService.getListAdmin().size() < 2) {
-    //         AdminModel admin = new AdminModel();
-    //         admin.setEmail("admin3@rumahsehat.com");
-    //         admin.setNama("admin utama");
-    //         admin.setPassword("admin");
-    //         admin.setRole(UserType.ADMIN);
-    //         admin.setUsername("admin2");
-    //         admin.setIsSso(false);
-    //         admin.setToken("0");
-    //         adminService.addAdmin(admin);
-    //     }
+    // if (adminService.getListAdmin().size() < 2) {
+    // AdminModel admin = new AdminModel();
+    // admin.setEmail("admin3@rumahsehat.com");
+    // admin.setNama("admin utama");
+    // admin.setPassword("admin");
+    // admin.setRole(UserType.ADMIN);
+    // admin.setUsername("admin2");
+    // admin.setIsSso(false);
+    // admin.setToken("0");
+    // adminService.addAdmin(admin);
+    // }
 
-    //     return "error/404";
+    // return "error/404";
     // }
 
     // @GetMapping("/api/initial")
