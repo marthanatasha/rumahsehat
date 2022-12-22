@@ -16,7 +16,7 @@ class Pembayaran extends StatelessWidget {
   Future tagihanAfterPembayaran(String noTagihan) async {
     // get auth
     var auth = await http
-        .get(Uri.parse('http://localhost:8080/api/v1/info'), headers: {
+        .get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
       "Authorization": "Bearer $token"
@@ -27,7 +27,7 @@ class Pembayaran extends StatelessWidget {
     if (pasienRole == "PASIEN") {
       var response = await http.get(
           Uri.parse(
-              'http://localhost:8080/api/v1/tagihan/pembayaran/$noTagihan'),
+              'http://10.0.2.2:8080/api/v1/tagihan/pembayaran/$noTagihan'),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"

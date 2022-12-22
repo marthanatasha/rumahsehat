@@ -26,12 +26,12 @@ class _AuthPage extends State<AuthPage> {
   String password = "";
 
   // Function to post login request
-  Future loginRequest(
-      BuildContext context, String email, String password) async {
+  Future loginRequest(BuildContext context, String email, String password) async {
+    print("masuk sini");
     var authJson =
         jsonEncode(<String, String>{"password": password, "email": email});
     var response =
-        await http.post(Uri.parse('http://192.168.42.12:8080/api/v1/login'),
+        await http.post(Uri.parse('http://10.0.2.2:8080/api/v1/login'),
             headers: {
               "Accept": "application/json",
               "content-type": "application/json",
@@ -40,14 +40,14 @@ class _AuthPage extends State<AuthPage> {
             },
             body: authJson);
     var token = response.body;
-    print(response.statusCode); // TODO:
+    print(response.statusCode); // TODO: debug
     print(token); // TODO: debug
 
     if (response.statusCode == 200) {
       print("user found"); // TODO: debug
       // get auth
       var auth = await http
-          .get(Uri.parse('http://192.168.42.12:8080/api/v1/info'), headers: {
+          .get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
         "Authorization": "Bearer $token"

@@ -26,7 +26,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
         nama, username, password, email, saldo, umur); // TODO: BINGUNG INI APA
     var pasienJson = json.encode(pasien.toJson());
     var response = await http.post(
-        Uri.parse('http://localhost:8000/api/v1/pasien/add'),
+        Uri.parse('http://10.0.2.2:8000/api/v1/pasien/add'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json"

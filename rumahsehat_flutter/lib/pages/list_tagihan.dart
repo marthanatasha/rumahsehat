@@ -17,7 +17,7 @@ class ViewAllTagihan extends StatelessWidget {
   // Function to get list of Appointment
   Future getTagihan() async {
     var auth = await http
-        .get(Uri.parse('http://localhost:8080/api/v1/info'), headers: {
+        .get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",
       "Authorization": "Bearer $token"
@@ -28,7 +28,7 @@ class ViewAllTagihan extends StatelessWidget {
 
     if (pasienRole == "PASIEN") {
       var response = await http.get(
-          Uri.parse('http://localhost:8080/api/v1/tagihan/$pasienId'),
+          Uri.parse('http://10.0.2.2:8080/api/v1/tagihan/$pasienId'),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE"
