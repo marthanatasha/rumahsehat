@@ -1,4 +1,5 @@
 package apap.tugas.akhir.rumahsehat.service;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -55,7 +56,7 @@ public class UserService {
 
     public String encrypt(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
+        String hashedPassword = passwordEncoder.encode("{noop}" + password);
         return hashedPassword;
     }
 
