@@ -68,7 +68,7 @@ public class UserService {
         return userDb.findByEmail(email);
     }
 
-    public Boolean isAdmin(Principal principal) {
+    public boolean isAdmin(Principal principal) {
         UserModel user = userDb.findByUsername(principal.getName());
         if (user.getRole().equals(UserType.ADMIN)) {
             return true;

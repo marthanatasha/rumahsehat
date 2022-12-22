@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import apap.tugas.akhir.rumahsehat.model.users.ApotekerModel;
@@ -43,12 +42,6 @@ public class ApotekerController {
         
     }
 
-    // Detail apoteker
-    @GetMapping("/apoteker/{id}")
-    public String getApotekerById(@PathVariable Long id) {
-        return "dashboard/apoteker/detail";
-    }
-
     // Form create apoteker
     @GetMapping("/apoteker/add")
     public String getApotekerAddForm(Principal principal) {
@@ -57,7 +50,6 @@ public class ApotekerController {
         } else {
             return notFoundError;
         }
-        
     }
 
     // Confirmation create apoteker
@@ -71,7 +63,5 @@ public class ApotekerController {
         } else {
             return notFoundError;
         }
-        
     }
-
 }

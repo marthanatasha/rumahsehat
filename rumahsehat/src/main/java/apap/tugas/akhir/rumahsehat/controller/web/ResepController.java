@@ -83,7 +83,7 @@ public class ResepController {
 
         ResepModel resep = resepService.getResepById(id);
         List<JumlahModel> listJumlah = resep.getJumlah();
-        Boolean isApoteker = false;
+        boolean isApoteker = false;
         Boolean canConfirm = resepService.canConfirm(resep);
 
         if (userService.isDokter(principal)
@@ -231,5 +231,4 @@ public class ResepController {
             return notFoundError;
         }
     }
-
 }
