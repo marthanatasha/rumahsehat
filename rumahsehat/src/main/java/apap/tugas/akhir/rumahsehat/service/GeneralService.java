@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class GeneralService {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
         return hashedPassword;
     }
