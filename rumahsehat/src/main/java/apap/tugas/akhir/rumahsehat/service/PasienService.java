@@ -1,6 +1,7 @@
 package apap.tugas.akhir.rumahsehat.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -26,13 +27,8 @@ public class PasienService {
     }
 
     public PasienModel getPasienById(String id) {
-        return pasienDb.findById(id).get();
-    }
-
-    public void addPasienInitial(PasienModel pasien) {
-        String pass = generalService.encrypt(pasien.getPassword());
-        pasien.setPassword(pass);
-        pasienDb.save(pasien);
+        Optional<PasienModel> pasien = pasienDb.findById(id);
+        return pasien.orElse(null);
     }
 
     public PasienModel addPasien(PasienDTO pasien) {

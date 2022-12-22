@@ -23,10 +23,6 @@ public class AdminService {
         return adminDb.findAll();
     }
 
-    public AdminModel getAdminById(String id) {
-        return adminDb.findById(id).get();
-    }
-
     public void addAdmin(AdminModel admin) {
         String pass = generalService.encrypt(admin.getPassword());
         admin.setPassword(pass);

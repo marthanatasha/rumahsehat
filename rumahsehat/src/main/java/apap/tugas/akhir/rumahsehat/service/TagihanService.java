@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -64,7 +65,13 @@ public class TagihanService {
     }
 
     public TagihanDTO getTagihanById(String id) {
-        TagihanModel tagihan = tagihanDb.findById(id).get();
+        TagihanModel tagihan;
+        Optional<TagihanModel> opt = tagihanDb.findById(id);
+        tagihan = opt.orElse(null);
+        if (tagihan == null) {
+            return null;
+        }
+
         TagihanDTO tagihanDTO = new TagihanDTO();
 
         tagihanDTO.setIdPasien(tagihan.getAppointment().getPasien().getId());
@@ -73,7 +80,7 @@ public class TagihanService {
         tagihanDTO.setJumlahTagihan(tagihan.getJumlahTagihan());
 
         // Cek Status Pasien
-        if (tagihan.getIsPaid() == true){
+        if (tagihan.getIsPaid()){
             tagihanDTO.setStatus("LUNAS");
             tagihanDTO.setTanggalBayar(tagihan.getTanggalBayar().toString());
         } else{
@@ -84,7 +91,13 @@ public class TagihanService {
     }
 
     public TagihanDTO pembayaranTagihan(String id) {
-        TagihanModel tagihan = tagihanDb.findById(id).get();
+        TagihanModel tagihan;
+        Optional<TagihanModel> opt = tagihanDb.findById(id);
+        tagihan = opt.orElse(null);
+        if (tagihan == null) {
+            return null;
+        }
+
         TagihanDTO tagihanDTO = new TagihanDTO();
 
         // Pemilik tagihan dan saldonya
@@ -118,7 +131,7 @@ public class TagihanService {
         tagihanDTO.setJumlahTagihan(tagihan.getJumlahTagihan());
 
         // Cek Status Pasien
-        if (tagihan.getIsPaid() == true){
+        if (tagihan.getIsPaid()){
             tagihanDTO.setStatus("LUNAS");
             tagihanDTO.setTanggalBayar(tagihan.getTanggalBayar().toString());
         } else{
@@ -142,17 +155,6 @@ public class TagihanService {
 
         // save
         return tagihanDb.save(newTagihan);
-    }
-
-
-    public TagihanModel updateTagihan(TagihanModel tagihan) {
-        tagihanDb.save(tagihan);
-        return tagihan;
-    }
-
-    public TagihanModel deleteTagihan(TagihanModel tagihan) {
-        tagihanDb.delete(tagihan);
-        return tagihan;
     }
 
     public Long getTotalPendapatan (String month){

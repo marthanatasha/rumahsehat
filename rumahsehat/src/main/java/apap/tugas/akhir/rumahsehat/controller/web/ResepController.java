@@ -179,8 +179,7 @@ public class ResepController {
     public String deleteRowObat(@ModelAttribute ResepModel resep, Model model, @RequestParam("deleteRow") Integer row,
             @PathVariable("kodeApt") String kodeApt) {
         List<ObatModel> listObat = obatService.getListObat();
-        final Integer rowInt = Integer.valueOf(row);
-        resep.getJumlah().remove(rowInt.intValue());
+        resep.getJumlah().remove(row.intValue());
 
         List<JumlahModel> listJumlah = resep.getJumlah();
 

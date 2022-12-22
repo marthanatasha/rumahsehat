@@ -21,26 +21,4 @@ public class JumlahService {
         return jumlahDb.findAll();
     }
 
-    public JumlahModel getJumlahById(String id) {
-        return jumlahDb.findById(id).get();
-    }
-
-    public void addJumlah(JumlahModel jumlah) {
-        jumlahDb.save(jumlah);
-    }
-
-    public JumlahDTO getJumlahApi(String namaObat, Integer kuantitas){
-        JumlahDTO jumlahDTO = new JumlahDTO(namaObat, kuantitas);
-        return jumlahDTO;
-    }
-
-    public JumlahModel updateJumlah(JumlahModel jumlah) {
-        jumlahDb.save(jumlah);
-        return jumlah;
-    }
-
-    public JumlahModel deleteJumlah(JumlahModel jumlah) {
-        jumlahDb.delete(jumlah);
-        return jumlah;
-    }
 }

@@ -90,6 +90,10 @@ public class BaseController {
                         Setting.CLIENT_LOGIN))
                 .retrieve().bodyToMono(ServiceResponse.class).block();
 
+        if (serviceResponse == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
         Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
         String username = serviceResponse.getAuthenticationSuccess().getUser();
 

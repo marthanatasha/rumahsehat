@@ -117,35 +117,35 @@ public class ChartController {
 
                 if (barChartDTO.getObat1() != null)
                     data.put(barChartDTO.getObat1().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat1()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat1()));
 
                 if (barChartDTO.getObat2() != null)
                     data.put(barChartDTO.getObat2().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat2()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat2()));
 
                 if (barChartDTO.getObat3() != null)
                     data.put(barChartDTO.getObat3().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat3()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat3()));
 
                 if (barChartDTO.getObat4() != null)
                     data.put(barChartDTO.getObat4().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat4()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat4()));
 
                 if (barChartDTO.getObat5() != null)
                     data.put(barChartDTO.getObat5().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat5()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat5()));
 
                 if (barChartDTO.getObat6() != null)
                     data.put(barChartDTO.getObat6().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat6()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat6()));
 
                 if (barChartDTO.getObat7() != null)
                     data.put(barChartDTO.getObat7().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat7()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat7()));
 
                 if (barChartDTO.getObat8() != null)
                     data.put(barChartDTO.getObat8().getNamaObat(),
-                            obatService.penjualanTotalObat(barChartDTO.getObat8()).intValue());
+                            obatService.penjualanTotalObat(barChartDTO.getObat8()));
 
                 model.addAttribute("data", data);
                 model.addAttribute("title", "Bar Chart Total Kuantitas Penjualan");

@@ -2,6 +2,7 @@ package apap.tugas.akhir.rumahsehat.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +26,8 @@ public class ResepService {
     }
 
     public ResepModel getResepById(Long id) {
-        return resepDb.findById(id).get();
+        Optional<ResepModel> resep = resepDb.findById(id);
+        return resep.orElse(null);
     }
 
     public void addResep(ResepModel resep) {
@@ -63,10 +65,6 @@ public class ResepService {
             }
         }
         return canConfirm;
-    }
-
-    public void updateResep (ResepModel resep){
-        resepDb.save(resep);
     }
 
 }
