@@ -11,7 +11,6 @@ public class GeneralService {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String encrypt(String password) {
-        String hashedPassword = passwordEncoder.encode("{noop}" + password);
-        return hashedPassword;
+        return passwordEncoder.encode("{noop}" + password);
     }
 }

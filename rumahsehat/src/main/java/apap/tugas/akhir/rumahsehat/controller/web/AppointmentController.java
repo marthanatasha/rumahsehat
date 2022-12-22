@@ -33,6 +33,7 @@ public class AppointmentController {
     TagihanService tagihanService;
 
     Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+    String roleDokter = "DOKTER";
 
     // List appointment
     @GetMapping("/appointment")
@@ -43,7 +44,7 @@ public class AppointmentController {
 
         if (role.equals("ADMIN")) {
             aptList = appointmentService.getListAppointment();
-        } else if (role.equals("DOKTER")) {
+        } else if (role.equals(roleDokter)) {
             DokterModel dokter = (DokterModel) user;
             aptList = dokter.getListAppointment();
         }
@@ -67,11 +68,11 @@ public class AppointmentController {
 
         Long kodeResep = null;
 
-        if (role.equals("DOKTER") || role.equals("ADMIN")) {
+        if (role.equals(roleDokter) || role.equals("ADMIN")) {
             canAccess = true;
         }
 
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone() && apt.getResep() == null) {
+        if (apt != null && role.equals(roleDokter) && !apt.getIsDone() && apt.getResep() == null) {
             canUpdateStatus = true;
             canCreateResep = true;
             showResepWarning = true;

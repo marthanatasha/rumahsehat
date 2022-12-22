@@ -32,7 +32,7 @@ public class PasienService {
     }
 
     public PasienModel addPasien(PasienDTO pasien) {
-        PasienModel newPasien = new PasienModel();
+        var newPasien = new PasienModel();
         newPasien.setNama(pasien.getNama());
         newPasien.setUsername(pasien.getUsername());
         String pass = generalService.encrypt(pasien.getPassword());

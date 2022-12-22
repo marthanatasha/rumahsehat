@@ -1,7 +1,5 @@
 package apap.tugas.akhir.rumahsehat.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import apap.tugas.akhir.rumahsehat.model.JumlahModel;
 import apap.tugas.akhir.rumahsehat.model.ObatModel;
-import apap.tugas.akhir.rumahsehat.model.ResepModel;
-import apap.tugas.akhir.rumahsehat.model.TagihanModel;
 import apap.tugas.akhir.rumahsehat.repository.ObatDb;
 
 @Service

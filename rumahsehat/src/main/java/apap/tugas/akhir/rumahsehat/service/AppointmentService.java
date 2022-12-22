@@ -51,7 +51,7 @@ public class AppointmentService {
         PasienModel registeredPasien = pasienService.getPasienById(appointmentDTO.getPasienId());
 
         // create new appointment
-        AppointmentModel newAppointment = new AppointmentModel();
+        var newAppointment = new AppointmentModel();
 
         // set default values
         int count = getListAppointment().size();

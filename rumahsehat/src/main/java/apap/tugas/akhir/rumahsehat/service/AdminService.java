@@ -29,18 +29,7 @@ public class AdminService {
         adminDb.save(admin);
     }
 
-    public AdminModel updateAdmin(AdminModel admin) {
-        adminDb.save(admin);
-        return admin;
-    }
-
-    public AdminModel deleteAdmin(AdminModel admin) {
-        adminDb.delete(admin);
-        return admin;
-    }
-
     public AdminModel getAdminByUsername(String username) {
-        AdminModel admin = adminDb.findByUsername(username);
-        return admin;
+        return adminDb.findByUsername(username);
     }
 }

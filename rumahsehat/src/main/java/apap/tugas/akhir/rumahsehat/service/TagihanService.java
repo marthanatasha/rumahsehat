@@ -3,7 +3,6 @@ package apap.tugas.akhir.rumahsehat.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -30,17 +29,20 @@ public class TagihanService {
     @Autowired
     PasienService pasienService;
 
+    String constLunas = "LUNAS";
+    String constBelumLunas = "BELUM LUNAS";
+
     public List<TagihanModel> getListTagihan() {
         return tagihanDb.findAll();
     }
 
     public List<TagihanDTO> getTagihanDTO(String idPasien) {
         List<TagihanModel> tagihan = tagihanDb.findAll();
-        List<TagihanDTO> tagihanDTO = new ArrayList<TagihanDTO>();
+        List<TagihanDTO> tagihanDTO = new ArrayList<>();
 
         for (TagihanModel aTagihan: tagihan){
             if(aTagihan.getAppointment().getPasien().getId().equals(idPasien)){
-                TagihanDTO newTagihan = new TagihanDTO();
+                var newTagihan = new TagihanDTO();
                 PasienModel pasien = aTagihan.getAppointment().getPasien();
                 newTagihan.setNomorTagihan(aTagihan.getKode());
                 newTagihan.setTanggalTerbuat(aTagihan.getTanggalTerbuat().toString());
@@ -48,17 +50,15 @@ public class TagihanService {
                 newTagihan.setJumlahTagihan(aTagihan.getJumlahTagihan());
 
                 // Cek Status Pasien
-                if (aTagihan.getIsPaid() == true){
-                    newTagihan.setStatus("LUNAS");
+                if (aTagihan.getIsPaid()){
+                    newTagihan.setStatus(constLunas);
                     newTagihan.setTanggalBayar(aTagihan.getTanggalBayar().toString());
                 } else{
-                    newTagihan.setStatus("BELUM LUNAS");
+                    newTagihan.setStatus(constBelumLunas);
                     newTagihan.setTanggalBayar("Anda belum melunasi pembayaran");
                 }
 
                 tagihanDTO.add(newTagihan);
-            } else{
-                continue;
             }
         }
         return tagihanDTO;
@@ -72,7 +72,7 @@ public class TagihanService {
             return null;
         }
 
-        TagihanDTO tagihanDTO = new TagihanDTO();
+        var tagihanDTO = new TagihanDTO();
 
         tagihanDTO.setIdPasien(tagihan.getAppointment().getPasien().getId());
         tagihanDTO.setNomorTagihan(tagihan.getKode());
@@ -81,10 +81,10 @@ public class TagihanService {
 
         // Cek Status Pasien
         if (tagihan.getIsPaid()){
-            tagihanDTO.setStatus("LUNAS");
+            tagihanDTO.setStatus(constLunas);
             tagihanDTO.setTanggalBayar(tagihan.getTanggalBayar().toString());
         } else{
-            tagihanDTO.setStatus("BELUM LUNAS");
+            tagihanDTO.setStatus(constBelumLunas);
             tagihanDTO.setTanggalBayar("Anda belum melunasi pembayarab");
         }
         return tagihanDTO;
@@ -98,7 +98,7 @@ public class TagihanService {
             return null;
         }
 
-        TagihanDTO tagihanDTO = new TagihanDTO();
+        var tagihanDTO = new TagihanDTO();
 
         // Pemilik tagihan dan saldonya
         PasienModel pasien = tagihan.getAppointment().getPasien();
@@ -132,10 +132,10 @@ public class TagihanService {
 
         // Cek Status Pasien
         if (tagihan.getIsPaid()){
-            tagihanDTO.setStatus("LUNAS");
+            tagihanDTO.setStatus(constLunas);
             tagihanDTO.setTanggalBayar(tagihan.getTanggalBayar().toString());
         } else{
-            tagihanDTO.setStatus("BELUM LUNAS");
+            tagihanDTO.setStatus(constBelumLunas);
             tagihanDTO.setTanggalBayar("Anda belum melunasi pembayarab");
         }
 
@@ -162,7 +162,7 @@ public class TagihanService {
         List<TagihanModel> listBill = tagihanDb.findAll();
 
         for (TagihanModel check : listBill){
-            if (check.getIsPaid() == true && check.getTanggalBayar().getMonth().toString().equals(month)){
+            if (check.getIsPaid() && check.getTanggalBayar().getMonth().toString().equals(month)){
                 for (JumlahModel obat : check.getAppointment().getResep().getJumlah()){
                     result = result + (obat.getObat().getHarga() * obat.getKuantitas());
                 }

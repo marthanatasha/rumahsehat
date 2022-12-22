@@ -56,7 +56,9 @@ public class ResepController {
     UserService userService;
 
     Logger logger = LoggerFactory.getLogger(ResepController.class);
-
+    String constResep = "resep";
+    String constListJumlah = "listJumlah";
+    String constListObat = "listObat";
     String notFoundError = "error/404";
     String formAddPage = "dashboard/resep/form-add";
 
@@ -83,21 +85,20 @@ public class ResepController {
 
         ResepModel resep = resepService.getResepById(id);
         List<JumlahModel> listJumlah = resep.getJumlah();
-        boolean isApoteker = false;
+        var isApoteker = false;
         Boolean canConfirm = resepService.canConfirm(resep);
 
         if (userService.isDokter(principal)
                 && !authentication.getName().equals(resep.getAppointment().getDokter().getUsername())) {
-            logger.error("Gagal melihat Detail Resep. Anda bukan Dokter pada Appointment "
-                    + resep.getAppointment().getKode());
+            logger.error("Gagal melihat Detail Resep. Anda bukan Dokter pada Appointment {}.", resep.getAppointment().getKode());
             return notFoundError;
         }
         if (userService.isApoteker(principal)) {
             isApoteker = true;
         }
 
-        model.addAttribute("resep", resep);
-        model.addAttribute("listJumlah", listJumlah);
+        model.addAttribute(constResep, resep);
+        model.addAttribute(constListJumlah, listJumlah);
         model.addAttribute("isApoteker", isApoteker);
         model.addAttribute("canConfirm", canConfirm);
         return "dashboard/resep/detail";
@@ -120,9 +121,9 @@ public class ResepController {
             resep.setJumlah(new ArrayList<>());
             resep.getJumlah().add(new JumlahModel());
 
-            model.addAttribute("resep", resep);
-            model.addAttribute("listObat", listObat);
-            model.addAttribute("listJumlah", listJumlah);
+            model.addAttribute(constResep, resep);
+            model.addAttribute(constListObat, listObat);
+            model.addAttribute(constListJumlah, listJumlah);
             model.addAttribute("kodeApt", kodeApt);
 
             return formAddPage;
@@ -170,9 +171,9 @@ public class ResepController {
         resep.getJumlah().add(new JumlahModel());
         List<JumlahModel> listJumlah = jumlahService.getListJumlah();
 
-        model.addAttribute("resep", resep);
-        model.addAttribute("listJumlah", listJumlah);
-        model.addAttribute("listObat", listObat);
+        model.addAttribute(constResep, resep);
+        model.addAttribute(constListJumlah, listJumlah);
+        model.addAttribute(constListObat, listObat);
 
         return formAddPage;
     }
@@ -186,9 +187,9 @@ public class ResepController {
 
         List<JumlahModel> listJumlah = resep.getJumlah();
 
-        model.addAttribute("resep", resep);
-        model.addAttribute("listJumlah", listJumlah);
-        model.addAttribute("listObat", listObat);
+        model.addAttribute(constResep, resep);
+        model.addAttribute(constListJumlah, listJumlah);
+        model.addAttribute(constListObat, listObat);
 
         return formAddPage;
     }
@@ -220,7 +221,7 @@ public class ResepController {
                 var newBill = new TagihanModel();
                 tagihanService.addTagihan(newBill, harga, resep.getAppointment());
 
-                model.addAttribute("resep", resep);
+                model.addAttribute(constResep, resep);
                 model.addAttribute("canConfirm", canConfirm);
                 return "dashboard/resep/confirmation-update";
             } else {

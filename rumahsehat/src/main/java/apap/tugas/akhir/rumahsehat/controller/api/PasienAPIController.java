@@ -52,7 +52,7 @@ public class PasienAPIController {
     @GetMapping("/pasien/{pasienId}")
     public PasienModel getUserProfile(@PathVariable("pasienId") String pasienId) {
         try {
-            logger.info("API GET: Informasi Pasien " + pasienId + ".");
+            logger.info("API GET: Informasi Pasien {}.", pasienId);
             return (PasienModel) userService.getRestUserById(pasienId);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
