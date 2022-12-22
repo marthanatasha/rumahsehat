@@ -28,6 +28,8 @@ public class ApotekerController {
     @Autowired
     UserService userService;
 
+    String notFoundError = "error/404";
+
     // List apoteker
     @GetMapping("/apoteker")
     public String getApotekerList(Model model, Principal principal) {
@@ -36,38 +38,38 @@ public class ApotekerController {
             model.addAttribute("apotekers", apotekerService.getListApoteker());
             return "dashboard/apoteker/list";
         } else {
-            return "error/404";
+            return notFoundError;
         }
         
     }
 
     // Detail apoteker
     @GetMapping("/apoteker/{id}")
-    public String getApotekerById(@PathVariable Long id, Model model) {
+    public String getApotekerById(@PathVariable Long id) {
         return "dashboard/apoteker/detail";
     }
 
     // Form create apoteker
     @GetMapping("/apoteker/add")
-    public String getApotekerAddForm(Model model, Principal principal) {
+    public String getApotekerAddForm(Principal principal) {
         if (userService.isAdmin(principal)) {
             return "dashboard/apoteker/form-add";
         } else {
-            return "error/404";
+            return notFoundError;
         }
         
     }
 
     // Confirmation create apoteker
     @PostMapping(value = "/apoteker/add")
-    public String postApotekerAddForm(@ModelAttribute ApotekerModel apoteker, Model model, Principal principal) {
+    public String postApotekerAddForm(@ModelAttribute ApotekerModel apoteker, Principal principal) {
         if (userService.isAdmin(principal)) {
             apoteker.setRole(UserType.APOTEKER);
             apoteker.setIsSso(false);
             apotekerService.addApoteker(apoteker);
             return "dashboard/apoteker/confirmation-add";
         } else {
-            return "error/404";
+            return notFoundError;
         }
         
     }

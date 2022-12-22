@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;

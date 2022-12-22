@@ -57,6 +57,9 @@ public class ResepController {
 
     Logger logger = LoggerFactory.getLogger(ResepController.class);
 
+    String notFoundError = "error/404";
+    String formAddPage = "dashboard/resep/form-add";
+
     // List resep
     @GetMapping("/resep")
     public String getResepList(Model model, Principal principal) {
@@ -66,7 +69,7 @@ public class ResepController {
             return "dashboard/resep/list";
         } else {
             logger.error("Gagal melihat Daftar Resep. Role Anda bukan Apoteker atau Admin");
-            return "error/404";
+            return notFoundError;
         }
     }
 
@@ -75,7 +78,7 @@ public class ResepController {
     public String getResepById(@PathVariable Long id, Model model, Principal principal, Authentication authentication) {
         if (userService.isPasien(principal)) {
             logger.error("Gagal melihat Detail Resep. Role Anda Pasien");
-            return "error/404";
+            return notFoundError;
         }
 
         ResepModel resep = resepService.getResepById(id);
@@ -87,7 +90,7 @@ public class ResepController {
                 && !authentication.getName().equals(resep.getAppointment().getDokter().getUsername())) {
             logger.error("Gagal melihat Detail Resep. Anda bukan Dokter pada Appointment "
                     + resep.getAppointment().getKode());
-            return "error/404";
+            return notFoundError;
         }
         if (userService.isApoteker(principal)) {
             isApoteker = true;
@@ -110,7 +113,7 @@ public class ResepController {
         // cek rolenya dokter, dokter pada appointment, appointment belum ada resep
         if (userService.isDokter(principal) && apt.getDokter().getUsername().equals(dokterLogin)
                 && apt.getResep() == null) {
-            ResepModel resep = new ResepModel();
+            var resep = new ResepModel();
             List<ObatModel> listObat = obatService.getListObat();
             List<JumlahModel> listJumlah = jumlahService.getListJumlah();
 
@@ -122,10 +125,10 @@ public class ResepController {
             model.addAttribute("listJumlah", listJumlah);
             model.addAttribute("kodeApt", kodeApt);
 
-            return "dashboard/resep/form-add";
+            return formAddPage;
         } else {
             logger.error("Gagal membuat resep.");
-            return "error/404";
+            return notFoundError;
         }
     }
 
@@ -140,7 +143,7 @@ public class ResepController {
         if (resep.getJumlah() == null) {
             resep.setJumlah(new ArrayList<>());
         } else {
-            int idx = 0;
+            var idx = 0;
             for (JumlahModel jml : resep.getJumlah()) {
                 jml.setResep(resep);
                 jml.setObat(resep.getJumlah().get(idx).getObat());
@@ -171,7 +174,7 @@ public class ResepController {
         model.addAttribute("listJumlah", listJumlah);
         model.addAttribute("listObat", listObat);
 
-        return "dashboard/resep/form-add";
+        return formAddPage;
     }
 
     // Delete Row obat
@@ -187,7 +190,7 @@ public class ResepController {
         model.addAttribute("listJumlah", listJumlah);
         model.addAttribute("listObat", listObat);
 
-        return "dashboard/resep/form-add";
+        return formAddPage;
     }
 
     // Update resep
@@ -198,7 +201,7 @@ public class ResepController {
             ApotekerModel apoteker = apotekerService.getApotekerByUsername(authentication.getName());
 
             // cek kuantitas obat, ada semua --> bisa confirm
-            boolean canConfirm = true;
+            var canConfirm = true;
             canConfirm = resepService.canConfirm(resep);
 
             // update status resep, update appointment, dan buat tagihan
@@ -214,19 +217,18 @@ public class ResepController {
                 for (JumlahModel jml : resep.getJumlah()) {
                     harga += jml.getObat().getHarga();
                 }
-                TagihanModel newBill = new TagihanModel();
+                var newBill = new TagihanModel();
                 tagihanService.addTagihan(newBill, harga, resep.getAppointment());
 
                 model.addAttribute("resep", resep);
                 model.addAttribute("canConfirm", canConfirm);
                 return "dashboard/resep/confirmation-update";
             } else {
-                canConfirm = false;
-                return "error/404";
+                return notFoundError;
             }
         } else {
             logger.error("Gagal mengkonfirmasi resep. Role Anda bukan Apoteker");
-            return "error/404";
+            return notFoundError;
         }
     }
 

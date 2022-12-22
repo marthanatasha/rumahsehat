@@ -32,11 +32,13 @@ public class ChartController {
     @Autowired
     ObatService obatService;
 
+    String notFoundError = "error/404";
+
     @GetMapping("/chart")
     public String defaultLineChart(Model model, Principal principal) {
         if (userService.isAdmin(principal)) {
             Map<String, Long> data = new LinkedHashMap<>();
-            List<String> months = new ArrayList<String>(Arrays.asList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY",
+            List<String> months = new ArrayList<>(Arrays.asList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY",
                     "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"));
 
             for (String month : months) {
@@ -46,7 +48,7 @@ public class ChartController {
             model.addAttribute("data", data);
             return "dashboard/chart/linechart-default";
         } else {
-            return "error/404";
+            return notFoundError;
         }
 
     }
@@ -54,21 +56,21 @@ public class ChartController {
     @GetMapping("/chart/line-obat")
     public String obatChartForm(Model model, Principal principal) {
         if (userService.isAdmin(principal)) {
-            LineChartDTO lineChartDTO = new LineChartDTO();
+            var lineChartDTO = new LineChartDTO();
             List<ObatModel> obatList = obatService.getListObat();
             model.addAttribute("lineChartDTO", lineChartDTO);
             model.addAttribute("obatList", obatList);
             return "dashboard/chart/form-line-chart";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 
     @PostMapping("/chart/line-obat")
     public String obatChartView(@ModelAttribute LineChartDTO lineChartDTO, Model model, Principal principal) {
         if (userService.isAdmin(principal)) {
-            Map<String, ArrayList<Integer>> data = new LinkedHashMap<String, ArrayList<Integer>>();
-            ArrayList<Integer> arr = new ArrayList<Integer>();
+            Map<String, ArrayList<Integer>> data = new LinkedHashMap<>();
+            ArrayList<Integer> arr = new ArrayList<>();
 
             if (lineChartDTO.getObat1() != null)
                 data.put(lineChartDTO.getObat1().getNamaObat(), arr);
@@ -89,14 +91,14 @@ public class ChartController {
 
             return "dashboard/chart/view-line-chart";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 
     @GetMapping("/chart/bar-obat")
     public String obatBarChartForm(Model model, Principal principal) {
         if (userService.isAdmin(principal)) {
-            BarChartDTO barChartDTO = new BarChartDTO();
+            var barChartDTO = new BarChartDTO();
             List<ObatModel> obatList = obatService.getListObat();
 
             model.addAttribute("lineChartDTO", barChartDTO);
@@ -104,14 +106,14 @@ public class ChartController {
 
             return "dashboard/chart/form-bar-chart";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 
     @PostMapping("/chart/bar-obat")
     public String obatBarChartView(@ModelAttribute BarChartDTO barChartDTO, Model model, Principal principal) {
         if (userService.isAdmin(principal)) {
-            Map<String, Integer> data = new LinkedHashMap<String, Integer>();
+            Map<String, Integer> data = new LinkedHashMap<>();
 
             if (barChartDTO.getType().equals("Penjualan")) {
 
@@ -190,7 +192,7 @@ public class ChartController {
 
             return "dashboard/chart/view-bar-chart";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 }

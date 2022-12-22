@@ -38,7 +38,7 @@ public class AppointmentController {
     @GetMapping("/appointment")
     public String getAppointmentList(Model model, Principal principal) {
         UserModel user = userService.getUserByUsername(principal.getName());
-        String role = user.getRole().toString();
+        var role = user.getRole().toString();
         List<AppointmentModel> aptList = null;
 
         if (role.equals("ADMIN")) {
@@ -58,12 +58,12 @@ public class AppointmentController {
     public String getAppointmentById(@RequestParam(value = "kode") String kode, Model model, Principal principal) {
         AppointmentModel apt = appointmentService.getAppointmentById(kode);
         UserModel user = userService.getUserByUsername(principal.getName());
-        String role = user.getRole().toString();
+        var role = user.getRole().toString();
 
-        boolean canAccess = false;
-        boolean canCreateResep = false;
-        boolean canUpdateStatus = false;
-        boolean showResepWarning = false;
+        var canAccess = false;
+        var canCreateResep = false;
+        var canUpdateStatus = false;
+        var showResepWarning = false;
 
         Long kodeResep = null;
 
@@ -71,12 +71,10 @@ public class AppointmentController {
             canAccess = true;
         }
 
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) {
-            if (apt.getResep() == null) {
-                canUpdateStatus = true;
-                canCreateResep = true;
-                showResepWarning = true;
-            }
+        if (apt != null && role.equals("DOKTER") && !apt.getIsDone() && apt.getResep() == null) {
+            canUpdateStatus = true;
+            canCreateResep = true;
+            showResepWarning = true;
         }
 
         if (apt == null) {
@@ -105,7 +103,7 @@ public class AppointmentController {
             redirectUrl = "/appointment/detail/?kode=" + updated.getKode();
 
             Integer harga = apt.getDokter().getTarif();
-            TagihanModel newBill = new TagihanModel();
+            var newBill = new TagihanModel();
             tagihanService.addTagihan(newBill, harga, apt);
 
         } else {

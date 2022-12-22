@@ -28,6 +28,8 @@ public class DokterController {
     @Autowired
     UserService userService;
 
+    String notFoundError = "error/404";
+
     // List dokter
     @GetMapping("/dokter")
     public String getDokterList(Model model, Principal principal) {
@@ -36,7 +38,7 @@ public class DokterController {
             model.addAttribute("apotekers", apotekerService.getListApoteker());
             return "dashboard/dokter/list";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 
@@ -52,7 +54,7 @@ public class DokterController {
         if (userService.isAdmin(principal)) {
             return "dashboard/dokter/form-add";
         } else {
-            return "error/404";
+            return notFoundError;
         }
     }
 
@@ -65,7 +67,7 @@ public class DokterController {
             dokterService.addDokter(dokter);
             return "dashboard/dokter/confirmation-add";
         } else {
-            return "error/404";
+            return notFoundError;
         }
 
     }

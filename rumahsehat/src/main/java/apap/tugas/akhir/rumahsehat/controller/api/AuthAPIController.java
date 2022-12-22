@@ -3,8 +3,6 @@ package apap.tugas.akhir.rumahsehat.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,19 +23,19 @@ public class AuthAPIController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginAPIDTO loginAPIDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> login(@RequestBody LoginAPIDTO loginAPIDTO) {
         String token = authService.getToken(loginAPIDTO);
 
         if (token == null) {
-            return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(authService.getToken(loginAPIDTO), HttpStatus.OK);
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String bearerToken, Model model) {
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String bearerToken) {
         if (!authService.tokenCheck(bearerToken)) {
-            return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(authService.getUserInfo(bearerToken), HttpStatus.OK);
     }

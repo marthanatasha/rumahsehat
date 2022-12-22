@@ -62,7 +62,7 @@ public class ResepModel implements Serializable {
 
     @OneToMany(mappedBy = "resep", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<JumlahModel> jumlah;
+    private transient List<JumlahModel> jumlah;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = true, name = "confirmer_uuid", referencedColumnName = "id")

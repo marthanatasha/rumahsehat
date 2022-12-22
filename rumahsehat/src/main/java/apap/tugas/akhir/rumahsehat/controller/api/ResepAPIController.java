@@ -35,8 +35,7 @@ public class ResepAPIController {
         try {
             logger.info("API GET: Detail Resep " + id + ".");
             ResepModel resep = resepService.getResepById(id);
-            ResepDTO resepApi = resepService.getResepApi(resep);
-            return resepApi;
+            return resepService.getResepApi(resep);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode resep tidak ditemukan.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID Resep " + id + " not found.");

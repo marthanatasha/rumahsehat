@@ -80,8 +80,7 @@ public class PasienAPIController {
     public PasienModel getUserProfile(@PathVariable("pasienId") String pasienId) {
         try {
             logger.info("API GET: Informasi Pasien " + pasienId + ".");
-            PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
-            return pasien;
+            return (PasienModel) userService.getRestUserById(pasienId);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
@@ -96,7 +95,7 @@ public class PasienAPIController {
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field.");
         } else {
             logger.info("API POST: Saldo pasien berhasil diubah.");
-            SaldoDTO saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());
+            var saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());
             return pasienService.updatePasien(saldo.getUsername(), saldo.getSaldo());
         }
     }

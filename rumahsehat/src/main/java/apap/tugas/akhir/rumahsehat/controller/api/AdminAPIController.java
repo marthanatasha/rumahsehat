@@ -30,9 +30,9 @@ public class AdminAPIController {
 
     // List admin
     @GetMapping("/admin")
-    public ResponseEntity<?> getAdminList(@RequestHeader("Authorization") String bearerToken, Model model) {
+    public ResponseEntity<?> getAdminList(@RequestHeader("Authorization") String bearerToken) {
         if (!authService.tokenCheck(bearerToken)) {
-            return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(adminService.getListAdmin(), HttpStatus.OK);
     }
