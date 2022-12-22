@@ -3,6 +3,7 @@ services:
   web:
     build:
       context: .
+    image: apap-registry.cs.ui.ac.id/salma.karimah/apap-070
     restart: always
     ports:
       - "10070:8080"
