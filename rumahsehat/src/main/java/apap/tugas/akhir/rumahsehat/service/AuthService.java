@@ -1,8 +1,8 @@
 package apap.tugas.akhir.rumahsehat.service;
 
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -12,9 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import apap.tugas.akhir.rumahsehat.model.DTO.LoginAPIDTO;
-import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
-import apap.tugas.akhir.rumahsehat.repository.AdminDb;
 import apap.tugas.akhir.rumahsehat.repository.UserDb;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,9 +24,6 @@ public class AuthService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private GeneralService generalService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -68,7 +63,8 @@ public class AuthService {
     static String tokenGenerator(int n) {
 
         byte[] array = new byte[256];
-        new Random().nextBytes(array);
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(array);
         String randomString = new String(array, Charset.forName("UTF-8"));
 
         StringBuffer r = new StringBuffer();
@@ -83,7 +79,6 @@ public class AuthService {
                 n--;
             }
         }
-
         return r.toString();
     }
 
