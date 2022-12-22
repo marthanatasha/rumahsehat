@@ -46,6 +46,6 @@ public class ObatModel implements Serializable {
     private Integer stok;
 
     @OneToMany(mappedBy = "obat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<JumlahModel> jumlah;
+    private transient List<JumlahModel> jumlah;
 
 }

@@ -6,11 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,19 +36,6 @@ public class PasienAPIController {
 
     Logger logger = LoggerFactory.getLogger(PasienController.class);
 
-    // List pasien
-    @GetMapping("/pasien")
-    public String getPasienList(Model model) {
-        model.addAttribute("pasiens", pasienService.getListPasien());
-        return "pages/pasien/list";
-    }
-
-    // Form create pasien
-    @GetMapping("/pasien/add")
-    public String getPasienAddForm(Model model) {
-        return "pages/pasien/form-add";
-    }
-
     // Confirmation create pasien
     @PostMapping(value = "/pasien/add")
     public PasienModel createPasien(@RequestBody PasienDTO pasien, BindingResult bindingResult) {
@@ -64,24 +49,11 @@ public class PasienAPIController {
         }
     }
 
-    // Form update pasien
-    @GetMapping("/pasien/update/{id}")
-    public String getPasienAddUpdate(@PathVariable Long id, Model model) {
-        return "pages/pasien/form-update";
-    }
-
-    // Delete pasien
-    @PostMapping("/pasien/delete")
-    public String deletePengajarSubmit(@ModelAttribute PasienModel pasien, Model model) {
-        return "pages/pasien/confirmation-delete";
-    }
-
     @GetMapping("/pasien/{pasienId}")
     public PasienModel getUserProfile(@PathVariable("pasienId") String pasienId) {
         try {
-            logger.info("API GET: Informasi Pasien " + pasienId + ".");
-            PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
-            return pasien;
+            logger.info("API GET: Informasi Pasien {}.", pasienId);
+            return (PasienModel) userService.getRestUserById(pasienId);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasien ID " + pasienId + " not found.");
@@ -96,7 +68,7 @@ public class PasienAPIController {
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field.");
         } else {
             logger.info("API POST: Saldo pasien berhasil diubah.");
-            SaldoDTO saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());
+            var saldo = new SaldoDTO(saldoPasien.getUsername(), saldoPasien.getSaldo());
             return pasienService.updatePasien(saldo.getUsername(), saldo.getSaldo());
         }
     }

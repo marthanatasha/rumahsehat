@@ -35,14 +35,14 @@ public class AppointmentAPIController {
     @Autowired
     UserService userService;
 
-    Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
     // List appointment
     @GetMapping("/appointment/{pasienId}")
     public List<AppointmentModel> getAppointmentList(@PathVariable("pasienId") String pasienId) {
         try {
             PasienModel pasien = (PasienModel) userService.getRestUserById(pasienId);
-            logger.info("API GET: Daftar appointment milik pasien " + pasien.getId() + ".");
+            logger.info("API GET: Daftar appointment milik pasien {}.", pasien.getId());
             return pasien.getListAppointment();
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode pasien tidak ditemukan.");
@@ -54,7 +54,7 @@ public class AppointmentAPIController {
     @GetMapping("/appointment/detail/{kode}")
     public AppointmentModel getAppointmentById(@PathVariable("kode") String kode) {
         try {
-            logger.info("API GET: Detail appointment " + kode + ".");
+            logger.info("API GET: Detail appointment {}.", kode);
             return appointmentService.getRestAppointmentById(kode);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode appointment tidak ditemukan.");

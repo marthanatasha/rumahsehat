@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,9 +54,8 @@ public class UserService {
     }
 
     public String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode("{noop}" + password);
-        return hashedPassword;
+        var passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode("{noop}" + password);
     }
 
     public UserModel getUserByUsername(String username) {
@@ -68,39 +66,23 @@ public class UserService {
         return userDb.findByEmail(email);
     }
 
-    public Boolean isAdmin(Principal principal) {
+    public boolean isAdmin(Principal principal) {
         UserModel user = userDb.findByUsername(principal.getName());
-        if (user.getRole().equals(UserType.ADMIN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return user.getRole().equals(UserType.ADMIN);
     }
 
-    public Boolean isApoteker(Principal principal) {
+    public boolean isApoteker(Principal principal) {
         UserModel user = userDb.findByUsername(principal.getName());
-        if (user.getRole().equals(UserType.APOTEKER)) {
-            return true;
-        } else {
-            return false;
-        }
+        return user.getRole().equals(UserType.APOTEKER);
     }
 
-    public Boolean isDokter(Principal principal) {
+    public boolean isDokter(Principal principal) {
         UserModel user = userDb.findByUsername(principal.getName());
-        if (user.getRole().equals(UserType.DOKTER)) {
-            return true;
-        } else {
-            return false;
-        }
+        return user.getRole().equals(UserType.DOKTER);
     }
 
-    public Boolean isPasien(Principal principal) {
+    public boolean isPasien(Principal principal) {
         UserModel user = userDb.findByUsername(principal.getName());
-        if (user.getRole().equals(UserType.PASIEN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return user.getRole().equals(UserType.PASIEN);
     }
 }

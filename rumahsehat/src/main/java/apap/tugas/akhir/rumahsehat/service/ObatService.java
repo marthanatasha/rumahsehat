@@ -1,8 +1,7 @@
 package apap.tugas.akhir.rumahsehat.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import apap.tugas.akhir.rumahsehat.model.JumlahModel;
 import apap.tugas.akhir.rumahsehat.model.ObatModel;
-import apap.tugas.akhir.rumahsehat.model.ResepModel;
-import apap.tugas.akhir.rumahsehat.model.TagihanModel;
 import apap.tugas.akhir.rumahsehat.repository.ObatDb;
 
 @Service
@@ -29,11 +26,8 @@ public class ObatService {
     }
 
     public ObatModel getObatById(String id) {
-        return obatDb.findById(id).get();
-    }
-
-    public void addObat(ObatModel obat) {
-        obatDb.save(obat);
+        Optional<ObatModel> obat = obatDb.findById(id);
+        return obat.orElse(null);
     }
 
     public ObatModel updateObat(ObatModel obat) {

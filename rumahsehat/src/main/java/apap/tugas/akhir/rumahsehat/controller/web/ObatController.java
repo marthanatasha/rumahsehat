@@ -34,12 +34,6 @@ public class ObatController {
         }
     }
 
-    // Detail obat
-    @GetMapping("/obat/{id}")
-    public String getObatById(@PathVariable Long id, Model model) {
-        return "dashboard/obat/detail";
-    }
-
     // Form update obat
     @GetMapping("/obat/update/{idObat}")
     public String getObatAddUpdate(@PathVariable String idObat, Model model) {

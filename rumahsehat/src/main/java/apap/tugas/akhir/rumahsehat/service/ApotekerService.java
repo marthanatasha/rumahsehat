@@ -23,10 +23,6 @@ public class ApotekerService {
         return apotekerDb.findAll();
     }
 
-    public ApotekerModel getApotekerById(String id) {
-        return apotekerDb.findById(id).get();
-    }
-
     public ApotekerModel getApotekerByUsername(String username){
         return apotekerDb.findByUsername(username);
     }

@@ -33,17 +33,18 @@ public class AppointmentController {
     TagihanService tagihanService;
 
     Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+    String roleDokter = "DOKTER";
 
     // List appointment
     @GetMapping("/appointment")
     public String getAppointmentList(Model model, Principal principal) {
         UserModel user = userService.getUserByUsername(principal.getName());
-        String role = user.getRole().toString();
+        var role = user.getRole().toString();
         List<AppointmentModel> aptList = null;
 
         if (role.equals("ADMIN")) {
             aptList = appointmentService.getListAppointment();
-        } else if (role.equals("DOKTER")) {
+        } else if (role.equals(roleDokter)) {
             DokterModel dokter = (DokterModel) user;
             aptList = dokter.getListAppointment();
         }
@@ -58,25 +59,23 @@ public class AppointmentController {
     public String getAppointmentById(@RequestParam(value = "kode") String kode, Model model, Principal principal) {
         AppointmentModel apt = appointmentService.getAppointmentById(kode);
         UserModel user = userService.getUserByUsername(principal.getName());
-        String role = user.getRole().toString();
+        var role = user.getRole().toString();
 
-        boolean canAccess = false;
-        boolean canCreateResep = false;
-        boolean canUpdateStatus = false;
-        boolean showResepWarning = false;
+        var canAccess = false;
+        var canCreateResep = false;
+        var canUpdateStatus = false;
+        var showResepWarning = false;
 
         Long kodeResep = null;
 
-        if (role.equals("DOKTER") || role.equals("ADMIN")) {
+        if (role.equals(roleDokter) || role.equals("ADMIN")) {
             canAccess = true;
         }
 
-        if (apt != null && role.equals("DOKTER") && !apt.getIsDone()) {
-            if (apt.getResep() == null) {
-                canUpdateStatus = true;
-                canCreateResep = true;
-                showResepWarning = true;
-            }
+        if (apt != null && role.equals(roleDokter) && !apt.getIsDone() && apt.getResep() == null) {
+            canUpdateStatus = true;
+            canCreateResep = true;
+            showResepWarning = true;
         }
 
         if (apt == null) {
@@ -105,7 +104,7 @@ public class AppointmentController {
             redirectUrl = "/appointment/detail/?kode=" + updated.getKode();
 
             Integer harga = apt.getDokter().getTarif();
-            TagihanModel newBill = new TagihanModel();
+            var newBill = new TagihanModel();
             tagihanService.addTagihan(newBill, harga, apt);
 
         } else {
