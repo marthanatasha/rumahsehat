@@ -11,6 +11,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    String adminRole = "ADMIN";
+    String dokterRole = "DOKTER";
+    String pasienRole = "PASIEN";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -22,22 +25,22 @@ public class WebSecurityConfig {
                 .antMatchers("/bootstrap/**").permitAll()
                 .antMatchers("/dist/**").permitAll()
                 .antMatchers("/plugins/**").permitAll()
+                .antMatchers("/api/v1/appointment/**").hasAuthority(pasienRole)
+                .antMatchers("/api/v1/dokter").hasAuthority(pasienRole)
+                .antMatchers("/api/v1/resep/{id}").hasAnyAuthority(pasienRole)
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/login-sso", "/validate-ticket").permitAll()
-                .antMatchers("/appointment").hasAnyAuthority("ADMIN", "DOKTER")
-                .antMatchers("/appointment/detail/**").hasAnyAuthority("ADMIN", "DOKTER")
-                .antMatchers("/appointment/update/**").hasAuthority("DOKTER")
-                .antMatchers("/api/v1/appointment/**").hasAuthority("PASIEN")
-                .antMatchers("/api/v1/dokter").hasAuthority("PASIEN")
-                .antMatchers("/resep/add/{kode}").hasAnyAuthority("DOKTER")
-                .antMatchers("/resep").hasAnyAuthority("APOTEKER", "ADMIN")
-                .antMatchers("/api/v1/resep/{id}").hasAnyAuthority("PASIEN")
-                .antMatchers("/apoteker").hasAnyAuthority("ADMIN")
-                .antMatchers("/dokter").hasAnyAuthority("ADMIN")
-                .antMatchers("/pasien").hasAnyAuthority("ADMIN")
-                .antMatchers("/apoteker/add").hasAnyAuthority("ADMIN")
-                .antMatchers("/dokter/add").hasAnyAuthority("ADMIN")
-                .antMatchers("/chart/*").hasAnyAuthority("ADMIN")
+                .antMatchers("/appointment").hasAnyAuthority(adminRole, dokterRole)
+                .antMatchers("/appointment/detail/**").hasAnyAuthority(adminRole, dokterRole)
+                .antMatchers("/appointment/update/**").hasAuthority(dokterRole)
+                .antMatchers("/resep/add/{kode}").hasAnyAuthority(dokterRole)
+                .antMatchers("/resep").hasAnyAuthority("APOTEKER", adminRole)
+                .antMatchers("/apoteker").hasAnyAuthority(adminRole)
+                .antMatchers("/dokter").hasAnyAuthority(adminRole)
+                .antMatchers("/pasien").hasAnyAuthority(adminRole)
+                .antMatchers("/apoteker/add").hasAnyAuthority(adminRole)
+                .antMatchers("/dokter/add").hasAnyAuthority(adminRole)
+                .antMatchers("/chart/*").hasAnyAuthority(adminRole)
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

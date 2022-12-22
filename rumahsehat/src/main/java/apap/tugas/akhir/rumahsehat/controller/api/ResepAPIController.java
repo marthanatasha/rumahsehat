@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +30,11 @@ public class ResepAPIController {
 
     // Detail resep
     @GetMapping("/resep/{id}")
-    public ResepDTO getResepById(@PathVariable Long id, Model model) {
+    public ResepDTO getResepById(@PathVariable Long id) {
         try {
-            logger.info("API GET: Detail Resep " + id + ".");
+            logger.info("API GET: Detail Resep {}.", id);
             ResepModel resep = resepService.getResepById(id);
-            ResepDTO resepApi = resepService.getResepApi(resep);
-            return resepApi;
+            return resepService.getResepApi(resep);
         } catch (NoSuchElementException e) {
             logger.error("Gagal API GET: Kode resep tidak ditemukan.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID Resep " + id + " not found.");

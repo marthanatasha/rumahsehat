@@ -45,7 +45,7 @@ public class TagihanAPIController {
     @GetMapping("/tagihan/detail/{id}")
     public TagihanDTO getDetailTagihan(@PathVariable("id") String id) {
         try {
-            logger.info("API GET: Detail Tagihan " + id + ".");
+            logger.info("API GET: Detail Tagihan {}.", id);
             return tagihanService.getTagihanById(id);
         } catch (Exception e) {
             logger.error("Gagal API GET: Kode tagihan tidak ditemukan.");
@@ -57,7 +57,7 @@ public class TagihanAPIController {
     @GetMapping("/tagihan/pembayaran/{noTagihan}")
     public TagihanDTO pembayaranTagihan(@PathVariable("noTagihan") String noTagihan) {
         try {
-            logger.info("API GET: Validitas pembayaran tagihan " + noTagihan + ".");
+            logger.info("API GET: Validitas pembayaran tagihan {}.", noTagihan);
             return tagihanService.pembayaranTagihan(noTagihan);
         } catch (Exception e) {
             logger.error("Gagal API GET: Kode tagihan tidak ditemukan.");

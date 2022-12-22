@@ -1,8 +1,8 @@
 package apap.tugas.akhir.rumahsehat.service;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -12,9 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import apap.tugas.akhir.rumahsehat.model.DTO.LoginAPIDTO;
-import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
 import apap.tugas.akhir.rumahsehat.model.users.UserModel;
-import apap.tugas.akhir.rumahsehat.repository.AdminDb;
 import apap.tugas.akhir.rumahsehat.repository.UserDb;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,9 +24,6 @@ public class AuthService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private GeneralService generalService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -54,7 +49,7 @@ public class AuthService {
         return null;
     }
 
-    public Boolean tokenCheck(String token) {
+    public boolean tokenCheck(String token) {
         List<UserModel> listUser = userDb.findAll();
         String tokenparsed = token.split(" ")[1];
         for (UserModel user : listUser) {
@@ -67,14 +62,15 @@ public class AuthService {
 
     static String tokenGenerator(int n) {
 
-        byte[] array = new byte[256];
-        new Random().nextBytes(array);
-        String randomString = new String(array, Charset.forName("UTF-8"));
+        var array = new byte[256];
+        var random = new SecureRandom();
+        random.nextBytes(array);
+        var randomString = new String(array, StandardCharsets.UTF_8);
 
-        StringBuffer r = new StringBuffer();
+        var r = new StringBuilder();
 
-        for (int k = 0; k < randomString.length(); k++) {
-            char ch = randomString.charAt(k);
+        for (var k = 0; k < randomString.length(); k++) {
+            var ch = randomString.charAt(k);
             if (((ch >= 'a' && ch <= 'z')
                     || (ch >= 'A' && ch <= 'Z')
                     || (ch >= '0' && ch <= '9'))
@@ -83,7 +79,6 @@ public class AuthService {
                 n--;
             }
         }
-
         return r.toString();
     }
 

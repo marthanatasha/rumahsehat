@@ -2,6 +2,7 @@ package apap.tugas.akhir.rumahsehat.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +26,8 @@ public class ResepService {
     }
 
     public ResepModel getResepById(Long id) {
-        return resepDb.findById(id).get();
+        Optional<ResepModel> resep = resepDb.findById(id);
+        return resep.orElse(null);
     }
 
     public void addResep(ResepModel resep) {
@@ -33,12 +35,12 @@ public class ResepService {
     }
 
     public ResepDTO getResepApi (ResepModel resep){
-        List<JumlahDTO> listObat = new ArrayList<JumlahDTO>();
+        List<JumlahDTO> listObat = new ArrayList<>();
         for (JumlahModel obat : resep.getJumlah()){
-            JumlahDTO med = new JumlahDTO(obat.getObat().getNamaObat(), obat.getKuantitas());
+            var med = new JumlahDTO(obat.getObat().getNamaObat(), obat.getKuantitas());
             listObat.add(med);
         }
-        ResepDTO apiResep = new ResepDTO(resep.getId(), resep.getAppointment().getDokter().getNama(),
+        var apiResep = new ResepDTO(resep.getId(), resep.getAppointment().getDokter().getNama(),
                 resep.getAppointment().getPasien().getNama(), listObat);
         if (resep.getApoteker() != null){
             apiResep.setApoteker(resep.getApoteker().getNama());
@@ -46,7 +48,7 @@ public class ResepService {
         else {
             apiResep.setApoteker("-");
         }
-        if (resep.getIsDone() == true){
+        if (resep.getIsDone()){
             apiResep.setStatusResep("Selesai");
         }
         else apiResep.setStatusResep("Belum Selesai");
@@ -63,10 +65,6 @@ public class ResepService {
             }
         }
         return canConfirm;
-    }
-
-    public void updateResep (ResepModel resep){
-        resepDb.save(resep);
     }
 
 }

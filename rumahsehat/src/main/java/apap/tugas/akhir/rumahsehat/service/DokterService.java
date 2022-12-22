@@ -1,6 +1,7 @@
 package apap.tugas.akhir.rumahsehat.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -24,7 +25,8 @@ public class DokterService {
     }
 
     public DokterModel getDokterById(String id) {
-        return dokterDb.findById(id).get();
+        Optional<DokterModel> dokter = dokterDb.findById(id);
+        return dokter.orElse(null);
     }
 
     public void addDokter(DokterModel dokter) {
