@@ -26,7 +26,7 @@ public class ObatController {
     // List obat
     @GetMapping("/obat")
     public String getObatList(Model model, Principal principal) {
-        if(userService.isApoteker(principal) || userService.isAdmin(principal)){
+        if (userService.isApoteker(principal) || userService.isAdmin(principal)) {
             model.addAttribute("daftarObat", obatService.getListObat());
             return "dashboard/obat/list";
         } else {
@@ -52,13 +52,13 @@ public class ObatController {
     @PostMapping(value = "/obat/update")
     public String postObatUpdateForm(
             @ModelAttribute ObatModel obat, Model model, Principal principal) {
-        if(userService.isApoteker(principal) || userService.isAdmin(principal)){
+        if (userService.isApoteker(principal) || userService.isAdmin(principal)) {
             ObatModel updatedObat = obatService.updateObat(obat);
             model.addAttribute("updatedObat", updatedObat);
             return "dashboard/obat/confirmation-update";
         } else {
             return "error/404";
         }
-        
+
     }
 }

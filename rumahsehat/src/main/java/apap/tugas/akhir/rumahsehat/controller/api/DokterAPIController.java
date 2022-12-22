@@ -1,18 +1,21 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
-import apap.tugas.akhir.rumahsehat.controller.web.AppointmentController;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
-import apap.tugas.akhir.rumahsehat.service.DokterService;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import apap.tugas.akhir.rumahsehat.controller.web.AppointmentController;
+import apap.tugas.akhir.rumahsehat.model.users.DokterModel;
+import apap.tugas.akhir.rumahsehat.service.DokterService;
 
 @CrossOrigin()
 @RestController

@@ -1,15 +1,10 @@
 package apap.tugas.akhir.rumahsehat.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
-import apap.tugas.akhir.rumahsehat.model.DTO.PasienDTO;
-import apap.tugas.akhir.rumahsehat.model.users.*;
-import apap.tugas.akhir.rumahsehat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,16 +12,23 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import apap.tugas.akhir.rumahsehat.repository.AdminDb;
+import apap.tugas.akhir.rumahsehat.model.users.AdminModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserModel;
+import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.security.xml.Attributes;
 import apap.tugas.akhir.rumahsehat.security.xml.ServiceResponse;
+import apap.tugas.akhir.rumahsehat.service.AdminService;
+import apap.tugas.akhir.rumahsehat.service.ApotekerService;
+import apap.tugas.akhir.rumahsehat.service.DokterService;
+import apap.tugas.akhir.rumahsehat.service.PasienService;
+import apap.tugas.akhir.rumahsehat.service.UserService;
 import apap.tugas.akhir.rumahsehat.setting.Setting;
 
 @Controller
@@ -50,7 +52,11 @@ public class BaseController {
     private WebClient webClient = WebClient.builder().build();
 
     @GetMapping("/")
-    private String Home() {
+    private String Home(Model model) {
+        model.addAttribute("n_apoteker", apotekerService.getListApoteker().size());
+        model.addAttribute("n_dokter", dokterService.getListDokter().size());
+        model.addAttribute("n_pasien", pasienService.getListPasien().size());
+        model.addAttribute("n_admin", adminService.getListAdmin().size());
         return "dashboard/index";
     }
 
@@ -58,73 +64,6 @@ public class BaseController {
     public String login() {
         return "login";
     }
-
-    // @GetMapping("/api/initial")
-    // private String Initial() {
-    //     if (adminService.getListAdmin().size() < 2) {
-    //         AdminModel admin = new AdminModel();
-    //         admin.setEmail("admin3@rumahsehat.com");
-    //         admin.setNama("admin utama");
-    //         admin.setPassword("admin");
-    //         admin.setRole(UserType.ADMIN);
-    //         admin.setUsername("admin2");
-    //         admin.setIsSso(false);
-    //         admin.setToken("0");
-    //         adminService.addAdmin(admin);
-    //     }
-
-    //     return "error/404";
-    // }
-
-     @GetMapping("/api/initial")
-     private String Initial() {
-//     if (apotekerService.getListApoteker().size() == 0) {
-//     ApotekerModel apoteker = new ApotekerModel();
-//     apoteker.setEmail("apoteker@rumahsehat.com");
-//     apoteker.setNama("apoteker satu");
-//     apoteker.setPassword("apoteker");
-//     apoteker.setRole(UserType.APOTEKER);
-//     apoteker.setUsername("apoteker");
-//     apoteker.setIsSso(false);
-//     apotekerService.addApoteker(apoteker);
-//     }
-//     if (adminService.getListAdmin().size() == 0) {
-//     AdminModel admin = new AdminModel();
-//     admin.setEmail("admin@rumahsehat.com");
-//     admin.setNama("admin utama");
-//     admin.setPassword("admin");
-//     admin.setRole(UserType.ADMIN);
-//     admin.setUsername("admin");
-//     admin.setIsSso(false);
-//     adminService.addAdmin(admin);
-//     }
-//     if (dokterService.getListDokter().size() == 0) {
-//     DokterModel dokter = new DokterModel();
-//     dokter.setEmail("dokter@rumahsehat.com");
-//     dokter.setNama("dokter satu");
-//     dokter.setPassword("dokter");
-//     dokter.setRole(UserType.DOKTER);
-//     dokter.setUsername("dokter");
-//     dokter.setIsSso(false);
-//     Integer tarif = 300000;
-//     dokter.setTarif(tarif);
-//     dokterService.addDokter(dokter);
-//     }
-//     if (pasienService.getListPasien().size() == 0) {
-
-     PasienDTO pasien = new PasienDTO();
-     pasien.setEmail("pasien3@rumahsehat.com");
-     pasien.setNama("pasien tiga");
-     pasien.setPassword("pasien3");
-     pasien.setUsername("pasien3");
-     pasien.setSaldo(80000);
-     pasien.setUmur(20);
-     pasienService.addPasien(pasien);
-//     }
-
-//     return "pages/home";
-     return ("redirect:/");
-     }
 
     @GetMapping(value = "/login-sso")
     public ModelAndView loginSSO() {
@@ -164,6 +103,7 @@ public class BaseController {
             admin.setUsername(username);
             admin.setIsSso(true);
             admin.setRole(UserType.ADMIN);
+            admin.setToken("0");
             adminService.addAdmin(admin);
         }
 

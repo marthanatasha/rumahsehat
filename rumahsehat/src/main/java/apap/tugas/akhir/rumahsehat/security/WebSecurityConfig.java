@@ -12,6 +12,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    public BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -37,6 +39,7 @@ public class WebSecurityConfig {
                 .antMatchers("/pasien").hasAnyAuthority("ADMIN")
                 .antMatchers("/apoteker/add").hasAnyAuthority("ADMIN")
                 .antMatchers("/dokter/add").hasAnyAuthority("ADMIN")
+                .antMatchers("/chart/*").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -46,18 +49,5 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/login").permitAll();
         return http.build();
     }
-
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // @Autowired
-    // private UserDetailsService userDetailsService;
-
-    // @Autowired
-    // public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    //     auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-    // }
 
 }

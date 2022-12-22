@@ -1,21 +1,28 @@
 package apap.tugas.akhir.rumahsehat.controller.api;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import apap.tugas.akhir.rumahsehat.controller.web.AppointmentController;
 import apap.tugas.akhir.rumahsehat.model.AppointmentModel;
 import apap.tugas.akhir.rumahsehat.model.DTO.AppointmentDTO;
 import apap.tugas.akhir.rumahsehat.model.users.PasienModel;
 import apap.tugas.akhir.rumahsehat.service.AppointmentService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @CrossOrigin()
 @RestController
@@ -57,7 +64,8 @@ public class AppointmentAPIController {
 
     // Form create appointment
     @PostMapping("/appointment/add")
-    public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentDTO appointmentDTO, BindingResult bindingResult) {
+    public AppointmentModel getAppointmentAddForm(@RequestBody AppointmentDTO appointmentDTO,
+            BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             logger.error("Gagal API POST: Bad Request.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");

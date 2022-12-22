@@ -15,7 +15,6 @@ import apap.tugas.akhir.rumahsehat.model.users.UserType;
 import apap.tugas.akhir.rumahsehat.service.ApotekerService;
 import apap.tugas.akhir.rumahsehat.service.DokterService;
 import apap.tugas.akhir.rumahsehat.service.UserService;
-import net.bytebuddy.utility.nullability.AlwaysNull;
 
 @Controller
 public class DokterController {
@@ -53,7 +52,7 @@ public class DokterController {
         if (userService.isAdmin(principal)) {
             return "dashboard/dokter/form-add";
         } else {
-            return "error/404"; 
+            return "error/404";
         }
     }
 
@@ -68,6 +67,6 @@ public class DokterController {
         } else {
             return "error/404";
         }
-        
+
     }
 }

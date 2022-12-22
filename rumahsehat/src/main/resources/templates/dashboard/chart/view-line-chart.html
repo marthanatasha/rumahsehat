@@ -53,48 +53,61 @@
             <section class="content">
 
                 <div layout:fragment="content">
+
                     <!-- Masukkan apapun yang dibuat kedalam sini -->
-                    <div class="chart-container" style="margin: 0 auto; height:50vh; width:80vw">
-                        <canvas id="myChart"></canvas>
+                    <div align="center" style="width: 1000px;">
+                        <h2>Pemasukan PerWaktu</h2>
+                        <div id="linechart" style="width: 900px; height: 500px;"></div>
                     </div>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                     <script th:inline="javascript">
-                        var htmldata = /*[[${data}]]*/'noValue';
-                        var ctx = document.getElementById('myChart').getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-                                datasets: [{
-                                    label: 'Total Pemasukan Obat',
-                                    data: Object.keys(htmldata).map(function (key) { return htmldata[key]; }),
-                                    backgroundColor: [
-                                        'rgb(0,255,255)',
-                                        'rgb(46,139,87)',
-                                        'rgb(255,165,0)'
-                                    ],
-                                    borderColor: [
-                                        'rgb(0,255,255)',
-                                        'rgb(46,139,87)',
-                                        'rgb(255,165,0)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Pemasukan Semua Obat Periode Bulanan'
-                                    }
-                                }
-                            },
+
+                        var real_data = /*[[${data}]]*/'noValue';
+                        $(document).ready(function () {
+                            google.charts.load('current', {
+                                packages: ['corechart', 'bar']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
                         });
+
+                        function drawChart() {
+                            var data = new google.visualization.DataTable();
+                            data.addColumn('string', 'Period');
+
+
+                            Object.keys(real_data).forEach(
+                                function (key) {
+                                    data.addColumn([key, real_data[key]]);
+                                }
+                            )
+
+                            var options = {
+                                title: 'Company Performance',
+                                curveType: 'function',
+                                legend: { position: 'bottom' }
+                            };
+
+                            var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+
+                            chart.draw(data, options);
+                        }
+
+                        function drawPieChart() {
+                            var data = new google.visualization.DataTable();
+                            data.addColumn('string', 'Period');
+                            data.addColumn('number', 'Quantity');
+                            Object.keys(real_data).forEach(function (key) {
+                                data.addRow([key, real_data[key]]);
+                            });
+                            var options = {
+                                title: 'Statistik Pendapatan'
+                            };
+
+                            var chart = new google.visualization.LineChart(document
+                                .getElementById('linechart'));
+                            chart.draw(data, options);
+                        }
                     </script>
+
 
 
                 </div>
