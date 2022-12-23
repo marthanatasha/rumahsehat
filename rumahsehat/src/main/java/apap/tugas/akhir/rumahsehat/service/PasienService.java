@@ -42,6 +42,7 @@ public class PasienService {
         newPasien.setSaldo(0);
         newPasien.setIsSso(false);
         newPasien.setRole(UserType.PASIEN);
+        newPasien.setToken("0");
         return pasienDb.save(newPasien);
     }
 
