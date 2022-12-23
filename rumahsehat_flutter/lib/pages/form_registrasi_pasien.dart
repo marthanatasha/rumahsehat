@@ -22,16 +22,18 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
 
   // Function to post Appointment as Json
   Future postPasien() async {
+    print('postPasien'); // TODO: debug
     GetPasienDTO pasien = GetPasienDTO(
         nama, username, password, email, saldo, umur); // TODO: BINGUNG INI APA
     var pasienJson = json.encode(pasien.toJson());
     var response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/v1/pasien/add'),
+        Uri.parse('http://10.0.2.2:8080/api/v1/pasien/add'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json"
         },
         body: pasienJson);
+    print('response: ${response.statusCode}'); // TODO: debug
     if (response.statusCode == 200) {
       return showDialog(
           context: context,
@@ -171,6 +173,7 @@ class _FormRegistrasiPasien extends State<FormRegistrasiPasien> {
                           padding: const EdgeInsets.only(top: 12),
                           child: ElevatedButton(
                             onPressed: () async {
+                              print('onPressed'); // TODO: debug
                               await postPasien();
                               // if (_formKey.currentState!.validate()) {
                               //   postPasien();

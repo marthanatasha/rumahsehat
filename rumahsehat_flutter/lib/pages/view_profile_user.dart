@@ -25,7 +25,7 @@ class ViewUserProfile extends StatelessWidget {
 
     if (pasienRole == "PASIEN") {
       var response = await http.get(
-          Uri.parse('http://10.0.2.2:8000/api/v1/pasien/$kodePasien'),
+          Uri.parse('http://10.0.2.2:8080/api/v1/pasien/$kodePasien'),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Method": "POST, GET, PUT, DELETE",

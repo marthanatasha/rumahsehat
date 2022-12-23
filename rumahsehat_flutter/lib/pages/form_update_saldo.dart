@@ -32,7 +32,7 @@ class _FormUpdateSaldo extends State<FormUpdateSaldo> {
     SaldoUpdateDTO topUp = SaldoUpdateDTO(username, saldo);
     var topUpJson = json.encode(topUp.toJson());
     var response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/v1/pasien/addSaldo'),
+        Uri.parse('http://10.0.2.2:8080/api/v1/pasien/addSaldo'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
