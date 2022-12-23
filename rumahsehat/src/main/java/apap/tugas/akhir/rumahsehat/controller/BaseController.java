@@ -60,6 +60,25 @@ public class BaseController {
         return "login";
     }
 
+    @GetMapping("/api/initial")
+    private String Initial() {
+        if (adminService.getListAdmin().size() == 0) {
+            AdminModel admin = new AdminModel();
+            admin.setEmail("admin3@rumahsehat.com");
+            admin.setNama("admin utama");
+            admin.setPassword("admin");
+            admin.setRole(UserType.ADMIN);
+            admin.setUsername("admin2");
+            admin.setIsSso(false);
+            admin.setToken("0");
+            adminService.addAdmin(admin);
+            System.out.println("Berhasil membuat admin!");
+            return "login";
+        }
+        System.out.println("Maaf gagal");
+        return "error/404";
+    }
+
     @GetMapping(value = "/login-sso")
     public ModelAndView loginSSO() {
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
