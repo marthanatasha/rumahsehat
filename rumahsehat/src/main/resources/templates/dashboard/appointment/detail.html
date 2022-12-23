@@ -106,7 +106,7 @@
                 <a class="btn btn-secondary mr-8" th:href="@{/appointment}">Kembali ke List Appointment</a>
               </div>
               <div th:if="${apt.resep != null}" style="display: inline">
-                <a class="btn btn-primary mr-8" th:href="@{/resep/{kodeResep}(kodeResep = ${kodeResep})}">Lihat Resep</a>
+                <a class="btn btn-primary mr-8" th:href="@{/resep/} + ${apt.resep.id}">Lihat Resep</a>
               </div>
               <div th:if="${canCreateResep}" style="display: inline">
                 <a class="btn btn-primary mr-8" th:href="@{/resep/add/{kodeApt}(kodeApt = ${apt.Kode})}">Buat Resep</a>
