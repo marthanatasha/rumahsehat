@@ -12,7 +12,7 @@ class ViewUserProfile extends StatelessWidget {
   late GetPasienDTO pasienDetails;
 
   // Function to get appointment details
-  Future GetUserProfile(String kodePasien) async {
+  Future GetUserProfile() async {
     var auth =
         await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/info'), headers: {
       "Access-Control-Allow-Origin": "*",
@@ -57,7 +57,7 @@ class ViewUserProfile extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: GetUserProfile(kodePasien),
+        future: GetUserProfile(),
         builder: (context, snapshot) {
           if (snapshot.data == false) {
             return SafeArea(
