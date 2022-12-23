@@ -55,7 +55,7 @@ public class BaseController {
         return "dashboard/index";
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public String login() {
         return "login";
     }
